@@ -4,12 +4,10 @@ import os
 import http.server
 import socketserver
 import json
-import time
 import sqlite3
 import threading
 
 from http import HTTPStatus
-from urllib.parse import quote
 from urllib.parse import unquote
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
@@ -120,23 +118,15 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         qcomps = self.parse_query_components()
 
-        start_time = time.time()
-
         audio_sources_json_list = []
         with sqlite3.connect(get_db_path()) as connection:
             cursor = connection.cursor()
 
-            id_to_source_map: dict[str, AudioSource] = {
-                source.data.id: source for source in SOURCES
-            }
-
             for source in qcomps.sources:
-                audio_source = id_to_source_map.get(source, None)
+                audio_source = ID_TO_SOURCE_MAP.get(source, None)
                 if audio_source is not None:
                     audio_sources_json_list += audio_source.get_sources(connection, qcomps)
             cursor.close()
-
-        print("--- %s seconds ---" % (time.time() - start_time))
 
         # Build JSON that yomichan requires
         # Ref: https://github.com/FooSoft/yomichan/blob/master/ext/data/schemas/custom-audio-list-schema.json

@@ -192,7 +192,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
     ```
 
 ## Credits & Acknowledgements
-* **`Zetta#3033`**: Creator of the original addon
+* **`Zetta#3033`**: Creator of the original addon + advice for improving query speed
 * **`kezi#0001`**: Getting NHK16 audio
 * **`(anonymous)`**: Adding SQL + NHK16 audio support
 * **`Renji-xD#8182`**: Getting Forvo audio, adding Forvo audio support
