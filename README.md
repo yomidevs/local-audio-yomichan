@@ -5,11 +5,6 @@ This is a completely optional setup for people who want to be
 able to create Anki cards nearly instantaneously, and without
 a working internet connection.
 
-> **Warning**:
-> I did NOT make these plugins, and cannot provide detailed support for when things go wrong.
-> Credits are given in the respective folders, and at the bottom of this guide.
-
-
 
 <details>
 <summary>Advantages and Disadvantages of using this setup <i>(click here)</i></summary>
@@ -206,6 +201,9 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 * **`Aquafina water bottle#3026`**: Combining the Forvo + SQL versions, maintaining these instructions
 * **`jamesnicolas`**: Creator of [yomichan-forvo-server](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
 
+
+## License
+[MIT](https://github.com/Aquafina-water-bottle/local-audio-yomichan/blob/master/LICENSE)
 
 ## Original Messages
 
