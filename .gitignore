@@ -193,6 +193,6 @@ tags
 
 tmp/
 .python-version
-what.py
 plugin/forvo.db
 notes.txt
+temp.py

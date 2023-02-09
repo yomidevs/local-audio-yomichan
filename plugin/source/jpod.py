@@ -83,5 +83,5 @@ class JPodAudioSource(AudioSource):
         return "JPod101"
 
 
-JPOD_DATA = AudioSourceData("jpod", "jpod", "user_files/jpod_files")
+JPOD_DATA = AudioSourceData("jpod", "user_files/jpod_files")
 JPOD_AUDIO_SOURCE = JPodAudioSource(JPOD_DATA)

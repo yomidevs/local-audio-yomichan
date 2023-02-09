@@ -18,7 +18,6 @@ from typing import Any
 @dataclass
 class AudioSourceData:
     id: str  # also the table name
-    source_id: str  # used in sources= param
     media_dir: str
 
 
@@ -85,7 +84,6 @@ class AudioSource(ABC):
             query="",
             fragment="",
         )
-        print(parts)
         return urlunparse(parts)
 
     def get_sources(

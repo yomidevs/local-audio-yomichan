@@ -93,6 +93,6 @@ class ForvoAudioSource(AudioSource):
 
         return audio_source_json_list
 
-FORVO_DATA = AudioSourceData("forvo", "forvo", "user_files/forvo_files")
+FORVO_DATA = AudioSourceData("forvo", "user_files/forvo_files")
 FORVO_AUDIO_SOURCE = ForvoAudioSource(FORVO_DATA)
 

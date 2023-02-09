@@ -250,7 +250,7 @@ class NHK16AudioSource(AudioSource):
         return cursor.execute(query, params).fetchall()
 
 
-NHK16_DATA = AudioSourceData("nhk16", "nhk16", "user_files/nhk16_files")
+NHK16_DATA = AudioSourceData("nhk16", "user_files/nhk16_files")
 NHK16_AUDIO_SOURCE = NHK16AudioSource(NHK16_DATA)
 
 

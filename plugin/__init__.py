@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+import os
 import http.server
-from pathlib import Path
 import socketserver
 import json
+import time
 import sqlite3
 import threading
 
@@ -12,9 +13,9 @@ from urllib.parse import quote
 from urllib.parse import unquote
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
-from pathlib import PurePosixPath
+from pathlib import Path
 
-from .util import HOSTNAME, PORT, QueryComponents, get_db_path
+from .util import HOSTNAME, PORT, QueryComponents, get_db_path, get_program_root_path
 
 from .source.audio_source import AudioSource
 from .source.jpod import JPOD_AUDIO_SOURCE
@@ -28,7 +29,7 @@ SOURCES: list[AudioSource] = [
     NHK16_AUDIO_SOURCE,
     FORVO_AUDIO_SOURCE,
 ]
-# ID_TO_SOURCE_MAP: dict[str, AudioSource] = {source.data.source_id: source for source in SOURCES}
+ID_TO_SOURCE_MAP: dict[str, AudioSource] = {source.data.id: source for source in SOURCES}
 
 
 def init_db(force_init: bool = False):
@@ -50,27 +51,29 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         """Make log_message do nothing."""
         pass
 
-    #def get_audio(self, media_dir, path_prefix):
-    #    audio_file = (
-    #        get_program_root_path()
-    #        + f"/{media_dir}/"
-    #        + unquote(self.path).removeprefix(f"/{path_prefix}/")
-    #    )
-    #    if not Path(audio_file).is_file():
-    #        self.send_response(400)
-    #        return
-    #    elif audio_file.endswith(".mp3"):
-    #        self.send_response(200)
-    #        self.send_header("Content-type", "text/mpeg")
-    #    elif audio_file.endswith(".aac"):
-    #        self.send_response(200)
-    #        self.send_header("Content-type", "text/aac")
-    #    else:
-    #        self.send_response(400)
-    #        return
-    #    self.end_headers()
-    #    with open(audio_file, "rb") as fh:
-    #        self.wfile.write(fh.read())
+    def get_audio(self, media_dir, file_path):
+        audio_file = os.path.join(
+            get_program_root_path(),
+            media_dir,
+            file_path
+        )
+        if not Path(audio_file).is_file():
+            self.send_response(400)
+            return
+
+        if audio_file.endswith(".mp3"):
+            self.send_response(200)
+            self.send_header("Content-type", "text/mpeg")
+        elif audio_file.endswith(".aac"):
+            self.send_response(200)
+            self.send_header("Content-type", "text/aac")
+        else:
+            self.send_response(400)
+            return
+
+        self.end_headers()
+        with open(audio_file, "rb") as fh:
+            self.wfile.write(fh.read())
 
     def parse_query_components(self) -> QueryComponents:
         """Extract 'term', 'reading', 'sources', and 'user' query parameters"""
@@ -107,33 +110,24 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         urlparse(self.path).netloc
         parse_result = urlparse(self.path)
         full_path = unquote(parse_result.path)
-        path_parts = PurePosixPath(full_path).parts
 
-        #if self.path.startswith(f"/{JPOD_PATH}/"):
-        #    self.get_audio(JPOD_MEDIA_DIR, JPOD_PATH)
-        #    return
-        #elif self.path.startswith(f"/{JPOD_ALT_PATH}/"):
-        #    self.get_audio(JPOD_ALT_MEDIA_DIR, JPOD_ALT_PATH)
-        #    return
-        #elif self.path.startswith(f"/{NHK98_PATH}/"):
-        #    self.get_audio(NHK98_MEDIA_DIR, NHK98_PATH)
-        #    return
-        #elif self.path.startswith(f"/{NHK16_PATH}/"):
-        #    self.get_audio(NHK16_MEDIA_DIR, NHK16_PATH)
-        #    return
-        #elif self.path.startswith(f"/{FORVO_PATH}/"):
-        #    self.get_audio(FORVO_MEDIA_DIR, FORVO_PATH)
-        #    return
+        path_parts = full_path.split("/", 2)
+        if len(path_parts) == 3 and (source_id := path_parts[1]) in ID_TO_SOURCE_MAP:
+            audio_source = ID_TO_SOURCE_MAP[source_id]
+            file_path = path_parts[2]
+            self.get_audio(audio_source.get_media_dir_path(), file_path)
+            return
 
-        #term, reading, sources, users = self.parse_query_components()
         qcomps = self.parse_query_components()
+
+        start_time = time.time()
 
         audio_sources_json_list = []
         with sqlite3.connect(get_db_path()) as connection:
             cursor = connection.cursor()
 
             id_to_source_map: dict[str, AudioSource] = {
-                source.data.source_id: source for source in SOURCES
+                source.data.id: source for source in SOURCES
             }
 
             for source in qcomps.sources:
@@ -142,11 +136,11 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
                     audio_sources_json_list += audio_source.get_sources(connection, qcomps)
             cursor.close()
 
+        print("--- %s seconds ---" % (time.time() - start_time))
+
         # Build JSON that yomichan requires
         # Ref: https://github.com/FooSoft/yomichan/blob/master/ext/data/schemas/custom-audio-list-schema.json
-        #resp = {"type": "audioSourceList", "audioSources": audio_sources_json_list}
-        resp = {"type": "audioSourceList", "audioSources": []}
-        print(audio_sources_json_list)
+        resp = {"type": "audioSourceList", "audioSources": audio_sources_json_list}
 
         # Writing the JSON contents with UTF-8
         payload = bytes(json.dumps(resp), "utf8")
