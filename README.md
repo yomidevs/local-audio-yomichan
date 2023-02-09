@@ -191,7 +191,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
     http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
-## Credits
+## Credits & Acknowledgements
 * **`Zetta#3033`**: Creator of the original addon
 * **`kezi#0001`**: Getting NHK16 audio
 * **`(anonymous)`**: Adding SQL + NHK16 audio support

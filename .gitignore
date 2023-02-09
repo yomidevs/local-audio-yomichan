@@ -194,3 +194,4 @@ tags
 tmp/
 .python-version
 what.py
+plugin/forvo.db
