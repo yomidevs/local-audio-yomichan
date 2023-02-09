@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import http.server
 import os
 from pathlib import Path
@@ -5,6 +7,8 @@ import socketserver
 import json
 import sqlite3
 import threading
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 from http import HTTPStatus
 from urllib.parse import quote
@@ -32,7 +36,7 @@ the media folder within the addon directory
 
 """
 
-DB_FILE = "entries.db"
+DB_FILE_NAME = "entries.db"
 
 JPOD_SOURCE_PARAM = "jpod"
 JPOD_PATH = "jpod_audio"
@@ -53,8 +57,10 @@ NHK16_MEDIA_DIR = "user_files/nhk16_files"
 FORVO_SOURCE_PARAM = "forvo"
 FORVO_PATH = "forvo_audio"
 FORVO_MEDIA_DIR = "user_files/forvo_files"
-FORVO_DB_NAME = "forvo.db"
 
+
+
+# ============================================================================
 
 def is_kana(word):
     for char in word:
@@ -62,41 +68,31 @@ def is_kana(word):
             return False
     return True
 
-
 def get_program_root_path():
     return os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").removesuffix("/")
 
-
-def table_exists_and_has_data(table_name):
-    db_file = get_program_root_path() + "/" + DB_FILE
-    with sqlite3.connect(db_file) as conn:
-        cursor = conn.cursor()
-        cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
-                       {"name": table_name})
-        result = cursor.fetchone()
-        if int(result[0]) == 0:
-            return False
-        cursor.execute(f"SELECT count(*) FROM {table_name}")
-        result = cursor.fetchone()
-        has_data = int(result[0]) > 0
-        cursor.close()
-        return has_data
+DB_FILE_PATH = os.path.join(get_program_root_path(), DB_FILE_NAME)
 
 
-def init_db():
-    print("Initializing database. This make take a while...")
-    init_jpod_table("jpod", JPOD_MEDIA_DIR)
-    init_jpod_table("jpod_alt", JPOD_ALT_MEDIA_DIR)
-    init_nhk98_table()
-    init_nhk16_table()
-    init_forvo_table()
-    print("Finished initializing database!")
+#def table_exists_and_has_data(table_name):
+#    db_file = get_program_root_path() + "/" + DB_FILE
+#    with sqlite3.connect(db_file) as conn:
+#        cursor = conn.cursor()
+#        cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
+#                       {"name": table_name})
+#        result = cursor.fetchone()
+#        if int(result[0]) == 0:
+#            return False
+#        cursor.execute(f"SELECT count(*) FROM {table_name}")
+#        result = cursor.fetchone()
+#        has_data = int(result[0]) > 0
+#        cursor.close()
+#        return has_data
 
 
-def init_jpod_table(table_name, media_dir):
-    if table_exists_and_has_data(table_name):
-        return
-    db_file = get_program_root_path() + "/" + DB_FILE
+def create_jpod_table(source: AudioSource):
+    table_name = source.data.id
+
     drop_table_sql = f"DROP TABLE IF EXISTS {table_name}"
     create_table_sql = f"""
        CREATE TABLE {table_name} (
@@ -106,7 +102,8 @@ def init_jpod_table(table_name, media_dir):
            file text NOT NULL
        );
     """
-    with sqlite3.connect(db_file) as conn:
+
+    with sqlite3.connect(DB_FILE_PATH) as conn:
         cur = conn.cursor()
         cur.execute(drop_table_sql)
         cur.execute(create_table_sql)
@@ -130,39 +127,159 @@ def init_jpod_table(table_name, media_dir):
                     cur.execute(sql, (parts[1], parts[0], relative_path))
         conn.commit()
 
+# ============================================================================
 
-def init_nhk98_table():
-    if table_exists_and_has_data("nhk98"):
-        return
-    drop_table_sql = "DROP TABLE IF EXISTS nhk98"
-    create_table_sql = """
-       CREATE TABLE nhk98 (
-           id integer PRIMARY KEY,
-           expression text,
-           reading text NOT NULL,
-           file text NOT NULL
-       );
-    """
-    db_file = get_program_root_path() + "/" + DB_FILE
-    with sqlite3.connect(db_file) as conn:
-        cur = conn.cursor()
-        cur.execute(drop_table_sql)
-        cur.execute(create_table_sql)
-        start = get_program_root_path() + "/" + NHK98_MEDIA_DIR
-        for root, _, files in os.walk(start, topdown=False):
-            for name in files:
-                if not name.endswith('.mp3'):
-                    continue
-                parts = name.split(".")[0].split("_")
-                path = os.path.join(root, name)
-                relative_path = os.path.relpath(path, start)
-                sql = "INSERT INTO nhk98 (expression, reading, file) VALUES (?,?,?)"
-                for part in parts:
-                    if is_kana(part):
-                        cur.execute(sql, ('', part, relative_path))
-                    else:
-                        cur.execute(sql, (part, '', relative_path))
-        conn.commit()
+@dataclass
+class AudioSourceData():
+    id: str  # also the table name
+    source_id: str # used in sources= param
+    media_dir: str
+
+
+class AudioSource(ABC):
+
+    def __init__(self, data: AudioSourceData):
+        self.data = data
+
+    @abstractmethod
+    def create_table(self):
+        pass
+
+    def init_table(self, force_init: bool):
+        if not force_init and self.table_exists_and_has_data():
+            return
+        self.create_table()
+
+    @abstractmethod
+    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
+        pass
+
+    def table_exists_and_has_data(self):
+        table_name = self.data.id
+
+        with sqlite3.connect(DB_FILE_PATH) as conn:
+            cursor = conn.cursor()
+            cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
+                           {"name": table_name})
+            result = cursor.fetchone()
+            if int(result[0]) == 0:
+                return False
+            cursor.execute(f"SELECT count(*) FROM {table_name}")
+            result = cursor.fetchone()
+            has_data = int(result[0]) > 0
+            cursor.close()
+            return has_data
+
+
+    def get_media_dir_path(self):
+        return os.path.join(get_program_root_path(), self.data.media_dir)
+
+# ================================ JPod101 ====================================
+
+class JPodAudioSource(AudioSource):
+    def create_table(self):
+        create_jpod_table(self)
+
+    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
+        pass
+
+JPOD_DATA = AudioSourceData("jpod", "jpod", "user_files/jpod_files")
+
+# ============================== JPodAlt101 ===================================
+
+class JPodAltAudioSource(AudioSource):
+    def create_table(self):
+        create_jpod_table(self)
+
+    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
+        pass
+
+JPOD_ALT_DATA = AudioSourceData("jpod_alt", "jpod_alternate", "user_files/jpod_alternate_files")
+
+# ================================= NHK16 ====================================
+
+class NHK16AudioSource(AudioSource):
+    def create_table(self):
+        pass
+
+    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
+        pass
+
+NHK16_DATA = AudioSourceData("nhk16", "nhk16", "user_files/nhk16_files")
+
+# ================================= Forvo ====================================
+
+class ForvoAudioSource(AudioSource):
+    def create_table(self):
+        pass
+
+    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
+        pass
+
+FORVO_DATA = AudioSourceData("forvo", "forvo", "user_files/forvo_files")
+
+# ============================================================================
+
+SOURCES: list[AudioSource] = [
+    JPodAudioSource(JPOD_DATA),
+    JPodAltAudioSource(JPOD_ALT_DATA),
+    NHK16AudioSource(NHK16_DATA),
+    ForvoAudioSource(FORVO_DATA),
+]
+
+ID_TO_SOURCE_MAP: dict[str, AudioSource] = {source.data.source_id: source for source in SOURCES}
+
+# TODO use this
+def _init_db(force_init: bool):
+    print("Initializing database. This make take a while...")
+    for source in SOURCES:
+        source.init_table(force_init)
+    print("Finished initializing database!")
+
+
+def init_db():
+    print("Initializing database. This make take a while...")
+    init_jpod_table("jpod", JPOD_MEDIA_DIR)
+    init_jpod_table("jpod_alt", JPOD_ALT_MEDIA_DIR)
+    init_nhk98_table()
+    init_nhk16_table()
+    init_forvo_table()
+    print("Finished initializing database!")
+
+
+
+#def init_nhk98_table():
+#    if table_exists_and_has_data("nhk98"):
+#        return
+#    drop_table_sql = "DROP TABLE IF EXISTS nhk98"
+#    create_table_sql = """
+#       CREATE TABLE nhk98 (
+#           id integer PRIMARY KEY,
+#           expression text,
+#           reading text NOT NULL,
+#           file text NOT NULL
+#       );
+#    """
+#    db_file = get_program_root_path() + "/" + DB_FILE
+#    with sqlite3.connect(db_file) as conn:
+#        cur = conn.cursor()
+#        cur.execute(drop_table_sql)
+#        cur.execute(create_table_sql)
+#        start = get_program_root_path() + "/" + NHK98_MEDIA_DIR
+#        for root, _, files in os.walk(start, topdown=False):
+#            for name in files:
+#                if not name.endswith('.mp3'):
+#                    continue
+#                parts = name.split(".")[0].split("_")
+#                path = os.path.join(root, name)
+#                relative_path = os.path.relpath(path, start)
+#                sql = "INSERT INTO nhk98 (expression, reading, file) VALUES (?,?,?)"
+#                for part in parts:
+#                    if is_kana(part):
+#                        cur.execute(sql, ('', part, relative_path))
+#                    else:
+#                        cur.execute(sql, (part, '', relative_path))
+#        conn.commit()
 
 
 def init_nhk16_table():
