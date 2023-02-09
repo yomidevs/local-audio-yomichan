@@ -2,6 +2,10 @@ import os
 import json
 import sqlite3
 from pathlib import Path
+from typing import Any
+
+from .audio_source import AudioSource, AudioSourceData
+from ..util import get_db_path, get_program_root_path
 
 num2fullwidth = str.maketrans("0123456789", "０１２３４５６７８９")
 
@@ -122,33 +126,48 @@ def get_display_text(accent):
 def create_table(conn):
     drop_table_sql = "DROP TABLE IF EXISTS nhk16"
     create_table_sql = """
-       CREATE TABLE nhk16 (
-           id integer PRIMARY KEY,
-           expression text,
-           reading text NOT NULL,
-           display text NOT NULL,
-           file text NOT NULL,
-           type text NOT NULL
+        CREATE TABLE nhk16 (
+            id integer PRIMARY KEY,
+            expression text,
+            reading text,
+            display text NOT NULL,
+            file text NOT NULL,
+            type text NOT NULL,
+            priority integer NOT NULL
     );
     """
+    # basic optimization
+    create_index_sql = f"""
+        CREATE INDEX idx_nhk16 ON nhk16(expression, reading, priority);
+    """
+
     c = conn.cursor()
     c.execute(drop_table_sql)
     c.execute(create_table_sql)
+    c.execute(create_index_sql)
     c.close()
 
 
 def insert_entry(conn, entry):
-    sql = 'INSERT INTO nhk16(expression, reading, display, file, type) VALUES (?,?,?,?,?)'
+    reading = entry[1]
     cur = conn.cursor()
-    cur.execute(sql, entry)
+
+    if reading == "":
+        sql = 'INSERT INTO nhk16(expression, reading, display, file, type, priority) VALUES (?,NULL,?,?,?,1)'
+        cur.execute(sql, entry[0:1] + entry[2:])
+    else:
+        sql = 'INSERT INTO nhk16(expression, reading, display, file, type, priority) VALUES (?,?,?,?,?,2)'
+        cur.execute(sql, entry)
+
     cur.close()
 
 
 def make_nhk16_table(media_dir, db_file):
-    program_root_path = os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").removesuffix("/")
-    media_path = program_root_path + "/" + media_dir
-    entries_file = media_path + "/entries.json"
+    program_root_path = get_program_root_path()
+    media_path = os.path.join(program_root_path, media_dir)
+    entries_file = os.path.join(program_root_path, media_dir, "entries.json")
     if not Path(entries_file).is_file():
+        print(f"(make_nhk16_table) Cannot find entries file: {entries_file}")
         return
 
     with open(entries_file, "r", encoding="utf-8", errors="ignore") as f:
@@ -175,7 +194,7 @@ def make_nhk16_table(media_dir, db_file):
                     continue
                 display_text = get_display_text(accent)
                 if len(expression_list) == 0:
-                    insert_entry(conn, ('', reading, display_text, sound_file, 'entry'))
+                    insert_entry(conn, (reading, reading, display_text, sound_file, 'entry'))
                 for expression in expression_list:
                     insert_entry(conn, (expression, reading, display_text, sound_file, 'entry'))
 
@@ -189,7 +208,7 @@ def make_nhk16_table(media_dir, db_file):
                         display_text = get_display_text(accent)
                         for head in head_list:
                             if is_kana(head):
-                                insert_entry(conn, ('', head, display_text, sound_file, 'subentry'))
+                                insert_entry(conn, (head, head, display_text, sound_file, 'subentry'))
                             else:
                                 insert_entry(conn, (head, '', display_text, sound_file, 'subentry'))
                 else:  # number (+counter) section
@@ -211,8 +230,33 @@ def make_nhk16_table(media_dir, db_file):
         conn.commit()
 
 
+
+class NHK16AudioSource(AudioSource):
+    def create_table(self):
+        make_nhk16_table(self.get_media_dir_path(), get_db_path())
+
+    def get_name(self, row):
+        return "NHK16 " + row[1] # display
+
+    def execute_query(
+        self, cursor: sqlite3.Connection, **params: dict[str, str]
+    ) -> list[Any]:
+        query = f"""
+            SELECT file, display FROM {self.data.id} WHERE (
+                (expression = :expression AND reading = :reading)
+                OR (expression = :expression AND reading IS NULL)
+            ) ORDER BY priority DESC
+            """
+        return cursor.execute(query, params).fetchall()
+
+
+NHK16_DATA = AudioSourceData("nhk16", "nhk16", "user_files/nhk16_files")
+NHK16_AUDIO_SOURCE = NHK16AudioSource(NHK16_DATA)
+
+
+
 if __name__ == "__main__":
-    print("debug nhk16_files")
     media_dir = "user_files/nhk16_files"
     db_file = "entries.db"
     make_nhk16_table(media_dir, db_file)
+

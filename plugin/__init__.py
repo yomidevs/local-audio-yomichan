@@ -1,329 +1,44 @@
 from __future__ import annotations
 
 import http.server
-import os
 from pathlib import Path
 import socketserver
 import json
 import sqlite3
 import threading
-from abc import ABC, abstractmethod
-from dataclasses import dataclass
 
 from http import HTTPStatus
 from urllib.parse import quote
 from urllib.parse import unquote
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
+from pathlib import PurePosixPath
 
-from .make_nhk16_db import make_nhk16_table
+from .util import HOSTNAME, PORT, QueryComponents, get_db_path
 
-HOSTNAME = "localhost"
-PORT = 5050
-
-"""
-CONSTANTS
-
-*_SOURCE_PARAM
-used for the Custom URL (JSON) setting in Yomichan
-e.g. ?sources=jpod,nhk16
-
-*_PATH
-used for routing audio GET requests from Yomichan
-
-*_MEDIA_DIR
-the media folder within the addon directory
-
-"""
-
-DB_FILE_NAME = "entries.db"
-
-JPOD_SOURCE_PARAM = "jpod"
-JPOD_PATH = "jpod_audio"
-JPOD_MEDIA_DIR = "user_files/jpod_files"
-
-JPOD_ALT_SOURCE_PARAM = "jpod_alternate"
-JPOD_ALT_PATH = "jpod_alternate_audio"
-JPOD_ALT_MEDIA_DIR = "user_files/jpod_alternate_files"
-
-NHK98_SOURCE_PARAM = "nhk98"
-NHK98_PATH = "nhk98_audio"
-NHK98_MEDIA_DIR = "user_files/nhk98_files"
-
-NHK16_SOURCE_PARAM = "nhk16"
-NHK16_PATH = "nhk16_audio"
-NHK16_MEDIA_DIR = "user_files/nhk16_files"
-
-FORVO_SOURCE_PARAM = "forvo"
-FORVO_PATH = "forvo_audio"
-FORVO_MEDIA_DIR = "user_files/forvo_files"
-
-
-
-# ============================================================================
-
-def is_kana(word):
-    for char in word:
-        if char < 'ぁ' or char > 'ヾ':
-            return False
-    return True
-
-def get_program_root_path():
-    return os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").removesuffix("/")
-
-DB_FILE_PATH = os.path.join(get_program_root_path(), DB_FILE_NAME)
-
-
-#def table_exists_and_has_data(table_name):
-#    db_file = get_program_root_path() + "/" + DB_FILE
-#    with sqlite3.connect(db_file) as conn:
-#        cursor = conn.cursor()
-#        cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
-#                       {"name": table_name})
-#        result = cursor.fetchone()
-#        if int(result[0]) == 0:
-#            return False
-#        cursor.execute(f"SELECT count(*) FROM {table_name}")
-#        result = cursor.fetchone()
-#        has_data = int(result[0]) > 0
-#        cursor.close()
-#        return has_data
-
-
-def create_jpod_table(source: AudioSource):
-    table_name = source.data.id
-
-    drop_table_sql = f"DROP TABLE IF EXISTS {table_name}"
-    create_table_sql = f"""
-       CREATE TABLE {table_name} (
-           id integer PRIMARY KEY,
-           expression text,
-           reading text NOT NULL,
-           file text NOT NULL
-       );
-    """
-
-    with sqlite3.connect(DB_FILE_PATH) as conn:
-        cur = conn.cursor()
-        cur.execute(drop_table_sql)
-        cur.execute(create_table_sql)
-        start = get_program_root_path() + "/" + media_dir
-        for root, _, files in os.walk(start, topdown=False):
-            for name in files:
-                if not name.endswith('.mp3'):
-                    continue
-                parts = name.removesuffix('.mp3').split(" - ")
-                if len(parts) != 2:
-                    continue
-                path = os.path.join(root, name)
-                relative_path = os.path.relpath(path, start)
-                sql = f"INSERT INTO {table_name} (expression, reading, file) VALUES (?,?,?)"
-                if parts[0] == parts[1]:
-                    if is_kana(parts[0]):
-                        cur.execute(sql, ('', parts[0], relative_path))
-                    else:
-                        cur.execute(sql, (parts[0], '', relative_path))
-                else:
-                    cur.execute(sql, (parts[1], parts[0], relative_path))
-        conn.commit()
-
-# ============================================================================
-
-@dataclass
-class AudioSourceData():
-    id: str  # also the table name
-    source_id: str # used in sources= param
-    media_dir: str
-
-
-class AudioSource(ABC):
-
-    def __init__(self, data: AudioSourceData):
-        self.data = data
-
-    @abstractmethod
-    def create_table(self):
-        pass
-
-    def init_table(self, force_init: bool):
-        if not force_init and self.table_exists_and_has_data():
-            return
-        self.create_table()
-
-    @abstractmethod
-    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
-        pass
-
-    def table_exists_and_has_data(self):
-        table_name = self.data.id
-
-        with sqlite3.connect(DB_FILE_PATH) as conn:
-            cursor = conn.cursor()
-            cursor.execute("SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
-                           {"name": table_name})
-            result = cursor.fetchone()
-            if int(result[0]) == 0:
-                return False
-            cursor.execute(f"SELECT count(*) FROM {table_name}")
-            result = cursor.fetchone()
-            has_data = int(result[0]) > 0
-            cursor.close()
-            return has_data
-
-
-    def get_media_dir_path(self):
-        return os.path.join(get_program_root_path(), self.data.media_dir)
-
-# ================================ JPod101 ====================================
-
-class JPodAudioSource(AudioSource):
-    def create_table(self):
-        create_jpod_table(self)
-
-    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
-        pass
-
-JPOD_DATA = AudioSourceData("jpod", "jpod", "user_files/jpod_files")
-
-# ============================== JPodAlt101 ===================================
-
-class JPodAltAudioSource(AudioSource):
-    def create_table(self):
-        create_jpod_table(self)
-
-    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
-        pass
-
-JPOD_ALT_DATA = AudioSourceData("jpod_alt", "jpod_alternate", "user_files/jpod_alternate_files")
-
-# ================================= NHK16 ====================================
-
-class NHK16AudioSource(AudioSource):
-    def create_table(self):
-        pass
-
-    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
-        pass
-
-NHK16_DATA = AudioSourceData("nhk16", "nhk16", "user_files/nhk16_files")
-
-# ================================= Forvo ====================================
-
-class ForvoAudioSource(AudioSource):
-    def create_table(self):
-        pass
-
-    def get_sources(self, cursor: sqlite3.Connection, params: dict[str, str]):
-        pass
-
-FORVO_DATA = AudioSourceData("forvo", "forvo", "user_files/forvo_files")
-
-# ============================================================================
+from .source.audio_source import AudioSource
+from .source.jpod import JPOD_AUDIO_SOURCE
+from .source.jpod_alt import JPOD_ALT_AUDIO_SOURCE
+from .source.nhk16 import NHK16_AUDIO_SOURCE
+from .source.forvo import FORVO_AUDIO_SOURCE
 
 SOURCES: list[AudioSource] = [
-    JPodAudioSource(JPOD_DATA),
-    JPodAltAudioSource(JPOD_ALT_DATA),
-    NHK16AudioSource(NHK16_DATA),
-    ForvoAudioSource(FORVO_DATA),
+    JPOD_AUDIO_SOURCE,
+    JPOD_ALT_AUDIO_SOURCE,
+    NHK16_AUDIO_SOURCE,
+    FORVO_AUDIO_SOURCE,
 ]
+# ID_TO_SOURCE_MAP: dict[str, AudioSource] = {source.data.source_id: source for source in SOURCES}
 
-ID_TO_SOURCE_MAP: dict[str, AudioSource] = {source.data.source_id: source for source in SOURCES}
 
-# TODO use this
-def _init_db(force_init: bool):
+def init_db(force_init: bool = False):
     print("Initializing database. This make take a while...")
     for source in SOURCES:
         source.init_table(force_init)
     print("Finished initializing database!")
 
 
-def init_db():
-    print("Initializing database. This make take a while...")
-    init_jpod_table("jpod", JPOD_MEDIA_DIR)
-    init_jpod_table("jpod_alt", JPOD_ALT_MEDIA_DIR)
-    init_nhk98_table()
-    init_nhk16_table()
-    init_forvo_table()
-    print("Finished initializing database!")
-
-
-
-#def init_nhk98_table():
-#    if table_exists_and_has_data("nhk98"):
-#        return
-#    drop_table_sql = "DROP TABLE IF EXISTS nhk98"
-#    create_table_sql = """
-#       CREATE TABLE nhk98 (
-#           id integer PRIMARY KEY,
-#           expression text,
-#           reading text NOT NULL,
-#           file text NOT NULL
-#       );
-#    """
-#    db_file = get_program_root_path() + "/" + DB_FILE
-#    with sqlite3.connect(db_file) as conn:
-#        cur = conn.cursor()
-#        cur.execute(drop_table_sql)
-#        cur.execute(create_table_sql)
-#        start = get_program_root_path() + "/" + NHK98_MEDIA_DIR
-#        for root, _, files in os.walk(start, topdown=False):
-#            for name in files:
-#                if not name.endswith('.mp3'):
-#                    continue
-#                parts = name.split(".")[0].split("_")
-#                path = os.path.join(root, name)
-#                relative_path = os.path.relpath(path, start)
-#                sql = "INSERT INTO nhk98 (expression, reading, file) VALUES (?,?,?)"
-#                for part in parts:
-#                    if is_kana(part):
-#                        cur.execute(sql, ('', part, relative_path))
-#                    else:
-#                        cur.execute(sql, (part, '', relative_path))
-#        conn.commit()
-
-
-def init_nhk16_table():
-    if not table_exists_and_has_data("nhk16"):
-        db_file = get_program_root_path() + "/" + DB_FILE
-        make_nhk16_table(NHK16_MEDIA_DIR, db_file)
-
-
-def init_forvo_table():
-    if table_exists_and_has_data("forvo"):
-        return
-    drop_table_sql = "DROP TABLE IF EXISTS forvo"
-    create_table_sql = """
-       CREATE TABLE forvo (
-           id integer PRIMARY KEY,
-           expression text,
-           speaker text NOT NULL,
-           file text NOT NULL
-       );
-    """
-    sql = "INSERT INTO forvo (expression, speaker, file) VALUES (?,?,?)"
-    db_file = get_program_root_path() + "/" + DB_FILE
-    with sqlite3.connect(db_file) as conn:
-        cur = conn.cursor()
-        cur.execute(drop_table_sql)
-        cur.execute(create_table_sql)
-        start = get_program_root_path() + "/" + FORVO_MEDIA_DIR
-
-        for root, _, files in os.walk(start, topdown=False):
-            for name in files:
-                if not name.endswith('.mp3'):
-                    continue
-
-                speaker = os.path.basename(root)
-                expr = os.path.splitext(name)[0]
-                path = os.path.join(root, name)
-                relative_path = os.path.relpath(path, start)
-
-                cur.execute(sql, (expr, speaker, relative_path))
-        conn.commit()
-
-
-
-class AccentHandler(http.server.SimpleHTTPRequestHandler):
+class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
     def log_error(self, *args, **kwargs):
         """By default, SimpleHTTPRequestHandler logs to stderr.  This would
         cause Anki to show an error, even on successful requests
@@ -335,157 +50,103 @@ class AccentHandler(http.server.SimpleHTTPRequestHandler):
         """Make log_message do nothing."""
         pass
 
-    def get_jpod_sources(self, cursor, term, reading):
-        audio_sources = []
-        cursor.execute("SELECT DISTINCT file FROM jpod WHERE expression = :expression AND reading = :reading",
-                       {"expression": term, "reading": reading})
-        for row in cursor.fetchall():
-            audio_sources.append({"name": "JPod101",
-                                  "url": f"http://{HOSTNAME}:{PORT}/{JPOD_PATH}/{quote(row[0])}"})
-        return audio_sources
+    #def get_audio(self, media_dir, path_prefix):
+    #    audio_file = (
+    #        get_program_root_path()
+    #        + f"/{media_dir}/"
+    #        + unquote(self.path).removeprefix(f"/{path_prefix}/")
+    #    )
+    #    if not Path(audio_file).is_file():
+    #        self.send_response(400)
+    #        return
+    #    elif audio_file.endswith(".mp3"):
+    #        self.send_response(200)
+    #        self.send_header("Content-type", "text/mpeg")
+    #    elif audio_file.endswith(".aac"):
+    #        self.send_response(200)
+    #        self.send_header("Content-type", "text/aac")
+    #    else:
+    #        self.send_response(400)
+    #        return
+    #    self.end_headers()
+    #    with open(audio_file, "rb") as fh:
+    #        self.wfile.write(fh.read())
 
-    def get_jpod_alt_sources(self, cursor, term, reading):
-        audio_sources = []
-        cursor.execute("SELECT DISTINCT file FROM jpod_alt WHERE expression = :expression AND reading = :reading",
-                       {"expression": term, "reading": reading})
-        for row in cursor.fetchall():
-            audio_sources.append({"name": "JPod101 Alt",
-                                  "url": f"http://{HOSTNAME}:{PORT}/{JPOD_ALT_PATH}/{quote(row[0])}"})
-        return audio_sources
-
-    def get_nhk98_sources(self, cursor, term, reading):
-        audio_sources = []
-        cursor.execute("""
-            SELECT file FROM nhk98 WHERE expression = :expression
-             UNION
-            SELECT file FROM nhk98 WHERE reading = :reading
-               AND NOT EXISTS (SELECT file FROM nhk98 WHERE expression = :expression)
-        """, {"expression": term, "reading": reading})
-        for row in cursor.fetchall():
-            audio_sources.append({"name": "NHK98",
-                                  "url": f"http://{HOSTNAME}:{PORT}/{NHK98_PATH}/{quote(row[0])}"})
-        return audio_sources
-
-    def get_nhk16_sources(self, cursor, term, reading):
-        audio_sources = []
-        cursor.execute("""
-            SELECT display, file FROM nhk16 WHERE expression = :expression AND reading = :reading
-             UNION
-            SELECT display, file FROM nhk16 WHERE expression = :expression
-               AND NOT EXISTS (SELECT display, file FROM nhk16 WHERE expression = :expression AND reading = :reading)
-             UNION
-            SELECT display, file FROM nhk16 WHERE reading = :reading
-               AND NOT EXISTS (SELECT display, file FROM nhk16 WHERE expression = :expression)
-        """, {"expression": term, "reading": reading})
-        rows = cursor.fetchall()
-        for row in rows:
-            audio_sources.append({"name": f"NHK16 {row[0]}",
-                                  "url": f"http://{HOSTNAME}:{PORT}/{NHK16_PATH}/{quote(row[1])}"})
-        return audio_sources
-
-    def get_forvo_sources(self, cursor: sqlite3.Cursor, term: str, users: list[str]):
-        audio_sources = []
-
-        if len(users) > 0:
-            args = [term] + users
-            # "?,?,?" for number of users
-            n_question_marks = ','.join(['?'] * len(users))
-            rows = cursor.execute(
-                f"SELECT speaker,file FROM forvo WHERE expression = ? and speaker IN ({n_question_marks}) ORDER BY speaker", (args)).fetchall()
-
-            for u in users:
-                for row in rows:
-                    found_name = row[0]
-                    if (u == found_name):
-                        audio_sources += [
-                            {"name": "Forvo: " + found_name, "url": f"http://{HOSTNAME}:{PORT}/{FORVO_PATH}/{row[1]}"}]
-
-
-        else:
-            rows = cursor.execute(
-                "SELECT speaker,file FROM forvo WHERE expression = ? ORDER BY speaker", ([term])).fetchall()
-            for row in rows:
-                found_name = row[0]
-                audio_sources += [{"name": "Forvo: " + found_name,
-                                   "url": f"http://{HOSTNAME}:{PORT}/{FORVO_PATH}/{row[1]}"}]
-
-        return audio_sources
-
-    def get_audio(self, media_dir, path_prefix):
-        audio_file = get_program_root_path() + \
-            f"/{media_dir}/" + \
-            unquote(self.path).removeprefix(f"/{path_prefix}/")
-        if not Path(audio_file).is_file():
-            self.send_response(400)
-            return
-        elif audio_file.endswith(".mp3"):
-            self.send_response(200)
-            self.send_header('Content-type', 'text/mpeg')
-        elif audio_file.endswith(".aac"):
-            self.send_response(200)
-            self.send_header('Content-type', 'text/aac')
-        else:
-            self.send_response(400)
-            return
-        self.end_headers()
-        with open(audio_file, 'rb') as fh:
-            self.wfile.write(fh.read())
-
-    def parse_query_components(self) -> tuple[str, str, list[str], list[str]]:
+    def parse_query_components(self) -> QueryComponents:
         """Extract 'term', 'reading', 'sources', and 'user' query parameters"""
-        query_components = parse_qs(urlparse(self.path).query)
-        term = query_components["term"][0] if "term" in query_components else ""
-        if term == "":
-            # Yomichan used to use "expression" but renamed to term.
-            # Still support "expression" for older versions
-            term = query_components["expression"][0] if "expression" in query_components else ""
-        reading = query_components["reading"][0] if "reading" in query_components else ""
-        sources = query_components["sources"][0].split(',') if "sources" in query_components else [NHK16_SOURCE_PARAM, NHK98_SOURCE_PARAM, JPOD_SOURCE_PARAM, JPOD_ALT_SOURCE_PARAM, FORVO_SOURCE_PARAM]
-        user = [u.strip() for u in query_components["user"][0].split(
-            ',')] if "user" in query_components else []
+        parsed_qcomps = parse_qs(urlparse(self.path).query)
 
-        return term, reading, sources, user
+        if "term" in parsed_qcomps:
+            term = parsed_qcomps["term"][0]
+        elif "expression" in parsed_qcomps:
+            term = parsed_qcomps["expression"][0]
+        else:
+            raise Exception("Cannot find term or expression in query")
+
+        if "reading" in parsed_qcomps:
+            reading = parsed_qcomps["reading"][0]
+        else:
+            raise Exception("Cannot find reading in query")
+
+        if "sources" in parsed_qcomps:
+            sources = parsed_qcomps["sources"][0].split(",")
+        else:
+            sources = [s.data.id for s in SOURCES]
+
+        if "user" in parsed_qcomps:
+            user = [u.strip() for u in parsed_qcomps["user"][0].split(",")]
+        else:
+            user = []
+
+        qcomps = QueryComponents(term, reading, sources, user)
+
+        return qcomps
 
     def do_GET(self):
-        if self.path.startswith(f"/{JPOD_PATH}/"):
-            self.get_audio(JPOD_MEDIA_DIR, JPOD_PATH)
-            return
-        elif self.path.startswith(f"/{JPOD_ALT_PATH}/"):
-            self.get_audio(JPOD_ALT_MEDIA_DIR, JPOD_ALT_PATH)
-            return
-        elif self.path.startswith(f"/{NHK98_PATH}/"):
-            self.get_audio(NHK98_MEDIA_DIR, NHK98_PATH)
-            return
-        elif self.path.startswith(f"/{NHK16_PATH}/"):
-            self.get_audio(NHK16_MEDIA_DIR, NHK16_PATH)
-            return
-        elif self.path.startswith(f"/{FORVO_PATH}/"):
-            self.get_audio(FORVO_MEDIA_DIR, FORVO_PATH)
-            return
+        # https://stackoverflow.com/questions/7894384/python-get-url-path-sections
+        urlparse(self.path).netloc
+        parse_result = urlparse(self.path)
+        full_path = unquote(parse_result.path)
+        path_parts = PurePosixPath(full_path).parts
 
-        term, reading, sources, users = self.parse_query_components()
+        #if self.path.startswith(f"/{JPOD_PATH}/"):
+        #    self.get_audio(JPOD_MEDIA_DIR, JPOD_PATH)
+        #    return
+        #elif self.path.startswith(f"/{JPOD_ALT_PATH}/"):
+        #    self.get_audio(JPOD_ALT_MEDIA_DIR, JPOD_ALT_PATH)
+        #    return
+        #elif self.path.startswith(f"/{NHK98_PATH}/"):
+        #    self.get_audio(NHK98_MEDIA_DIR, NHK98_PATH)
+        #    return
+        #elif self.path.startswith(f"/{NHK16_PATH}/"):
+        #    self.get_audio(NHK16_MEDIA_DIR, NHK16_PATH)
+        #    return
+        #elif self.path.startswith(f"/{FORVO_PATH}/"):
+        #    self.get_audio(FORVO_MEDIA_DIR, FORVO_PATH)
+        #    return
 
-        audio_sources = []
-        db_file = get_program_root_path() + "/" + DB_FILE
-        with sqlite3.connect(db_file) as connection:
+        #term, reading, sources, users = self.parse_query_components()
+        qcomps = self.parse_query_components()
+
+        audio_sources_json_list = []
+        with sqlite3.connect(get_db_path()) as connection:
             cursor = connection.cursor()
-            for source in sources:
-                if source == JPOD_SOURCE_PARAM:
-                    audio_sources += self.get_jpod_sources(cursor, term, reading)
-                elif source == JPOD_ALT_SOURCE_PARAM:
-                    audio_sources += self.get_jpod_alt_sources(cursor, term, reading)
-                elif source == NHK98_SOURCE_PARAM:
-                    audio_sources += self.get_nhk98_sources(cursor, term, reading)
-                elif source == NHK16_SOURCE_PARAM:
-                    audio_sources += self.get_nhk16_sources(cursor, term, reading)
-                elif source == FORVO_SOURCE_PARAM:
-                    audio_sources += self.get_forvo_sources(cursor, term, users)
+
+            id_to_source_map: dict[str, AudioSource] = {
+                source.data.source_id: source for source in SOURCES
+            }
+
+            for source in qcomps.sources:
+                audio_source = id_to_source_map.get(source, None)
+                if audio_source is not None:
+                    audio_sources_json_list += audio_source.get_sources(connection, qcomps)
             cursor.close()
 
         # Build JSON that yomichan requires
         # Ref: https://github.com/FooSoft/yomichan/blob/master/ext/data/schemas/custom-audio-list-schema.json
-        resp = {"type": "audioSourceList",
-                "audioSources": audio_sources}
+        #resp = {"type": "audioSourceList", "audioSources": audio_sources_json_list}
+        resp = {"type": "audioSourceList", "audioSources": []}
+        print(audio_sources_json_list)
 
         # Writing the JSON contents with UTF-8
         payload = bytes(json.dumps(resp), "utf8")
@@ -504,12 +165,13 @@ if __name__ == "__main__":
     # If we're not in Anki, run the server directly and blocking for easier debugging
     print("Running in debug mode...")
     init_db()
-    httpd = socketserver.TCPServer((HOSTNAME, PORT), AccentHandler)
+    httpd = socketserver.TCPServer((HOSTNAME, PORT), LocalAudioHandler)
     httpd.serve_forever()
 else:
     # Else, run it in a separate thread so it doesn't block
     init_db()
-    httpd = http.server.ThreadingHTTPServer((HOSTNAME, PORT), AccentHandler)
+    httpd = http.server.ThreadingHTTPServer((HOSTNAME, PORT), LocalAudioHandler)
     server_thread = threading.Thread(target=httpd.serve_forever)
     server_thread.daemon = True
     server_thread.start()
+
