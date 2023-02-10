@@ -194,5 +194,10 @@ tags
 tmp/
 .python-version
 plugin/forvo.db
+plugin/android.db
 notes.txt
 temp.py
+
+bin/
+lib64
+pyvenv.cfg
