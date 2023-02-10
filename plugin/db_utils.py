@@ -19,19 +19,25 @@ def android_gen():
     original_db_path = get_db_path()
     android_db_path = get_android_db_path()
 
-    # literally copy entries.db -> android.db
-    shutil.copy(original_db_path, android_db_path)
+    ## literally copy entries.db -> android.db
+    #shutil.copy(original_db_path, android_db_path)
 
-    with sqlite3.connect(android_db_path) as android_connection:
-        android_cursor = android_connection.cursor()
+    #with sqlite3.connect(android_db_path) as android_connection:
+    #    android_cursor = android_connection.cursor()
+    #    android_write(android_cursor, android_cursor)
+    #    android_cursor.close()
 
-        android_write(android_cursor)
-
-        android_cursor.close()
+    with sqlite3.connect(original_db_path) as og_connection:
+        with sqlite3.connect(android_db_path) as android_connection:
+            android_cursor = android_connection.cursor()
+            og_cursor = og_connection.cursor()
+            android_write(og_cursor, android_cursor)
+            og_cursor.close()
+            android_cursor.close()
 
 
 # original cursor, android cursor
-def android_write(cur):
+def android_write(og_cur, cur):
     drop_table_sql = f"DROP TABLE IF EXISTS android"
     create_table_sql = f"""
        CREATE TABLE android (
@@ -55,7 +61,7 @@ def android_write(cur):
         SELECT file, source FROM entries
         """
 
-    rows = cur.execute(all_files_query).fetchall()
+    rows = og_cur.execute(all_files_query).fetchall()
     for row in rows:
         file_name = row[0]
         source_id = row[1]
