@@ -48,6 +48,8 @@ There is currently no way of using this on AnkiMobile.
 
 1. Download all the required audio files.
     They can be found at this [torrent link](https://nyaa.si/view/1625597).
+    If you have never used a torrent before, I highly recommend using the
+    [qBittorrent](https://www.qbittorrent.org/) client.
 
     <details> <summary>Magnet link <i>(click here)</i></summary>
 
@@ -65,34 +67,34 @@ There is currently no way of using this on AnkiMobile.
     [here](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old).
 
 1. Move the downloaded audio files to the correct place.
-    * On the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
+    * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
     * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
     * Copy the entire `user_files` folder from the first step torremt into this folder.
-        > **Note**: The other files in the torrent are now outdated, and should not be copied.
+      Note: the other files in the torrent are now outdated, and should **not** be copied.
 
-    <details> <summary>Expected file structure <i>(click here)</i></summary>
+        <details> <summary>Expected file structure <i>(click here)</i></summary>
 
-        1045800357
-        └── user_files
-            ├── forvo_files
-            │   ├── akitomo
-            │   │   └── 目的.mp3
-            │   ├── kaoring
-            │   │   └── ...
-            │   └── ...
-            ├── jpod_alternate_files
-            │   ├── よむ - 読む.mp3
-            │   └── ...
-            ├── jpod_files
-            │   ├── よむ - 読む.mp3
-            │   └── ...
-            └── nhk16_files
-                ├── audio
-                │   ├── 20170616125910.aac
+            1045800357
+            └── user_files
+                ├── forvo_files
+                │   ├── akitomo
+                │   │   └── 目的.mp3
+                │   ├── kaoring
+                │   │   └── ...
                 │   └── ...
-                └── entries.json
+                ├── jpod_alternate_files
+                │   ├── よむ - 読む.mp3
+                │   └── ...
+                ├── jpod_files
+                │   ├── よむ - 読む.mp3
+                │   └── ...
+                └── nhk16_files
+                    ├── audio
+                    │   ├── 20170616125910.aac
+                    │   └── ...
+                    └── entries.json
 
-    </summary>
+        </summary>
 
 1. In Yomichan Settings, go to:
 
