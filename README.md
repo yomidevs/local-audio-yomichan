@@ -51,6 +51,10 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 ## Steps
 
+These instructions only work on the PC release of Anki.
+If you wish to use this on AnkiDroid, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
+There is currently no way of using this on AnkiMobile.
+
 1.  Download the add-on. (TODO link anki web)
     If you are using Anki versions 2.1.49 or below, I recommend updating Anki.
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
@@ -158,6 +162,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 * **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
 * **`jamesnicolas`**: Creator of [yomichan-forvo-server](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
 * **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android.
+* **`Aquafina water bottle`**: Everything else (Merged SQL + forvo audio versions, implemented faster SQL lookups, rewrote codebase, etc.)
 
 
 ## License
