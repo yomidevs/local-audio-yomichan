@@ -203,3 +203,4 @@ lib64
 include/
 pyvenv.cfg
 .nvimrc
+localaudio.ankiaddon
