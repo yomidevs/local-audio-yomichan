@@ -107,6 +107,9 @@ There is currently no way of using this on AnkiMobile.
     http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}
     ```
 
+    Set this to be the **first entry** of the list,
+    if you already have other entries.
+
 1. Restart Anki.
 
     Because restarting Anki will generate the database file,
