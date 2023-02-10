@@ -147,7 +147,7 @@ There is currently no way of using this on AnkiMobile.
 
     > The files for now only includes audio files with an exact 1:1 mapping of a dictionary/Marv's JPDB frequency list term to the name of the file the user uploaded. Just because you don't get audio for an user it does not mean the user has no audio on Forvo. Just because you get audio it does not mean it actually matches the current word/reading. It is also not uncommon that people pronounce multiple readings in the same file.
 
-    The full quote can be found at the bottom of the page, under "Original Message for v09".
+    The full quote can be found at the bottom of [the legacy instructions](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old), under "Original Message for v09".
 
 </details>
 
