@@ -241,6 +241,7 @@ class NHK16AudioSource(AudioSource):
     def execute_query(
         self, cursor: sqlite3.Connection, **params: dict[str, str]
     ) -> list[Any]:
+        # overwritten method because file AND display is sent
         query = f"""
             SELECT file, display FROM {self.data.id} WHERE (
                 (expression = :expression AND reading = :reading)
