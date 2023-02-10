@@ -5,11 +5,15 @@ This Anki add-on allows you to run a local server of which Yomichan can fetch au
 With this setup, you are able to create Anki cards nearly instantaneously,
 and have word audio without a working internet connection.
 
+<sup>
+P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-mining-note/jpresources/">my other resources</a> if you're interested!
+</sup>
+
 ## Reasons for and against this setup
 
 * **Advantages:**
 
-    1. Most audio is gotten in **less than a second**. Without the local audio server,
+    1. Most audio is gotten in **almost instantly**. Without the local audio server,
         fetching the audio can take anywhere from three seconds to a full minute
         (on particularly bad days).
 
@@ -42,17 +46,13 @@ and have word audio without a working internet connection.
 
 </details>
 
-<sup>
-P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-mining-note/jpresources/">my other resources</a> if you're interested!
-</sup>
-
 ## Steps
 
 These instructions only work on the PC release of Anki.
 If you wish to use this on AnkiDroid, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
 There is currently no way of using this on AnkiMobile.
 
-1.  Download the add-on:
+1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
     * Copy and paste this code: `1045800357`
 
@@ -60,12 +60,9 @@ There is currently no way of using this on AnkiMobile.
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
     [here](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old).
 
-1. Install the add-on by heading over to:
-
-    > (Anki) →  `Tools` →  `Add-ons` →  `Install from file...`
-
 1. Download all the required audio files.
     They can be found at this [torrent link](https://nyaa.si/view/1625597).
+    Expect this to take a while.
 
     <details> <summary>Magnet link <i>(click here)</i></summary>
 

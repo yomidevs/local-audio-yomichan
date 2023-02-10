@@ -190,17 +190,27 @@ tags
 [._]*.un~
 
 # End of https://www.toptal.com/developers/gitignore/api/vim,python
-
-tmp/
-.python-version
-plugin/forvo.db
-plugin/android.db
-notes.txt
-temp.py
+#
 
 bin/
 lib64
 include/
 pyvenv.cfg
+
+tmp/
+.python-version
+notes.txt
+temp.py
 .nvimrc
+
+plugin/forvo.db
+plugin/forvo.db-journal
+plugin/entries.db
+plugin/entries.db-journal
+plugin/android.db
+plugin/android.db-journal
+plugin/user_files/
+plugin/user_files
+
 localaudio.ankiaddon
+

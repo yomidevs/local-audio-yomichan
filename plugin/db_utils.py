@@ -106,6 +106,14 @@ def init_db():
     print("Initializing database. This make take a while...")
 
     original_db_path = get_db_path()
+
+    # completely wipes out the file
+    try:
+        with open(original_db_path, "w") as _:
+            pass
+    except Exception:
+        pass
+
     with sqlite3.connect(original_db_path) as connection:
         cursor = connection.cursor()
 
