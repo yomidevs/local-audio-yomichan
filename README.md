@@ -69,7 +69,7 @@ There is currently no way of using this on AnkiMobile.
 1. Move the downloaded audio files to the correct place.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
     * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
-    * Copy the entire `user_files` folder from the first step torremt into this folder.
+    * Copy the entire `user_files` folder (from the first step) into this folder.
       Note: the other files in the torrent are now outdated, and should **not** be copied.
 
         <details> <summary>Expected file structure <i>(click here)</i></summary>
@@ -130,9 +130,12 @@ There is currently no way of using this on AnkiMobile.
 
 
 ## Troubleshooting
-*   If some or all sources don't work, try regenerating the database
+*   Try regenerating the database
     by navigating to `Tools` →  `Regenerate local audio database`, and trying again.
-
+    This should take a while.
+    *   If regenerating the database does not take a while,
+        it likely means that your audio files are misplaced.
+        Ensure that within step 3, your file structure matches the expected file structure.
 
 ## Usage Notes
 
