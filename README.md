@@ -136,6 +136,11 @@ There is currently no way of using this on AnkiMobile.
     *   If regenerating the database finishes almost instantly,
         it likely means that your audio files are misplaced.
         Ensure that within step 3, your file structure matches the expected file structure.
+*   Ensure you haven't copied any files from the torrent outside of `user_files`.
+    If you have (or suspect you may have):
+    * Temporarily move the `user_files` folder outside of the add-on folder
+    * Delete the add-on
+    * Start again from step 2.
 
 ## Usage Notes
 
