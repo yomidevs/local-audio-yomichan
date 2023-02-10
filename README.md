@@ -40,9 +40,11 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 ## Steps
 
+<!-- TODO uncomment when AnkiconnectAndroid release is close to being out as well
 These instructions only work on the PC release of Anki.
 If you wish to use this on AnkiDroid, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
 There is currently no way of using this on AnkiMobile.
+-->
 
 1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
