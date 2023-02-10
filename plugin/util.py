@@ -5,6 +5,7 @@ from dataclasses import dataclass
 HOSTNAME = "localhost"
 PORT = 5050
 DB_FILE_NAME = "entries.db"
+ANDROID_DB_FILE_NAME = "android.db"
 
 def is_kana(word):
     for char in word:
@@ -17,6 +18,9 @@ def get_program_root_path():
 
 def get_db_path():
     return os.path.join(get_program_root_path(), DB_FILE_NAME)
+
+def get_android_db_path():
+    return os.path.join(get_program_root_path(), ANDROID_DB_FILE_NAME)
 
 class URLComponents(NamedTuple):
     scheme: str

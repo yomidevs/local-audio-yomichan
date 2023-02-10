@@ -13,7 +13,7 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from pathlib import Path
 
-from .util import HOSTNAME, PORT, QueryComponents, get_db_path, get_program_root_path
+from .util import HOSTNAME, PORT, QueryComponents, get_db_path, get_program_root_path, get_android_db_path
 from .all_sources import SOURCES, ID_TO_SOURCE_MAP
 
 
@@ -51,8 +51,42 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         self.end_headers()
+
         with open(audio_file, "rb") as fh:
             self.wfile.write(fh.read())
+
+    def _get_audio_android(self, source, file_path):
+        """
+        internal testing method, shouldn't be used outside of testing the android db
+        """
+        if file_path.endswith(".mp3"):
+            self.send_response(200)
+            self.send_header("Content-type", "text/mpeg")
+        elif file_path.endswith(".aac"):
+            self.send_response(200)
+            self.send_header("Content-type", "text/aac")
+        else:
+            self.send_response(400)
+            return
+
+        self.end_headers()
+
+        android_db_path = get_android_db_path()
+        with sqlite3.connect(android_db_path) as android_connection:
+            android_cursor = android_connection.cursor()
+            sql = """
+            SELECT data FROM android WHERE file = :file AND source = :source
+            """
+            row = android_cursor.execute(sql, {"file": file_path, "source": source}).fetchone()
+            if row is None:
+                self.send_response(400)
+                return
+
+            data = row[0]
+            self.wfile.write(data)
+
+            android_cursor.close()
+
 
     def parse_query_components(self) -> QueryComponents:
         """Extract 'term', 'reading', 'sources', and 'user' query parameters"""
@@ -94,7 +128,8 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         if len(path_parts) == 3 and (source_id := path_parts[1]) in ID_TO_SOURCE_MAP:
             audio_source = ID_TO_SOURCE_MAP[source_id]
             file_path = path_parts[2]
-            self.get_audio(audio_source.get_media_dir_path(), file_path)
+            #self.get_audio(audio_source.get_media_dir_path(), file_path)
+            self._get_audio_android(audio_source.data.id, file_path)
             return
 
         qcomps = self.parse_query_components()

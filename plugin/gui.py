@@ -3,7 +3,7 @@ from aqt.qt import *
 from aqt.utils import restoreGeom, saveGeom, showInfo
 from aqt.operations import QueryOp
 
-from .database import init_db
+from .gen_db import init_db, android_gen
 
 
 def regenerate_database_operation():
@@ -46,7 +46,8 @@ def generate_android_database_operation():
     op.with_progress().run_in_background()
 
 def generate_android_database_action():
-    pass
+    android_gen()
+    return 1
 
 def generate_android_database_success():
     showInfo(f"Local audio database for AnkiConnect Android was successfully generated!")

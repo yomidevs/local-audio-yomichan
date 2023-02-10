@@ -2,16 +2,12 @@ import os
 from pathlib import Path
 import sqlite3
 
-from .util import get_db_path, get_program_root_path
+from .util import get_android_db_path, get_db_path, get_program_root_path
 from .all_sources import SOURCES
 
 def android_gen():
-    i = 0
     original_db_path = get_db_path()
-    android_db_path = os.path.join(
-        get_program_root_path(),
-        "android.db"
-    )
+    android_db_path = get_android_db_path()
     with sqlite3.connect(original_db_path) as connection:
         og_cursor = connection.cursor()
         with sqlite3.connect(android_db_path) as android_connection:
@@ -45,14 +41,13 @@ def android_write(og_cur, a_cur):
         """
 
     for source in SOURCES:
-        i = 0
+        print(f"(android_write) Reading from {source}...")
         all_files_query = f"""
             SELECT file FROM {source.data.id}
             """
 
         rows = og_cur.execute(all_files_query).fetchall()
         for row in rows:
-            i += 1
             file_name = row[0]
             full_file_path = os.path.join(
                 get_program_root_path(),
@@ -60,15 +55,11 @@ def android_write(og_cur, a_cur):
                 file_name
             )
             if not Path(full_file_path).is_file():
-                print(f"(android_gen) Cannot find file: {full_file_path}")
+                print(f"(android_write) Cannot find file: {full_file_path}")
                 continue
 
-            print(full_file_path)
             with open(full_file_path, 'rb') as file:
                 a_cur.execute(sql, (file_name, source.data.id, file.read()))
-
-            if i > 20:
-                break
 
 
 if __name__ == "__main__":
