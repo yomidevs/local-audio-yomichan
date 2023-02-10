@@ -128,8 +128,8 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         if len(path_parts) == 3 and (source_id := path_parts[1]) in ID_TO_SOURCE_MAP:
             audio_source = ID_TO_SOURCE_MAP[source_id]
             file_path = path_parts[2]
-            #self.get_audio(audio_source.get_media_dir_path(), file_path)
-            self._get_audio_android(audio_source.data.id, file_path)
+            self.get_audio(audio_source.get_media_dir_path(), file_path)
+            #self._get_audio_android(audio_source.data.id, file_path)
             return
 
         qcomps = self.parse_query_components()
