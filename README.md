@@ -7,7 +7,7 @@ a working internet connection.
 
 
 <details>
-<summary>Advantages and Disadvantages of using this setup <i>(click here)</i></summary>
+<summary>Reasons for and against using this setup <i>(click here)</i></summary>
 
 
 * **Advantages:**
@@ -24,13 +24,9 @@ a working internet connection.
 
 * **Disadvantages:**
 
-    1. This setup requires a little over **5GB of free space**.
+    1. This setup requires about **5GB of free space**.
 
-    1. This setup is only available for PC.
-        However, a WIP PR is currently live on [AnkiConnectAndroid](https://github.com/KamWithK/AnkiconnectAndroid/pull/20),
-        which means it will be available on Android in the future!
-
-    1. It only has the coverage of JPod, NHK16 and select audio from Forvo
+    1. It only has the coverage of JPod 101, NHK16 and select audio from Forvo
         (which is still about 99% coverage, from personal experience).
         To increase audio coverage,
         it would be ideal to also include an extra
@@ -55,44 +51,10 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 ## Steps
 
-1.  There are two main versions of the add-on. Download one of the two.
-
-    - **Option 1**: [SQL-based](https://github.com/Aquafina-water-bottle/local-audio-yomichan/releases/download/v23.01.24.1/localaudio_sql09__2023_01_24.ankiaddon) (highly recommended, but requires Anki 2.1.50+)
-    - **Option 2**: [Memory-based](https://github.com/Aquafina-water-bottle/local-audio-yomichan/blob/old/old/09/localaudio_09__2023_01_15.ankiaddon?raw=true)
-
-    If you are interested, here are the differences between the two versions:
-
-    <details> <summary>Comparing Memory-based VS SQL-based versions <i>(click here)</i></summary>
-
-    <br>
-
-    > The SQL-based version stores the map in a local database file on your computer.
-    > This version queries this database when fetching the audio.
-    >
-    > The memory-based version generates and caches the map in memory.
-    > This is the original version of the add-on.
-    > The SQL-based version is a patch on-top of this version.
-    >
-    > Advantages and disadvantages of each version:
-    >
-    > - The SQL-based version only works on Anki versions 2.1.50 and above.
-    >
-    > - The SQL database only has to be generated once, as this database is
-    >     stored on the disk.
-    >
-    >     The memory-based version must regenerated its cache
-    >     **every time you re-open Anki**.
-    >     This indeed has noticable effects;
-    >     the cache is only regenerated when audio is fetched,
-    >     so the first card added after every Anki restart will take noticably longer than normal.
-    >
-    > - The memory-based version hogs about ~250MB of memory,
-    >     which is a problem on slow computers.
-    >     The SQL-based version does not hog memory.
-    >
-    > - The memory-based version is slightly faster than the SQL-based version, outside of the first card of each session.
-
-    </details>
+1.  Download the add-on. (TODO link anki web)
+    If you are using Anki versions 2.1.49 or below, I recommend updating Anki.
+    If you can't do this for whatever reason, the legacy instructions and add-on can be found
+    [here](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old).
 
 1. Install the add-on by heading over to:
 
@@ -111,13 +73,9 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
     See [Anki's documentation](https://docs.ankiweb.net/files.html#file-locations)
     on instructions to find your `Anki2` folder.
 
-    Additionally, if you are using the memory-based version, place the `forvo.db` file
-    under `Anki2/addons21/955441350` (NOT under the `user_files` folder).
-
     <details> <summary>Expected file structure <i>(click here)</i></summary>
 
         955441350
-        ├── forvo.db
         └── user_files
             ├── forvo_files
             │   ├── akitomo
@@ -152,8 +110,9 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. Restart Anki.
 
-    If you are using the SQL-based version, restarting Anki will generate the database file.
-    Expect this to take a while.
+    Because restarting Anki will generate the database file,
+    it may appear that Anki is not loading.
+    This is normal, and expect this to take a while.
 
 1. Ensure that everything works. To do this, play some audio from Yomichan.
     You should notice two things:
@@ -170,9 +129,8 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
     Play all the sources from the above (読む) to ensure the sound is properly fetched.
 
-    > **Note**: If some sources don't work (and you are using the sql version),
-    > try deleting the `entries.db` file (under `Anki2/addons21/955441350/`),
-    > restarting Anki, and playing the audio again.
+    > **Note**: If some sources don't work, try regenerating the database
+    > by navigating to `Tools` →  `Regenerate local audio database`.
 
 
 ## Usage Notes
@@ -192,14 +150,14 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
     ```
 
 ## Credits & Acknowledgements
-* **`Zetta#3033`**: Creator of the original addon
+* **`Zetta#3033`**: Creator of the original addon + advice for improving query speed
 * **`kezi#0001`**: Getting NHK16 audio
 * **`(anonymous)`**: Adding SQL + NHK16 audio support
 * **`Renji-xD#8182`**: Getting Forvo audio, adding Forvo audio support
 * **`Marv#5144`**: Creating and maintaining the torrent
 * **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
-* **`Aquafina water bottle#3026`**: Combining the Forvo + SQL versions, maintaining these instructions
 * **`jamesnicolas`**: Creator of [yomichan-forvo-server](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
+* **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android.
 
 
 ## License

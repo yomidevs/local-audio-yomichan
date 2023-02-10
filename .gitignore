@@ -193,5 +193,13 @@ tags
 
 tmp/
 .python-version
-what.py
 plugin/forvo.db
+plugin/android.db
+notes.txt
+temp.py
+
+bin/
+lib64
+include/
+pyvenv.cfg
+.nvimrc
