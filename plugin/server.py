@@ -179,10 +179,6 @@ def run_server():
     server_thread.daemon = True
     server_thread.start()
 
-    from .gui import init_gui
-
-    init_gui()
-
 
 if __name__ == "__main__":
     # If we're not in Anki, run the server directly and blocking for easier debugging

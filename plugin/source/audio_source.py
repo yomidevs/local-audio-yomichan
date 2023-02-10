@@ -25,12 +25,10 @@ class AudioSource(ABC):
 
     @abstractmethod
     def add_entries(self, connection: sqlite3.Connection):
+        """
+        add entries to the `entries` table
+        """
         pass
-
-    # def init_table(self, force_init: bool):
-    #    if force_init or not self.table_exists_and_has_data():
-    #        print(f"(AudioSource) Initializing table: {self.data.id}")
-    #        self.create_table()
 
     def get_name(self, row) -> str:
         return self.data.id
@@ -48,26 +46,6 @@ class AudioSource(ABC):
             fragment="",
         )
         return urlunparse(parts)
-
-    # def get_sources(
-    #    self, cursor: sqlite3.Connection, qcomp: QueryComponents
-    # ) -> list[dict[str, str]]:
-
-    #    query_params = {
-    #        "expression": qcomp.expression,
-    #        "reading": qcomp.reading,
-    #    }
-    #    rows = self.execute_query(cursor, **query_params)
-
-    #    audio_source_json_list = []
-    #    for row in rows:
-    #        file_path = row[0]
-    #        name = self.get_name(row)
-    #        url = self.construct_file_url(file_path)
-
-    #        audio_source_entry = {"name": name, "url": url}
-    #        audio_source_json_list.append(audio_source_entry)
-    #    return audio_source_json_list
 
     def get_media_dir_path(self) -> str:
         return os.path.join(get_program_root_path(), self.data.media_dir)

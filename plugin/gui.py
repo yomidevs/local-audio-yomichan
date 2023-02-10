@@ -70,6 +70,6 @@ def init_gui():
     mw.form.menuTools.addAction(action)
 
     # generate android db (android.db)
-    action2 = QAction("Generate Android Database", mw)
+    action2 = QAction("Generate Android database", mw)
     qconnect(action2.triggered, generate_android_database_operation)
     mw.form.menuTools.addAction(action2)
