@@ -20,7 +20,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
     Most of the delay from Yomichan when creating cards is from fetching the audio.
     In other words, getting the audio is the main bottleneck of when creating Anki cards.
-    This setup removes this bottleneck, and allows you to make cards **nearly instaneously**.
+    This add-on removes the aforementioned bottleneck, meaning **you can make cards with virtually 0 delay**.
 
 1. If you do not have internet access, you can still add audio to your cards.
 
