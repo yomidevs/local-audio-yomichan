@@ -3,11 +3,13 @@ import sqlite3
 
 from .audio_source import AudioSource, AudioSourceData
 from ..consts import *
+from ..util import get_program_root_path
 
 
 class ForvoAudioSource(AudioSource):
     def add_entries(self, connection: sqlite3.Connection):
-        start = self.data.media_dir
+        program_root_path = get_program_root_path()
+        start = os.path.join(program_root_path, self.data.media_dir)
 
         sql = "INSERT INTO entries (expression, source, speaker, file) VALUES (?,?,?,?)"
         cur = connection.cursor()
