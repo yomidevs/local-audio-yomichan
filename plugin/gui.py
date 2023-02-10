@@ -1,6 +1,6 @@
 from aqt import mw
 from aqt.qt import *
-from aqt.utils import restoreGeom, saveGeom, showInfo
+from aqt.utils import showInfo
 from aqt.operations import QueryOp
 
 from .gen_db import init_db, android_gen
@@ -23,7 +23,7 @@ def regenerate_database_operation():
     op.with_progress().run_in_background()
 
 def regenerate_database_action() -> int:
-    init_db(True)
+    init_db()
     return 1
 
 def regenerate_database_success() -> None:

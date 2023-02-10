@@ -2,10 +2,10 @@ import os
 import json
 import sqlite3
 from pathlib import Path
-from typing import Any
 
 from .audio_source import AudioSource, AudioSourceData
-from ..util import get_db_path, get_program_root_path
+from ..util import get_program_root_path
+from ..consts import *
 
 num2fullwidth = str.maketrans("0123456789", "０１２３４５６７８９")
 
@@ -26,7 +26,7 @@ def katakana_to_hiragana(kana):
 
 def is_kana(word):
     for char in word:
-        if char < 'ぁ' or char > 'ヾ':
+        if char < "ぁ" or char > "ヾ":
             return False
     return True
 
@@ -119,50 +119,22 @@ def get_display_text(accent):
         if pitch_accent > 0:
             mora_list.insert(pitch_accent, "＼")
         display_text_list.append("".join(mora_list))
-    display_text = prefix + f"{'・'.join(display_text_list)} [{'・'.join(pitch_accent_list)}]"
+    display_text = (
+        prefix + f"{'・'.join(display_text_list)} [{'・'.join(pitch_accent_list)}]"
+    )
     return display_text
 
 
-def create_table(conn):
-    drop_table_sql = "DROP TABLE IF EXISTS nhk16"
-    create_table_sql = """
-        CREATE TABLE nhk16 (
-            id integer PRIMARY KEY,
-            expression text,
-            reading text,
-            display text NOT NULL,
-            file text NOT NULL,
-            type text NOT NULL,
-            priority integer NOT NULL
-    );
-    """
-    # basic optimization
-    create_index_sql = f"""
-        CREATE INDEX idx_nhk16 ON nhk16(expression, reading, priority);
-    """
-
-    c = conn.cursor()
-    c.execute(drop_table_sql)
-    c.execute(create_table_sql)
-    c.execute(create_index_sql)
-    c.close()
-
-
 def insert_entry(conn, entry):
-    reading = entry[1]
     cur = conn.cursor()
 
-    if reading == "":
-        sql = 'INSERT INTO nhk16(expression, reading, display, file, type, priority) VALUES (?,NULL,?,?,?,1)'
-        cur.execute(sql, entry[0:1] + entry[2:])
-    else:
-        sql = 'INSERT INTO nhk16(expression, reading, display, file, type, priority) VALUES (?,?,?,?,?,2)'
-        cur.execute(sql, entry)
+    sql = 'INSERT INTO entries (expression, reading, source, display, file) VALUES (?,?,?,?,?)'
+    cur.execute(sql, entry)
 
     cur.close()
 
 
-def make_nhk16_table(media_dir, db_file):
+def add_nhk16_entries(media_dir, conn):
     program_root_path = get_program_root_path()
     media_path = os.path.join(program_root_path, media_dir)
     entries_file = os.path.join(program_root_path, media_dir, "entries.json")
@@ -175,89 +147,89 @@ def make_nhk16_table(media_dir, db_file):
 
     file_to_relpath = get_file_to_relative_path(media_path)
 
-    with sqlite3.connect(db_file) as conn:
-        create_table(conn)
+    for entry in entries:
+        reading = entry["kana"]
+        expression_list = parse_headwords(entry["kanji"], "，")
 
-        for entry in entries:
-            reading = entry["kana"]
-            expression_list = parse_headwords(entry["kanji"], "，")
+        optional_kanji_list = parse_headwords(entry["kanjiNotUsed"], "，")
+        for optional_kanji in optional_kanji_list:
+            for expression in expression_list:
+                if optional_kanji in expression:
+                    expression_list.remove(expression)
 
-            optional_kanji_list = parse_headwords(entry["kanjiNotUsed"], "，")
-            for optional_kanji in optional_kanji_list:
-                for expression in expression_list:
-                    if optional_kanji in expression:
-                        expression_list.remove(expression)
+        for accent in entry["accents"]:
+            sound_file = get_sound_relpath(accent, file_to_relpath)
+            if sound_file is None:
+                continue
+            display_text = get_display_text(accent)
+            if len(expression_list) == 0:
+                insert_entry(
+                    conn, (reading, reading, "nhk16", display_text, sound_file)
+                )  # entry
+            for expression in expression_list:
+                insert_entry(
+                    conn, (expression, reading, "nhk16", display_text, sound_file)
+                )  # entry
 
-            for accent in entry["accents"]:
-                sound_file = get_sound_relpath(accent, file_to_relpath)
-                if sound_file is None:
-                    continue
-                display_text = get_display_text(accent)
-                if len(expression_list) == 0:
-                    insert_entry(conn, (reading, reading, display_text, sound_file, 'entry'))
-                for expression in expression_list:
-                    insert_entry(conn, (expression, reading, display_text, sound_file, 'entry'))
-
-            for subentry in entry["subentries"]:
-                if "head" in subentry:
-                    head_list = parse_headwords([subentry["head"]], "，")
-                    for accent in subentry["accents"]:
-                        sound_file = get_sound_relpath(accent, file_to_relpath)
-                        if sound_file is None:
-                            continue
-                        display_text = get_display_text(accent)
-                        for head in head_list:
-                            if is_kana(head):
-                                insert_entry(conn, (head, head, display_text, sound_file, 'subentry'))
-                            else:
-                                insert_entry(conn, (head, '', display_text, sound_file, 'subentry'))
-                else:  # number (+counter) section
-                    expression_list = parse_headwords(entry["kanji"], "・")
-                    numbers = get_numbers(subentry["number"])
-                    for accent in subentry["accents"]:
-                        sound_file = get_sound_relpath(accent, file_to_relpath)
-                        if sound_file is None:
-                            continue
-                        display_text = get_display_text(accent)
-                        if reading == "整数":
-                            reading = ""
-                        if len(expression_list) == 0:
-                            for number in numbers:
-                                insert_entry(conn, (f"{number}{reading}", '', display_text, sound_file, 'counter'))
-                        for expression in expression_list:
-                            for number in numbers:
-                                insert_entry(conn, (f"{number}{expression}", '', display_text, sound_file, 'counter'))
-        conn.commit()
-
-
+        for subentry in entry["subentries"]:
+            if "head" in subentry:
+                head_list = parse_headwords([subentry["head"]], "，")
+                for accent in subentry["accents"]:
+                    sound_file = get_sound_relpath(accent, file_to_relpath)
+                    if sound_file is None:
+                        continue
+                    display_text = get_display_text(accent)
+                    for head in head_list:
+                        if is_kana(head):
+                            insert_entry(
+                                conn, (head, head, "nhk16", display_text, sound_file)
+                            )  # subentry
+                        else:
+                            insert_entry(
+                                conn, (head, None, "nhk16", display_text, sound_file)
+                            )  # subentry
+            else:  # number (+counter) section
+                expression_list = parse_headwords(entry["kanji"], "・")
+                numbers = get_numbers(subentry["number"])
+                for accent in subentry["accents"]:
+                    sound_file = get_sound_relpath(accent, file_to_relpath)
+                    if sound_file is None:
+                        continue
+                    display_text = get_display_text(accent)
+                    if reading == "整数":
+                        reading = ""
+                    if len(expression_list) == 0:
+                        for number in numbers:
+                            insert_entry(
+                                conn,
+                                (
+                                    f"{number}{reading}",
+                                    None,
+                                    "nhk16",
+                                    display_text,
+                                    sound_file,
+                                ),
+                            )  # counter
+                    for expression in expression_list:
+                        for number in numbers:
+                            insert_entry(
+                                conn,
+                                (
+                                    f"{number}{expression}",
+                                    None,
+                                    "nhk16",
+                                    display_text,
+                                    sound_file,
+                                ),
+                            )  # counter
+    conn.commit()
 
 class NHK16AudioSource(AudioSource):
-    def create_table(self):
-        make_nhk16_table(self.get_media_dir_path(), get_db_path())
+    def add_entries(self, connection: sqlite3.Connection):
+        add_nhk16_entries(self.get_media_dir_path(), connection)
 
     def get_name(self, row):
-        return "NHK16 " + row[1] # display
-
-    def execute_query(
-        self, cursor: sqlite3.Connection, **params: dict[str, str]
-    ) -> list[Any]:
-        # overwritten method because file AND display is sent
-        query = f"""
-            SELECT file, display FROM {self.data.id} WHERE (
-                (expression = :expression AND reading = :reading)
-                OR (expression = :expression AND reading IS NULL)
-            ) ORDER BY priority DESC
-            """
-        return cursor.execute(query, params).fetchall()
-
+        return "NHK16 " + row[DISPLAY]
 
 NHK16_DATA = AudioSourceData("nhk16", "user_files/nhk16_files")
 NHK16_AUDIO_SOURCE = NHK16AudioSource(NHK16_DATA)
-
-
-
-if __name__ == "__main__":
-    media_dir = "user_files/nhk16_files"
-    db_file = "entries.db"
-    make_nhk16_table(media_dir, db_file)
-

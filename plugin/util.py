@@ -2,10 +2,8 @@ import os
 from typing import NamedTuple
 from dataclasses import dataclass
 
-HOSTNAME = "localhost"
-PORT = 5050
-DB_FILE_NAME = "entries.db"
-ANDROID_DB_FILE_NAME = "android.db"
+from .consts import *
+
 
 def is_kana(word):
     for char in word:
@@ -39,3 +37,5 @@ class QueryComponents():
 
 AudioSourceJsonEntry = dict[str, str]
 AudioSourceJsonList = list[AudioSourceJsonEntry]
+
+

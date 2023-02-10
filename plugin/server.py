@@ -13,8 +13,10 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from pathlib import Path
 
-from .util import HOSTNAME, PORT, QueryComponents, get_db_path, get_program_root_path, get_android_db_path
+from .util import QueryComponents, get_db_path, get_program_root_path, get_android_db_path
+from .consts import *
 from .all_sources import SOURCES, ID_TO_SOURCE_MAP
+from .gen_db import execute_query
 
 
 
@@ -136,17 +138,28 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         audio_sources_json_list = []
         with sqlite3.connect(get_db_path()) as connection:
-            cursor = connection.cursor()
+            rows = execute_query(connection, qcomps)
+            for row in rows:
+                source = row[SOURCE]
+                file = row[FILE]
 
-            for source in qcomps.sources:
                 audio_source = ID_TO_SOURCE_MAP.get(source, None)
-                if audio_source is not None:
-                    audio_sources_json_list += audio_source.get_sources(connection, qcomps)
-            cursor.close()
+                if audio_source is None:
+                    print(f"(do_GET) unknown source {source}")
+                    continue
+
+                name = audio_source.get_name(row)
+                url = audio_source.construct_file_url(file)
+                entry = {
+                    "name": name,
+                    "url": url
+                }
+                audio_sources_json_list.append(entry)
 
         # Build JSON that yomichan requires
         # Ref: https://github.com/FooSoft/yomichan/blob/master/ext/data/schemas/custom-audio-list-schema.json
         resp = {"type": "audioSourceList", "audioSources": audio_sources_json_list}
+        print(audio_sources_json_list)
 
         # Writing the JSON contents with UTF-8
         payload = bytes(json.dumps(resp), "utf8")
