@@ -1,14 +1,11 @@
 
 # Local Audio Server for Yomichan
 
-This is a completely optional setup for people who want to be
-able to create Anki cards nearly instantaneously, and without
-a working internet connection.
+This Anki add-on allows you to run a local server of which Yomichan can fetch audio files from.
+With this setup, you are able to create Anki cards nearly instantaneously,
+and have word audio without a working internet connection.
 
-
-<details>
-<summary>Reasons for and against using this setup <i>(click here)</i></summary>
-
+## Reasons for and against this setup
 
 * **Advantages:**
 
@@ -55,7 +52,10 @@ These instructions only work on the PC release of Anki.
 If you wish to use this on AnkiDroid, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
 There is currently no way of using this on AnkiMobile.
 
-1.  Download the add-on. (TODO link anki web)
+1.  Download the add-on:
+    * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
+    * Copy and paste this code: `1045800357`
+
     If you are using Anki versions 2.1.49 or below, I recommend updating Anki.
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
     [here](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old).
@@ -133,7 +133,7 @@ There is currently no way of using this on AnkiMobile.
 
     Play all the sources from the above (読む) to ensure the sound is properly fetched.
 
-    > **Note**: If some sources don't work, try regenerating the database
+    > **Note**: If some or all sources don't work, try regenerating the database
     > by navigating to `Tools` →  `Regenerate local audio database`.
 
 
