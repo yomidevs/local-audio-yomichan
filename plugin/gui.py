@@ -57,12 +57,12 @@ def init_gui():
     # separator
     mw.form.menuTools.addSeparator()
 
-    # re-generate database
-    action = QAction("Regenerate Local Audio database", mw)
+    # regenerate regular database (entries.db)
+    action = QAction("Regenerate local audio database", mw)
     qconnect(action.triggered, regenerate_database_operation)
     mw.form.menuTools.addAction(action)
 
-    # re-generate database
+    # generate android db (android.db)
     action2 = QAction("Generate Android Database", mw)
     qconnect(action2.triggered, generate_android_database_operation)
     mw.form.menuTools.addAction(action2)
