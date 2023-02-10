@@ -130,6 +130,8 @@ There is currently no way of using this on AnkiMobile.
 
 
 ## Troubleshooting
+These are additional instructions and tips if something doesn't work as expected.
+
 *   Try regenerating the database
     by navigating to `Tools` →  `Regenerate local audio database`.
     This should take a while.
