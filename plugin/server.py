@@ -13,11 +13,15 @@ from urllib.parse import urlparse
 from urllib.parse import parse_qs
 from pathlib import Path
 
-from .util import QueryComponents, get_db_path, get_program_root_path, get_android_db_path
+from .util import (
+    QueryComponents,
+    get_db_path,
+    get_program_root_path,
+    get_android_db_path,
+)
 from .consts import *
 from .all_sources import SOURCES, ID_TO_SOURCE_MAP
-from .gen_db import execute_query
-
+from .db_utils import execute_query
 
 
 class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
@@ -33,11 +37,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
     def get_audio(self, media_dir, file_path):
-        audio_file = os.path.join(
-            get_program_root_path(),
-            media_dir,
-            file_path
-        )
+        audio_file = os.path.join(get_program_root_path(), media_dir, file_path)
         if not Path(audio_file).is_file():
             self.send_response(400)
             return
@@ -79,7 +79,9 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             sql = """
             SELECT data FROM android WHERE file = :file AND source = :source
             """
-            row = android_cursor.execute(sql, {"file": file_path, "source": source}).fetchone()
+            row = android_cursor.execute(
+                sql, {"file": file_path, "source": source}
+            ).fetchone()
             if row is None:
                 self.send_response(400)
                 return
@@ -88,7 +90,6 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             self.wfile.write(data)
 
             android_cursor.close()
-
 
     def parse_query_components(self) -> QueryComponents:
         """Extract 'term', 'reading', 'sources', and 'user' query parameters"""
@@ -131,7 +132,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             audio_source = ID_TO_SOURCE_MAP[source_id]
             file_path = path_parts[2]
             self.get_audio(audio_source.get_media_dir_path(), file_path)
-            #self._get_audio_android(audio_source.data.id, file_path)
+            # self._get_audio_android(audio_source.data.id, file_path)
             return
 
         qcomps = self.parse_query_components()
@@ -150,10 +151,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
                 name = audio_source.get_name(row)
                 url = audio_source.construct_file_url(file)
-                entry = {
-                    "name": name,
-                    "url": url
-                }
+                entry = {"name": name, "url": url}
                 audio_sources_json_list.append(entry)
 
         # Build JSON that yomichan requires
@@ -173,6 +171,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             self.log_error("BrokenPipe when sending reply")
         return
 
+
 def run_server():
     # Else, run it in a separate thread so it doesn't block
     httpd = http.server.ThreadingHTTPServer((HOSTNAME, PORT), LocalAudioHandler)
@@ -181,6 +180,7 @@ def run_server():
     server_thread.start()
 
     from .gui import init_gui
+
     init_gui()
 
 
@@ -189,4 +189,3 @@ if __name__ == "__main__":
     print("Running in debug mode...")
     httpd = socketserver.TCPServer((HOSTNAME, PORT), LocalAudioHandler)
     httpd.serve_forever()
-

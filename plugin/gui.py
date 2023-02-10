@@ -3,7 +3,7 @@ from aqt.qt import *
 from aqt.utils import showInfo
 from aqt.operations import QueryOp
 
-from .gen_db import init_db, android_gen
+from .db_utils import init_db, android_gen
 
 
 def regenerate_database_operation():
@@ -22,12 +22,15 @@ def regenerate_database_operation():
     # note: QueryOp.with_progress() was broken until Anki 2.1.50
     op.with_progress().run_in_background()
 
+
 def regenerate_database_action() -> int:
     init_db()
     return 1
 
+
 def regenerate_database_success() -> None:
     showInfo(f"Local audio database was successfully regenerated!")
+
 
 def generate_android_database_operation():
     op = QueryOp(
@@ -45,12 +48,16 @@ def generate_android_database_operation():
     # note: QueryOp.with_progress() was broken until Anki 2.1.50
     op.with_progress().run_in_background()
 
+
 def generate_android_database_action():
     android_gen()
     return 1
 
+
 def generate_android_database_success():
-    showInfo(f"Local audio database for AnkiConnect Android was successfully generated!")
+    showInfo(
+        f"Local audio database for AnkiConnect Android was successfully generated!"
+    )
 
 
 def init_gui():
@@ -66,4 +73,3 @@ def init_gui():
     action2 = QAction("Generate Android Database", mw)
     qconnect(action2.triggered, generate_android_database_operation)
     mw.form.menuTools.addAction(action2)
-

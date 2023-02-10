@@ -1,28 +1,37 @@
 import os
 from pathlib import Path
 import sqlite3
+import shutil
 
 from typing import Any
 
-from .util import get_android_db_path, get_db_path, get_program_root_path, QueryComponents
-from .all_sources import SOURCES
+from .util import (
+    get_android_db_path,
+    get_db_path,
+    get_program_root_path,
+    QueryComponents,
+)
+from .all_sources import ID_TO_SOURCE_MAP, SOURCES
+from .consts import *
+
 
 def android_gen():
     original_db_path = get_db_path()
     android_db_path = get_android_db_path()
-    with sqlite3.connect(original_db_path) as connection:
-        og_cursor = connection.cursor()
-        with sqlite3.connect(android_db_path) as android_connection:
-            android_cursor = android_connection.cursor()
 
-            android_write(og_cursor, android_cursor)
+    # literally copy entries.db -> android.db
+    shutil.copy(original_db_path, android_db_path)
 
-            android_cursor.close()
-        og_cursor.close()
+    with sqlite3.connect(android_db_path) as android_connection:
+        android_cursor = android_connection.cursor()
+
+        android_write(android_cursor)
+
+        android_cursor.close()
+
 
 # original cursor, android cursor
-def android_write(og_cur, a_cur):
-
+def android_write(cur):
     drop_table_sql = f"DROP TABLE IF EXISTS android"
     create_table_sql = f"""
        CREATE TABLE android (
@@ -34,35 +43,33 @@ def android_write(og_cur, a_cur):
     create_index_sql = f"""
         CREATE INDEX idx_android ON android(file, source);
     """
-    a_cur.execute(drop_table_sql)
-    a_cur.execute(create_table_sql)
-    a_cur.execute(create_index_sql)
+    cur.execute(drop_table_sql)
+    cur.execute(create_table_sql)
+    cur.execute(create_index_sql)
 
     sql = f"""
         INSERT INTO android (file, source, data) VALUES (?,?,?)
         """
 
-    for source in SOURCES:
-        print(f"(android_write) Reading from {source}...")
-        all_files_query = f"""
-            SELECT file FROM {source.data.id}
-            """
+    all_files_query = f"""
+        SELECT file, source FROM entries
+        """
 
-        rows = og_cur.execute(all_files_query).fetchall()
-        for row in rows:
-            file_name = row[0]
-            full_file_path = os.path.join(
-                get_program_root_path(),
-                source.get_media_dir_path(),
-                file_name
-            )
-            if not Path(full_file_path).is_file():
-                print(f"(android_write) Cannot find file: {full_file_path}")
-                continue
+    rows = cur.execute(all_files_query).fetchall()
+    for row in rows:
+        file_name = row[0]
+        source_id = row[1]
+        source = ID_TO_SOURCE_MAP[source_id]
 
-            with open(full_file_path, 'rb') as file:
-                a_cur.execute(sql, (file_name, source.data.id, file.read()))
+        full_file_path = os.path.join(
+            get_program_root_path(), source.get_media_dir_path(), file_name
+        )
+        if not Path(full_file_path).is_file():
+            print(f"(android_write) Cannot find file: {full_file_path}")
+            continue
 
+        with open(full_file_path, "rb") as file:
+            cur.execute(sql, (file_name, source_id, file.read()))
 
 
 def table_exists_and_has_data() -> bool:
@@ -83,9 +90,11 @@ def table_exists_and_has_data() -> bool:
 
     return False
 
+
 def attempt_init_db():
     if not table_exists_and_has_data():
         init_db()
+
 
 def init_db():
     print("Initializing database. This make take a while...")
@@ -151,7 +160,6 @@ def init_db():
         cursor.execute(create_idx_expr_reading_speaker_sql)
         cursor.close()
 
-
         for source in SOURCES:
             print(f"(init_db) Adding entries from {source.data.id}...")
             source.add_entries(connection)
@@ -159,15 +167,7 @@ def init_db():
     print("Finished initializing database!")
 
 
-#def execute_query(
-#    self, cursor: sqlite3.Connection, **params: dict[str, str]
-#) -> list[Any]:
-def execute_query(
-    cursor: sqlite3.Connection, qcomps: QueryComponents
-) -> list[Any]:
-
-    # - short hand is (expression = :expression AND (reading = :reading OR reading IS NULL))
-    #   - expanded out statement such that the query explicit, which ensures the index is properly used
+def execute_query(cursor: sqlite3.Connection, qcomps: QueryComponents) -> list[Any]:
     # - order by priority is to prevent:
     #   - unnecessary post processing (best done in the query)
     #   - unnecessary unions & subqueries
@@ -176,12 +176,12 @@ def execute_query(
     # - cannot do "expression = :expression or reading = :reading":
     #   - imagine if there existed a word in pure kana that you wanted to add, but there was
     #     a different word that had the same kana
-    #   - how to prioritize without subqueries or post processing!
+    #   - don't think there's another way to prioritize readings without subqueries or post processing
     #   - best for correctness anyways: it is true that we can select any word that
     #     has the same reading, but there's 0 guarantee that the pitch accent will be the same!
 
     ## the query for when we don't care about speakers
-    #query = f"""
+    # query = f"""
     #    SELECT * FROM entries WHERE (
     #            expression = ?
     #        AND (reading IS NULL OR reading = ?)
@@ -198,11 +198,11 @@ def execute_query(
     #    """
 
     ## the query for when speakers must be filtered
-    #query = f"""
+    # query = f"""
     #    SELECT * FROM entries WHERE (
     #             expression = ?
     #        AND (reading IS NULL OR reading = ?)
-    #        AND (speaker IN (?,?,?) OR speaker IS NULL)
+    #        AND (speaker IS NULL OR speaker IN (?,?,?))
     #    )
     #    ORDER BY
     #      (CASE source
@@ -211,12 +211,17 @@ def execute_query(
     #        WHEN ? THEN 2
     #        WHEN ? THEN 3
     #      END),
+    #      (CASE speaker
+    #        WHEN ? THEN 0
+    #        WHEN ? THEN 1
+    #        WHEN ? THEN 2
+    #      END),
     #      reading
     #    """
 
     ## the query for when we have less than all sources
     ## i.e. fovo, jpod, jpod_alternate
-    #query = f"""
+    # query = f"""
     #    SELECT * FROM entries WHERE (
     #        AND expression = :expression
     #        AND (reading IS NULL OR reading = :reading)
@@ -250,26 +255,37 @@ def execute_query(
     if len(qcomps.user) > 0:
         n_question_marks = ",".join(["?"] * len(qcomps.user))
         query_where += f"""
-            AND (speaker in ({n_question_marks}))
+            AND (speaker IS NULL OR speaker in ({n_question_marks}))
         """
         params += qcomps.user
 
-    query_order_source = "\n".join(
-        f"WHEN ? THEN {i}" for i in range(len(qcomps.sources))
+    # orders by source
+    query_order = (
+        "(CASE source "
+        + "\n".join(f"WHEN ? THEN {i}" for i in range(len(qcomps.sources)))
+        + " END)"
     )
     params += qcomps.sources
+
+    # orders by speakers if necessary
+    if len(qcomps.user) > 0:
+        query_order += (
+            ",\n(CASE speaker "
+            + "\n".join(f"WHEN ? THEN {i}" for i in range(len(qcomps.user)))
+            + " END)"
+        )
+        params += qcomps.user
 
     query = f"""
         SELECT * FROM entries WHERE (
             {query_where}
         )
         ORDER BY
-          (CASE source {query_order_source} END),
+          {query_order},
           reading
         """
 
-    print(query)
-    print(params)
+    # print(query)
+    # print(params)
 
     return cursor.execute(query, params).fetchall()
-

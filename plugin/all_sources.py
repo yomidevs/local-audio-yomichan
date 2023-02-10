@@ -10,5 +10,6 @@ SOURCES: list[AudioSource] = [
     NHK16_AUDIO_SOURCE,
     FORVO_AUDIO_SOURCE,
 ]
-ID_TO_SOURCE_MAP: dict[str, AudioSource] = {source.data.id: source for source in SOURCES}
-
+ID_TO_SOURCE_MAP: dict[str, AudioSource] = {
+    source.data.id: source for source in SOURCES
+}

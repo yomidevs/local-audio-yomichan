@@ -27,7 +27,7 @@ class AudioSource(ABC):
     def add_entries(self, connection: sqlite3.Connection):
         pass
 
-    #def init_table(self, force_init: bool):
+    # def init_table(self, force_init: bool):
     #    if force_init or not self.table_exists_and_has_data():
     #        print(f"(AudioSource) Initializing table: {self.data.id}")
     #        self.create_table()
@@ -49,9 +49,9 @@ class AudioSource(ABC):
         )
         return urlunparse(parts)
 
-    #def get_sources(
+    # def get_sources(
     #    self, cursor: sqlite3.Connection, qcomp: QueryComponents
-    #) -> list[dict[str, str]]:
+    # ) -> list[dict[str, str]]:
 
     #    query_params = {
     #        "expression": qcomp.expression,

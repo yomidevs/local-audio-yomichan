@@ -7,18 +7,24 @@ from .consts import *
 
 def is_kana(word):
     for char in word:
-        if char < 'ぁ' or char > 'ヾ':
+        if char < "ぁ" or char > "ヾ":
             return False
     return True
 
+
 def get_program_root_path():
-    return os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").removesuffix("/")
+    return (
+        os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").removesuffix("/")
+    )
+
 
 def get_db_path():
     return os.path.join(get_program_root_path(), DB_FILE_NAME)
 
+
 def get_android_db_path():
     return os.path.join(get_program_root_path(), ANDROID_DB_FILE_NAME)
+
 
 class URLComponents(NamedTuple):
     scheme: str
@@ -28,14 +34,14 @@ class URLComponents(NamedTuple):
     query: str
     fragment: str
 
+
 @dataclass(frozen=True)
-class QueryComponents():
+class QueryComponents:
     expression: str
     reading: str
     sources: list[str]
     user: list[str]
 
+
 AudioSourceJsonEntry = dict[str, str]
 AudioSourceJsonList = list[AudioSourceJsonEntry]
-
-

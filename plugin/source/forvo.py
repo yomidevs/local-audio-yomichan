@@ -4,6 +4,7 @@ import sqlite3
 from .audio_source import AudioSource, AudioSourceData
 from ..consts import *
 
+
 class ForvoAudioSource(AudioSource):
     def add_entries(self, connection: sqlite3.Connection):
         start = self.data.media_dir
@@ -16,7 +17,7 @@ class ForvoAudioSource(AudioSource):
                 path = os.path.join(root, name)
                 relative_path = os.path.relpath(path, start)
 
-                if not name.endswith('.mp3'):
+                if not name.endswith(".mp3"):
                     print(f"(ForvoAudioSource) skipping non-mp3 file: {relative_path}")
                     continue
 
@@ -31,6 +32,6 @@ class ForvoAudioSource(AudioSource):
     def get_name(self, row):
         return f"Forvo ({row[SPEAKER]})"
 
+
 FORVO_DATA = AudioSourceData("forvo", "user_files/forvo_files")
 FORVO_AUDIO_SOURCE = ForvoAudioSource(FORVO_DATA)
-

@@ -43,7 +43,9 @@ class JPodAudioSource(AudioSource):
                 if reading == expr:
                     if is_kana(reading):
                         # it's likely safe to store kana only words like this
-                        cur.execute(sql, (reading, reading, self.data.id, relative_path))
+                        cur.execute(
+                            sql, (reading, reading, self.data.id, relative_path)
+                        )
                     else:
                         cur.execute(sql, (reading, None, self.data.id, relative_path))
                 else:
