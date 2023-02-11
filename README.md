@@ -143,9 +143,9 @@ These are additional instructions and tips if something doesn't work as expected
         Ensure that within step 3, your file structure matches the expected file structure.
 *   Ensure you haven't copied any files from the torrent outside of `user_files`.
     If you have (or suspect you may have):
-    * Temporarily move the `user_files` folder outside of the add-on folder (to avoid re-downloading the audio files torrent again).
-    * Delete the add-on.
-    * Start again from step 2.
+    1. Temporarily move the `user_files` folder outside of the add-on folder (to avoid re-downloading the audio files torrent again).
+    1. Delete the add-on.
+    1. Start again from step 2.
 
 ## Usage Notes
 
