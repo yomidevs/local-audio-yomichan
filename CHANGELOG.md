@@ -1,4 +1,7 @@
 
+## v1.1.0
+Moved options into a submenu (thanks to fsrs4anki helper for the example code)
+
 ## v1.0.0
 **Major code rewrite:**
 - Reworked database format so all sources are now in one giant table, and so one query can get all audio sources correctly

@@ -136,7 +136,7 @@ There is currently no way of using this on AnkiMobile.
 These are additional instructions and tips if something doesn't work as expected.
 
 *   Try regenerating the database
-    by navigating to `Tools` →  `Regenerate local audio database`.
+    by navigating to `Tools` →  `Local Audio` →  `Regenerate database`.
     This should take a while.
     *   If regenerating the database finishes almost instantly,
         it likely means that your audio files are misplaced.

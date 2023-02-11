@@ -61,15 +61,15 @@ def generate_android_database_success():
 
 
 def init_gui():
-    # separator
     mw.form.menuTools.addSeparator()
+    menu_local_audio = mw.form.menuTools.addMenu("Local Audio")
 
     # regenerate regular database (entries.db)
-    action = QAction("Regenerate local audio database", mw)
+    action = QAction("Regenerate database", mw)
     qconnect(action.triggered, regenerate_database_operation)
-    mw.form.menuTools.addAction(action)
+    menu_local_audio.addAction(action)
 
     # generate android db (android.db)
     action2 = QAction("Generate Android database", mw)
     qconnect(action2.triggered, generate_android_database_operation)
-    mw.form.menuTools.addAction(action2)
+    menu_local_audio.addAction(action2)
