@@ -185,7 +185,7 @@ Huge thanks to everyone who made it happen:
 * **`Marv#5144`**: Creating and maintaining the torrent + testing out the rewritten add-on
 * **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
 * **`jamesnicolas`**: Creator of [yomichan-forvo-server](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
-* **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android.
+* **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android. Also gave advice for improving the database.
 
 
 ## License
