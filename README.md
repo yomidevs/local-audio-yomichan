@@ -75,6 +75,9 @@ There is currently no way of using this on AnkiMobile.
         <details> <summary>Expected file structure <i>(click here)</i></summary>
 
             1045800357
+            ├── db_utils.py
+            ├── server.py
+            ├── ...
             └── user_files
                 ├── forvo_files
                 │   ├── akitomo
@@ -96,19 +99,18 @@ There is currently no way of using this on AnkiMobile.
 
         </summary>
 
-1. In Yomichan Settings, go to:
+1. Add the URL in Yomichan.
+    * In Yomichan Settings, go to:
+      > `Audio` →  `Configure audio playback sources`.
 
-    > `Audio` →  `Configure audio playback sources`.
+    * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
+    * Set the `URL` field to:
+        ```
+        http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}
+        ```
 
-    Click `Add`, and set the source to be `Add Custom URL (JSON)`.
-
-    Set the `URL` field to:
-    ```
-    http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}
-    ```
-
-    Set this to be the **first entry** of the list,
-    if you already have other entries.
+        Set this to be the **first entry** of the list,
+        if you already have other entries.
 
 1. Restart Anki.
 
