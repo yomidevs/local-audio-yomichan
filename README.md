@@ -48,7 +48,7 @@ There is currently no way of using this on AnkiMobile.
 
 1. Download all the required audio files.
     They can be found at this [torrent link](https://nyaa.si/view/1625597).
-    If you have never used a torrent before, I highly recommend using the
+    If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
     <details> <summary>Magnet link <i>(click here)</i></summary>
@@ -136,7 +136,7 @@ There is currently no way of using this on AnkiMobile.
 These are additional instructions and tips if something doesn't work as expected.
 
 *   Try regenerating the database
-    by navigating to `Tools` →  `Local Audio` →  `Regenerate database`.
+    by navigating to `Tools` →  `Local Audio Server` →  `Regenerate database`.
     This should take a while.
     *   If regenerating the database finishes almost instantly,
         it likely means that your audio files are misplaced.
@@ -182,7 +182,7 @@ Huge thanks to everyone who made it happen:
 * **`kezi#0001`**: Getting NHK16 audio
 * **`(anonymous)`**: Adding SQL + NHK16 audio support
 * **`Renji-xD#8182`**: Getting Forvo audio, adding Forvo audio support
-* **`Marv#5144`**: Creating and maintaining the torrent
+* **`Marv#5144`**: Creating and maintaining the torrent + testing out the rewritten add-on
 * **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
 * **`jamesnicolas`**: Creator of [yomichan-forvo-server](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
 * **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android.

@@ -1,3 +1,6 @@
+## v1.1.2
+Renamed submenu from `Local Audio` -> `Local Audio Server`
+
 ## v1.1.1
 Moved database (entries.db) into `user_files`, so it doesn't get overwritten on each update
 
