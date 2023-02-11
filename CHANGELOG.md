@@ -1,3 +1,6 @@
+## v1.1.3
+Added `user_files` in .addon file so the database can be opened and checked properly
+
 ## v1.1.2
 Renamed submenu from `Local Audio` -> `Local Audio Server`
 
