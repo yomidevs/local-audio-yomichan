@@ -1,3 +1,5 @@
+## v1.1.1
+Moved database (entries.db) into `user_files`, so it doesn't get overwritten on each update
 
 ## v1.1.0
 Moved options into a submenu (thanks to fsrs4anki helper for the example code)
