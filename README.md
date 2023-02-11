@@ -62,7 +62,9 @@ There is currently no way of using this on AnkiMobile.
     * Copy and paste this code: `1045800357`
 
     <details> <summary>Example image <i>(click here)</i></summary>
+
     ![image](./img/addons_install.png)
+
     </details>
 
     This add-on only works for Anki versions 2.1.50 and above.
@@ -74,7 +76,9 @@ There is currently no way of using this on AnkiMobile.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
     * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
         <details> <summary>Example image <i>(click here)</i></summary>
+
         ![image](./img/view_files.png)
+
         </details>
     * Copy the entire `user_files` folder (from the first step) into this folder.
       Note: the other files in the torrent are now outdated, and should **not** be copied.
@@ -109,6 +113,12 @@ There is currently no way of using this on AnkiMobile.
 1. Add the URL in Yomichan.
     * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
+
+        <details> <summary>Example image <i>(click here)</i></summary>
+
+        ![image](./img/configre_audio_playback_sources.png)
+
+        </details>
 
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
     * Set the `URL` field to:
@@ -148,6 +158,13 @@ These are additional instructions and tips if something doesn't work as expected
 *   Try regenerating the database
     by navigating to `Tools` →  `Local Audio Server` →  `Regenerate database`.
     This should take a while.
+
+    <details> <summary>Example image <i>(click here)</i></summary>
+
+    ![image](./img/regen_database.png)
+
+    </details>
+
     *   If regenerating the database finishes almost instantly,
         it likely means that your audio files are misplaced.
         Ensure that within step 3, your file structure matches the expected file structure.
