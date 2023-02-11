@@ -61,11 +61,7 @@ There is currently no way of using this on AnkiMobile.
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
     * Copy and paste this code: `1045800357`
 
-    <details> <summary>Example image <i>(click here)</i></summary>
-
-    ![image](./img/addons_install.png)
-
-    </details>
+        ![image](./img/addons_install.png)
 
     This add-on only works for Anki versions 2.1.50 and above.
     If you are using Anki versions 2.1.49 or below, I highly recommend updating.
@@ -75,11 +71,9 @@ There is currently no way of using this on AnkiMobile.
 1. Move the downloaded audio files to the correct place.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
     * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
-        <details> <summary>Example image <i>(click here)</i></summary>
 
         ![image](./img/view_files.png)
 
-        </details>
     * Copy the entire `user_files` folder (from the first step) into this folder.
       Note: the other files in the torrent are now outdated, and should **not** be copied.
 
@@ -114,11 +108,7 @@ There is currently no way of using this on AnkiMobile.
     * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
 
-        <details> <summary>Example image <i>(click here)</i></summary>
-
         ![image](./img/configre_audio_playback_sources.png)
-
-        </details>
 
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
     * Set the `URL` field to:
