@@ -61,6 +61,10 @@ There is currently no way of using this on AnkiMobile.
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
     * Copy and paste this code: `1045800357`
 
+    <details> <summary>Example image <i>(click here)</i></summary>
+    ![image](./img/addons_install.png)
+    </details>
+
     This add-on only works for Anki versions 2.1.50 and above.
     If you are using Anki versions 2.1.49 or below, I highly recommend updating.
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
@@ -69,6 +73,9 @@ There is currently no way of using this on AnkiMobile.
 1. Move the downloaded audio files to the correct place.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
     * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
+        <details> <summary>Example image <i>(click here)</i></summary>
+        ![image](./img/view_files.png)
+        </details>
     * Copy the entire `user_files` folder (from the first step) into this folder.
       Note: the other files in the torrent are now outdated, and should **not** be copied.
 
@@ -97,10 +104,10 @@ There is currently no way of using this on AnkiMobile.
                     │   └── ...
                     └── entries.json
 
-        </summary>
+        </details>
 
 1. Add the URL in Yomichan.
-    * In Yomichan Settings, go to:
+    * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
 
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
@@ -111,6 +118,7 @@ There is currently no way of using this on AnkiMobile.
 
         Set this to be the **first entry** of the list,
         if you already have other entries.
+
 
 1. Restart Anki.
 
