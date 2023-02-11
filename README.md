@@ -150,6 +150,12 @@ These are additional instructions and tips if something doesn't work as expected
     * Delete the add-on.
     * Start again from step 2.
 
+*   If nothing else works, have any questions, etc., feel free to contact
+    me on discord `Aquafina water bottle#3026`,
+    or [submit an issue](https://github.com/Aquafina-water-bottle/local-audio-yomichan/issues).
+    I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
+
+
 ## Usage Notes
 
 * The local audio server only works when Anki is open. Of course, it can be running minimized in the background.
@@ -194,11 +200,5 @@ Huge thanks to everyone who made it happen:
 ## License
 [MIT](https://github.com/Aquafina-water-bottle/local-audio-yomichan/blob/master/LICENSE)
 
-
-## Contact me!
-If you encounter any problems, have any questions, etc., feel free to contact
-me on discord `Aquafina water bottle#3026`,
-or [submit an issue](https://github.com/Aquafina-water-bottle/local-audio-yomichan/issues).
-I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
 
 
