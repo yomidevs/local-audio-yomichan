@@ -31,7 +31,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 1. This setup requires about **5GB of free space**.
 
 1. It only has the coverage of JPod 101, NHK16 and select audio from Forvo
-    (which is still about 99% coverage, from personal experience).
+    (which is still very high, as over 200,000 unique expressions are covered).
     To increase audio coverage, it would be ideal to also include an extra
     [Forvo audio source](https://learnjapanese.moe/yomichan/#bonus-adding-forvo-extra-audio-source).
 
