@@ -20,9 +20,9 @@ def android_gen():
     android_db_path = get_android_db_path()
 
     ## literally copy entries.db -> android.db
-    #shutil.copy(original_db_path, android_db_path)
+    # shutil.copy(original_db_path, android_db_path)
 
-    #with sqlite3.connect(android_db_path) as android_connection:
+    # with sqlite3.connect(android_db_path) as android_connection:
     #    android_cursor = android_connection.cursor()
     #    android_write(android_cursor, android_cursor)
     #    android_cursor.close()
@@ -100,6 +100,24 @@ def table_exists_and_has_data() -> bool:
 def attempt_init_db():
     if not table_exists_and_has_data():
         init_db()
+
+
+def get_num_files_per_source():
+    result = []
+
+    with sqlite3.connect(get_db_path()) as conn:
+        cursor = conn.cursor()
+        rows = cursor.execute(
+            "SELECT source, count(source) FROM entries GROUP BY source"
+        ).fetchall()
+        for row in rows:
+            source, count = row
+            result.append(f"{source}: {count}")
+
+    if len(result) == 0:
+        return "Database is empty."
+
+    return "\n".join(result)
 
 
 def init_db():
