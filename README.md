@@ -161,12 +161,6 @@ These are additional instructions and tips if something doesn't work as expected
     and then try regenerating the database
     by navigating to `Tools` →  `Local Audio Server` →  `Regenerate database`.
 
-    <details> <summary>Example image <i>(click here)</i></summary>
-
-    ![image](./img/regen_database.png)
-
-    </details>
-
 *   Ensure you haven't copied any files from the torrent outside of `user_files`.
     If you have (or suspect you may have):
     * Temporarily move the `user_files` folder outside of the add-on folder (to avoid re-downloading the audio files torrent again).
