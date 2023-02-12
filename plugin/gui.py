@@ -63,6 +63,7 @@ def generate_android_database_success():
 def action_get_num_files_per_source():
     showInfo(get_num_files_per_source())
 
+
 def init_gui():
     menu_local_audio = mw.form.menuTools.addMenu("Local Audio Server")
 
@@ -79,4 +80,3 @@ def init_gui():
     action3 = QAction("Generate Android database", mw)
     qconnect(action3.triggered, generate_android_database_operation)
     menu_local_audio.addAction(action3)
-

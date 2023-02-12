@@ -20,9 +20,9 @@ def android_gen():
     android_db_path = get_android_db_path()
 
     ## literally copy entries.db -> android.db
-    #shutil.copy(original_db_path, android_db_path)
+    # shutil.copy(original_db_path, android_db_path)
 
-    #with sqlite3.connect(android_db_path) as android_connection:
+    # with sqlite3.connect(android_db_path) as android_connection:
     #    android_cursor = android_connection.cursor()
     #    android_write(android_cursor, android_cursor)
     #    android_cursor.close()
@@ -103,7 +103,6 @@ def attempt_init_db():
 
 
 def get_num_files_per_source():
-
     result = []
 
     with sqlite3.connect(get_db_path()) as conn:
@@ -119,6 +118,7 @@ def get_num_files_per_source():
         return "Database is empty."
 
     return "\n".join(result)
+
 
 def init_db():
     print("Initializing database. This make take a while...")
