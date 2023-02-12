@@ -145,9 +145,21 @@ There is currently no way of using this on AnkiMobile.
 ## Troubleshooting
 These are additional instructions and tips if something doesn't work as expected.
 
-*   Try regenerating the database
+*   Make sure the database was properly generated.
+
+    To determine if the database was properly generated,
+    navigate to `Tools` →  `Local Audio Server` →  `Get number of entries per source`.
+    The expected result is the image below:
+
+    ![image](./img/num_per_source.png)
+
+    If there are missing sources, or you see "Database is empty", that means that
+    the audio files were either misplaced, or Anki was restarted before moving
+    the audio files into the proper location.
+
+    Ensure that within step 3, your file structure matches the expected file structure,
+    and then try regenerating the database
     by navigating to `Tools` →  `Local Audio Server` →  `Regenerate database`.
-    This should take a while.
 
     <details> <summary>Example image <i>(click here)</i></summary>
 
@@ -155,15 +167,12 @@ These are additional instructions and tips if something doesn't work as expected
 
     </details>
 
-    *   If regenerating the database finishes almost instantly,
-        it likely means that your audio files are misplaced.
-        Ensure that within step 3, your file structure matches the expected file structure.
-
 *   Ensure you haven't copied any files from the torrent outside of `user_files`.
     If you have (or suspect you may have):
     * Temporarily move the `user_files` folder outside of the add-on folder (to avoid re-downloading the audio files torrent again).
     * Delete the add-on.
     * Start again from step 2.
+
 
 *   If nothing else works, have any questions, etc., feel free to contact
     me on discord `Aquafina water bottle#3026`,

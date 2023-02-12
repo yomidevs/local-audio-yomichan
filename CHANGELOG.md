@@ -1,14 +1,18 @@
+## v1.2.0
+- Added `Get number of entries per source` menu option
+- Got rid of manifest.json in the resulting localaudio.addon file because it wasn't necessary
+
 ## v1.1.3
-Added `user_files` in .addon file so the database can be opened and checked properly
+- Added `user_files` in .addon file so the database can be opened and checked properly
 
 ## v1.1.2
-Renamed submenu from `Local Audio` -> `Local Audio Server`
+- Renamed submenu from `Local Audio` -> `Local Audio Server`
 
 ## v1.1.1
-Moved database (entries.db) into `user_files`, so it doesn't get overwritten on each update
+- Moved database (entries.db) into `user_files`, so it doesn't get overwritten on each update
 
 ## v1.1.0
-Moved options into a submenu (thanks to fsrs4anki helper for the example code)
+- Moved options into a submenu (thanks to fsrs4anki helper for the example code)
 
 ## v1.0.0
 **Major code rewrite:**

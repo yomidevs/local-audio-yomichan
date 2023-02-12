@@ -3,7 +3,7 @@ from aqt.qt import *
 from aqt.utils import showInfo
 from aqt.operations import QueryOp
 
-from .db_utils import init_db, android_gen
+from .db_utils import init_db, android_gen, get_num_files_per_source
 
 
 def regenerate_database_operation():
@@ -60,6 +60,9 @@ def generate_android_database_success():
     )
 
 
+def action_get_num_files_per_source():
+    showInfo(get_num_files_per_source())
+
 def init_gui():
     menu_local_audio = mw.form.menuTools.addMenu("Local Audio Server")
 
@@ -68,7 +71,12 @@ def init_gui():
     qconnect(action.triggered, regenerate_database_operation)
     menu_local_audio.addAction(action)
 
-    # generate android db (android.db)
-    action2 = QAction("Generate Android database", mw)
-    qconnect(action2.triggered, generate_android_database_operation)
+    action2 = QAction("Get number of entries per source", mw)
+    qconnect(action2.triggered, action_get_num_files_per_source)
     menu_local_audio.addAction(action2)
+
+    # generate android db (android.db)
+    action3 = QAction("Generate Android database", mw)
+    qconnect(action3.triggered, generate_android_database_operation)
+    menu_local_audio.addAction(action3)
+

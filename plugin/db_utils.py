@@ -102,6 +102,24 @@ def attempt_init_db():
         init_db()
 
 
+def get_num_files_per_source():
+
+    result = []
+
+    with sqlite3.connect(get_db_path()) as conn:
+        cursor = conn.cursor()
+        rows = cursor.execute(
+            "SELECT source, count(source) FROM entries GROUP BY source"
+        ).fetchall()
+        for row in rows:
+            source, count = row
+            result.append(f"{source}: {count}")
+
+    if len(result) == 0:
+        return "Database is empty."
+
+    return "\n".join(result)
+
 def init_db():
     print("Initializing database. This make take a while...")
 
