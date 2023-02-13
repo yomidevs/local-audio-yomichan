@@ -168,7 +168,7 @@ These are additional instructions and tips if something doesn't work as expected
     * Start again from step 2.
 
 
-*   If nothing else works, have any questions, etc., feel free to contact
+*   If nothing else works, you have questions, etc., feel free to contact
     me on discord `Aquafina water bottle#3026`,
     or [submit an issue](https://github.com/Aquafina-water-bottle/local-audio-yomichan/issues).
     I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
