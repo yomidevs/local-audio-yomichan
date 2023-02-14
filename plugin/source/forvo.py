@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from typing import Final
 
 from .audio_source import AudioSource, AudioSourceData
 from ..consts import *
@@ -35,5 +36,5 @@ class ForvoAudioSource(AudioSource):
         return f"Forvo ({row[SPEAKER]})"
 
 
-FORVO_DATA = AudioSourceData("forvo", "user_files/forvo_files")
-FORVO_AUDIO_SOURCE = ForvoAudioSource(FORVO_DATA)
+FORVO_DATA: Final = AudioSourceData("forvo", "user_files/forvo_files")
+FORVO_AUDIO_SOURCE: Final = ForvoAudioSource(FORVO_DATA)

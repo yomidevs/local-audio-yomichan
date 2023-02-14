@@ -1,7 +1,9 @@
 import os
 import sqlite3
+
 from abc import ABC, abstractmethod
 from dataclasses import dataclass
+from typing import Final
 
 from urllib.parse import urlunparse
 
@@ -15,8 +17,8 @@ from ..util import (
 
 @dataclass
 class AudioSourceData:
-    id: str  # also the table name
-    media_dir: str
+    id: Final[str]  # also the table name
+    media_dir: Final[str]
 
 
 class AudioSource(ABC):

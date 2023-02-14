@@ -2,6 +2,7 @@ import os
 import json
 import sqlite3
 from pathlib import Path
+from typing import Final
 
 from .audio_source import AudioSource, AudioSourceData
 from ..util import get_program_root_path
@@ -231,5 +232,5 @@ class NHK16AudioSource(AudioSource):
     def get_name(self, row):
         return "NHK16 " + row[DISPLAY]
 
-NHK16_DATA = AudioSourceData("nhk16", "user_files/nhk16_files")
-NHK16_AUDIO_SOURCE = NHK16AudioSource(NHK16_DATA)
+NHK16_DATA: Final = AudioSourceData("nhk16", "user_files/nhk16_files")
+NHK16_AUDIO_SOURCE: Final = NHK16AudioSource(NHK16_DATA)

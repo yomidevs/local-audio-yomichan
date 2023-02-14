@@ -211,6 +211,7 @@ plugin/android.db
 plugin/android.db-journal
 plugin/user_files/
 plugin/user_files
+plugin/meta.json
 
 localaudio.ankiaddon
 

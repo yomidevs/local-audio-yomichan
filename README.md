@@ -141,6 +141,10 @@ There is currently no way of using this on AnkiMobile.
 
     Play all the sources from the above (読む) to ensure the sound is properly fetched.
 
+## Optional Steps: Backfill cards
+DillonWall made [a fantastic add-on](https://github.com/DillonWall/generate-batch-audio-anki-addon)
+that can backfill cards from any custom URL, including this local audio server.
+
 
 ## Troubleshooting
 These are additional instructions and tips if something doesn't work as expected.
