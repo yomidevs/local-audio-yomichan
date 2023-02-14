@@ -215,7 +215,7 @@ Huge thanks to everyone who made it happen:
 * **`Renji-xD#8182`**: Getting Forvo audio, adding Forvo audio support
 * **`Marv#5144`**: Creating and maintaining the torrent + testing out the rewritten add-on
 * **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
-* **`jamesnicolas`**: Creator of [yomichan-forvo-server](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
+* **`jamesnicolas`**: Creator of [Yomichan Forvo Server for Anki](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
 * **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android. Also gave advice for improving the database.
 * **`DillonWall`**: Creator of [Generate Batch Audio](https://github.com/DillonWall/generate-batch-audio-anki-addon). This allows you to backfill existing cards with the local audio server, or anything else.
 
