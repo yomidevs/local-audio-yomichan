@@ -15,36 +15,47 @@ from .all_sources import ID_TO_SOURCE_MAP, SOURCES
 from .consts import *
 
 
+# versions when the entries.db database schemas has changed and must be regenerated
+UPDATE_VERSIONS = [
+    (1, 3, 0),
+]
+
+
 def android_gen():
+    """
+    generates the android.db file
+    """
+
     original_db_path = get_db_path()
     android_db_path = get_android_db_path()
 
     ## literally copy entries.db -> android.db
-    # shutil.copy(original_db_path, android_db_path)
+    shutil.copy(original_db_path, android_db_path)
 
-    # with sqlite3.connect(android_db_path) as android_connection:
-    #    android_cursor = android_connection.cursor()
-    #    android_write(android_cursor, android_cursor)
-    #    android_cursor.close()
+    with sqlite3.connect(android_db_path) as android_connection:
+        android_cursor = android_connection.cursor()
+        android_write(android_cursor, android_cursor)
+        android_cursor.close()
 
-    with sqlite3.connect(original_db_path) as og_connection:
-        with sqlite3.connect(android_db_path) as android_connection:
-            android_cursor = android_connection.cursor()
-            og_cursor = og_connection.cursor()
-            android_write(og_cursor, android_cursor)
-            og_cursor.close()
-            android_cursor.close()
+    # with sqlite3.connect(original_db_path) as og_connection:
+    #    with sqlite3.connect(android_db_path) as android_connection:
+    #        android_cursor = android_connection.cursor()
+    #        og_cursor = og_connection.cursor()
+    #        android_write(og_cursor, android_cursor)
+    #        og_cursor.close()
+    #        android_cursor.close()
 
 
 # original cursor, android cursor
 def android_write(og_cur, cur):
     drop_table_sql = f"DROP TABLE IF EXISTS android"
     create_table_sql = f"""
-       CREATE TABLE android (
-           file text NOT NULL,
-           source text NOT NULL,
-           data blob NOT NULL
-       );
+        CREATE TABLE android (
+            id integer PRIMARY KEY NOT NULL,
+            file text NOT NULL,
+            source text NOT NULL,
+            data blob NOT NULL
+        );
     """
     create_index_sql = f"""
         CREATE INDEX idx_android ON android(file, source);
@@ -97,9 +108,55 @@ def table_exists_and_has_data() -> bool:
     return False
 
 
-def attempt_init_db():
-    if not table_exists_and_has_data():
-        init_db()
+def update_check(prev, latest, update_versions):
+    if prev >= latest:  # shouldn't happen unless you're a dev
+        return False
+    for check_ver in update_versions:
+        if prev < check_ver:
+            return True
+    return False
+
+
+def table_must_be_updated():
+    # uses a super basic database updating scheme: regenerates the entire thing
+    # (it's failsafe!)
+
+    db_version_file = os.path.join(get_program_root_path(), DB_VERSION_FILE_NAME)
+    latest_version_file = os.path.join(
+        get_program_root_path(), LATEST_VERSION_FILE_NAME
+    )
+
+    if not os.path.isfile(db_version_file):
+        return True
+    with open(db_version_file) as f:
+        db_ver = f.read().strip().split(".")
+        if len(db_ver) != 3:  # shouldn't happen
+            return True
+        db_ver = tuple(int(v) for v in db_ver)
+
+    with open(latest_version_file) as f:
+        latest_ver = f.read().strip().split(".")
+        if len(latest_ver) != 3:  # shouldn't happen
+            return True
+        latest_ver = tuple(int(v) for v in latest_ver)
+
+    return update_check(db_ver, latest_ver, UPDATE_VERSIONS)
+
+
+def update_db_version():
+    """
+    writes the current version to the db version file
+    """
+    db_version_file = os.path.join(get_program_root_path(), DB_VERSION_FILE_NAME)
+    latest_version_file = os.path.join(
+        get_program_root_path(), LATEST_VERSION_FILE_NAME
+    )
+
+    with open(latest_version_file) as f:
+        ver = f.read().strip()
+
+    with open(db_version_file, "w") as f:
+        f.write(ver)
 
 
 def get_num_files_per_source():
@@ -149,7 +206,7 @@ def init_db():
         # - display: contains the display for nhk16. Null for anything that isn't nhk16.
         create_table_sql = """
             CREATE TABLE entries (
-                id integer PRIMARY KEY,
+                id integer PRIMARY KEY NOT NULL,
                 expression text NOT NULL,
                 reading text,
                 source text NOT NULL,
