@@ -44,10 +44,10 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         if audio_file.endswith(".mp3"):
             self.send_response(200)
-            self.send_header("Content-type", "text/mpeg")
+            self.send_header("Content-type", "audio/mpeg")
         elif audio_file.endswith(".aac"):
             self.send_response(200)
-            self.send_header("Content-type", "text/aac")
+            self.send_header("Content-type", "audio/aac")
         else:
             self.send_response(400)
             return
@@ -63,10 +63,10 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         """
         if file_path.endswith(".mp3"):
             self.send_response(200)
-            self.send_header("Content-type", "text/mpeg")
+            self.send_header("Content-type", "audio/mpeg")
         elif file_path.endswith(".aac"):
             self.send_response(200)
-            self.send_header("Content-type", "text/aac")
+            self.send_header("Content-type", "audio/aac")
         else:
             self.send_response(400)
             return
