@@ -119,12 +119,8 @@ There is currently no way of using this on AnkiMobile.
         Set this to be the **first entry** of the list,
         if you already have other entries.
 
-
-1. Restart Anki.
-
-    Because restarting Anki will generate the database file,
-    it may appear that Anki is not loading.
-    This is normal, and expect this to take a while.
+1. Restart Anki. You should see a message saying "Generating local audio database",
+    and should take some time to finish.
 
 1. Ensure that everything works. To do this, play some audio from Yomichan.
     You should notice two things:
@@ -170,7 +166,6 @@ These are additional instructions and tips if something doesn't work as expected
     * Temporarily move the `user_files` folder outside of the add-on folder (to avoid re-downloading the audio files torrent again).
     * Delete the add-on.
     * Start again from step 2.
-
 
 *   If nothing else works, you have questions, etc., feel free to contact
     me on discord `Aquafina water bottle#3026`,

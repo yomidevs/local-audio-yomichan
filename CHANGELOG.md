@@ -1,3 +1,9 @@
+## v1.3.0
+- Changed the database schema for the entries table (ensure that the primary key is not null)
+- Generating the database on Anki load now shows a GUI popup
+- android.db is now combined with entries.db (two separate tables: `entries` and `android`)
+- Added feature to re-generate the database for specific versions
+
 ## v1.2.0
 - Added `Get number of entries per source` menu option
 - Got rid of manifest.json in the resulting localaudio.addon file because it wasn't necessary

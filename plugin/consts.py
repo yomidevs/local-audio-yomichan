@@ -4,6 +4,8 @@ HOSTNAME: Final = "localhost"
 PORT: Final = 5050
 DB_FILE_NAME: Final = "user_files/entries.db"
 ANDROID_DB_FILE_NAME: Final = "user_files/android.db"
+DB_VERSION_FILE_NAME: Final = "user_files/entries_version.txt"
+LATEST_VERSION_FILE_NAME: Final = "version.txt"
 
 ROWID: Final = 0
 EXPRESSION: Final = 1
