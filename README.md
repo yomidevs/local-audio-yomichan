@@ -174,8 +174,8 @@ These are additional instructions and tips if something doesn't work as expected
 
 
 ## Known Issues
-* NHK16 audio files are saved as .aac, but they are saved as .mp3 files on the disk,
-    which will raise an error in the iPhone app.
+* NHK16 audio files are `.aac` files, but they are saved as `.mp3` files when the file is exported to Anki.
+    This will raise an error in the iPhone app.
     This will be fixed once Yomichan updates their stable version with
     [this PR](https://github.com/FooSoft/yomichan/pull/2302).
 
