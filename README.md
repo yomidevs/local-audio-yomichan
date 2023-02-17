@@ -177,7 +177,7 @@ These are additional instructions and tips if something doesn't work as expected
 * NHK16 audio files are saved as .aac, but they are saved as .mp3 files on the disk,
     which will raise an error in the iPhone app.
     This will be fixed once Yomichan updates their stable version with
-    [this PR](https://github.com/FooSoft/yomichan/pull/2302)
+    [this PR](https://github.com/FooSoft/yomichan/pull/2302).
 
 
 ## Usage Notes
