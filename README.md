@@ -173,6 +173,13 @@ These are additional instructions and tips if something doesn't work as expected
     I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
 
 
+## Known Issues
+* NHK16 audio files are saved as .aac, but they are saved as .mp3 files on the disk,
+    which will crash the iphone app.
+    This will be fixed once Yomichan updates their stable version with
+    [this PR](https://github.com/FooSoft/yomichan/pull/2302)
+
+
 ## Usage Notes
 
 * The local audio server only works when Anki is open. Of course, it can be running minimized in the background.
