@@ -1,3 +1,6 @@
+## v1.3.1
+- Fixed headers: now properly returns `audio/mpeg` and `audio/aac` instead of `text/...`
+
 ## v1.3.0
 - Changed the database schema for the entries table (ensure that the primary key is not null)
 - Generating the database on Anki load now shows a GUI popup
