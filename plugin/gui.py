@@ -26,8 +26,6 @@ def attempt_init_db_gui():
 
 
 def regenerate_database_operation(msg="Generating local audio database."):
-    update_db_version()
-
     op = QueryOp(
         # the active window (main window in this case)
         parent=mw,

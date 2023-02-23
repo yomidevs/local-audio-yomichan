@@ -191,6 +191,8 @@ def get_num_files_per_source():
 def init_db():
     print("Initializing database. This make take a while...")
 
+    update_db_version()
+
     original_db_path = get_db_path()
 
     # completely wipes out the file
