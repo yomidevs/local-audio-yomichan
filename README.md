@@ -207,6 +207,25 @@ These are additional instructions and tips if something doesn't work as expected
 </details>
 
 
+## Running without Anki
+If you wish to run the server without Anki, do the following:
+```bash
+git clone https://github.com/Aquafina-water-bottle/local-audio-yomichan.git
+cd local-audio-yomichan
+
+# You must fill `plugin/user_files` with the audio files, like with step 2.
+# If you are on unix and you have already setup the Anki add-on, you can run the commands below:
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/forvo_files ./plugin/user_files/forvo_files
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_alternate_files ./plugin/user_files/jpod_alternate_files
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_files ./plugin/user_files/jpod_files
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/nhk16_files ./plugin/user_files/nhk16_files
+
+# After filling in `plugin/user_files` with the audio files, you can now run the server.
+# Ensure you have python 3.10.6 or above.
+python3 run_server.py
+```
+
+
 ## Credits & Acknowledgements
 A lot of people came together, one way or the other, to get this add-on to where it is today.
 Huge thanks to everyone who made it happen:

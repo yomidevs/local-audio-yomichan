@@ -9,9 +9,9 @@ class DebugTCPServer(socketserver.TCPServer):
 
 if __name__ == "__main__":
     # If we're not in Anki, run the server directly and blocking for easier debugging
-    print("Running local audio server in debug mode...")
     attempt_init_db()
 
+    print("Running local audio server in debug mode...")
     httpd = DebugTCPServer((HOSTNAME, PORT), LocalAudioHandler)
     httpd.serve_forever()
 
