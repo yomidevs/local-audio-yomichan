@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import http.server
-import socketserver
 import json
 import sqlite3
 import threading
@@ -178,10 +177,3 @@ def run_server():
     server_thread = threading.Thread(target=httpd.serve_forever)
     server_thread.daemon = True
     server_thread.start()
-
-
-if __name__ == "__main__":
-    # If we're not in Anki, run the server directly and blocking for easier debugging
-    print("Running in debug mode...")
-    httpd = socketserver.TCPServer((HOSTNAME, PORT), LocalAudioHandler)
-    httpd.serve_forever()

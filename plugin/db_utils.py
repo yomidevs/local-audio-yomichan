@@ -143,6 +143,17 @@ def table_must_be_updated():
     return update_check(db_ver, latest_ver, UPDATE_VERSIONS)
 
 
+def attempt_init_db():
+    """
+    attempts to initialize the db if necessary
+    """
+
+    if not table_exists_and_has_data():
+        init_db()
+    elif table_must_be_updated():
+        init_db()
+
+
 def update_db_version():
     """
     writes the current version to the db version file

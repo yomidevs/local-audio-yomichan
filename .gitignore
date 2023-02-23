@@ -209,8 +209,10 @@ plugin/entries.db
 plugin/entries.db-journal
 plugin/android.db
 plugin/android.db-journal
-plugin/user_files/
-plugin/user_files
+plugin/user_files/*_files/
+plugin/user_files/*_files
+plugin/user_files/*.db
+plugin/user_files/*.txt
 plugin/meta.json
 
 localaudio.ankiaddon
