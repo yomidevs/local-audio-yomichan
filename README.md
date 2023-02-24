@@ -42,8 +42,8 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 <!-- TODO uncomment when AnkiconnectAndroid release is close to being out as well
 These instructions only work on the PC release of Anki.
-If you wish to use this on AnkiDroid, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
-There is currently no way of using this on AnkiMobile.
+If you wish to use this on Android, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
+There is currently no way of using this on iOS/AnkiMobile.
 -->
 
 1. Download all the required audio files.
@@ -175,14 +175,15 @@ These are additional instructions and tips if something doesn't work as expected
 
 ## Known Issues
 * NHK16 audio files are `.aac` files, but they are saved as `.mp3` files when the file is exported to Anki.
-    The audio will play normally on desktop, but will raise an error in the iPhone app.
+    The audio will play normally on desktop, but will raise an error in the iPhone app (AnkiMobile).
     This will be fixed once Yomichan updates their stable version with
     [this PR](https://github.com/FooSoft/yomichan/pull/2302).
 
 
 ## Usage Notes
 
-* The local audio server only works when Anki is open. Of course, it can be running minimized in the background.
+* As this is an Anki add-on, this will only run when Anki is open.
+    See [here](#running-without-anki) if you wish to run the server without Anki.
 
 * The sources can be rearranged to give priority to a different source.
     For example, if you want Forvo to have the highest priority, use
@@ -213,8 +214,8 @@ If you wish to run the server without Anki, do the following:
 git clone https://github.com/Aquafina-water-bottle/local-audio-yomichan.git
 cd local-audio-yomichan
 
-# You must fill `plugin/user_files` with the audio files, like with step 2.
-# If you are on unix and you have already setup the Anki add-on, you can run the commands below:
+# You must fill `plugin/user_files` with the audio files, like with step 2 of the main instructions.
+# If you are on a *unix OS and you have already setup the Anki add-on, you can run the commands below:
 ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/forvo_files ./plugin/user_files/forvo_files
 ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_alternate_files ./plugin/user_files/jpod_alternate_files
 ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_files ./plugin/user_files/jpod_files
@@ -230,12 +231,13 @@ python3 run_server.py
 A lot of people came together, one way or the other, to get this add-on to where it is today.
 Huge thanks to everyone who made it happen:
 
-* **`Zetta#3033`**: Creator of the original addon + advice for improving query speed
+* **`Zetta#3033`**: Creator of the original addon + gave advice for improving query speed
 * **`kezi#0001`**: Getting NHK16 audio
 * **`(anonymous)`**: Adding SQL + NHK16 audio support
 * **`Renji-xD#8182`**: Getting Forvo audio, adding Forvo audio support
 * **`Marv#5144`**: Creating and maintaining the torrent + testing out the rewritten add-on
 * **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
+* **`ctpk`**: Investigated and patched a bug with `.aac` files not having the correct mime type
 * **`jamesnicolas`**: Creator of [Yomichan Forvo Server for Anki](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
 * **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android. Also gave advice for improving the database.
 * **`DillonWall`**: Creator of [Generate Batch Audio](https://github.com/DillonWall/generate-batch-audio-anki-addon). This allows you to backfill existing cards with the local audio server, or anything else.
