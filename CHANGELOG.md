@@ -1,3 +1,7 @@
+## v1.3.2
+- Added condition in `__init__.py` to only run if it was imported by Anki
+- Added `run_server.py` to run the server without opening Anki
+
 ## v1.3.1
 - Fixed headers: now properly returns `audio/mpeg` and `audio/aac` instead of `text/...`
 
