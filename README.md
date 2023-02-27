@@ -179,6 +179,10 @@ These are additional instructions and tips if something doesn't work as expected
     This will be fixed once Yomichan updates their stable version with
     [this PR](https://github.com/FooSoft/yomichan/pull/2302).
 
+    > **Note**:
+    > As a temporary workaround, one can use a batch script to convert all the .aac files into .mp3 files
+    > (say, with ffmpeg), and then regenerate the database.
+    > The original .aac files should not be present within the folder anymore.
 
 ## Usage Notes
 
