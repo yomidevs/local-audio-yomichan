@@ -6,7 +6,7 @@ runs a local server of which Yomichan can fetch audio files from.
 With this setup, you are able to create Anki cards nearly instantaneously,
 and get word audio without a working internet connection.
 
-Core maintainer: [@Aquafina-water-bottle](https://www.github.com/Aquafina-water-bottle)
+Core maintainer: [**@Aquafina-water-bottle**](https://www.github.com/Aquafina-water-bottle)
 
 <sup>
 P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-mining-note/jpresources/">my other resources</a> if you're interested!
@@ -237,16 +237,16 @@ python3 run_server.py
 A lot of people came together, one way or the other, to get this add-on to where it is today.
 Huge thanks to everyone who made it happen:
 
-* **`Zetta#3033`**: Creator of the original addon + gave advice for improving query speed
-* **`kezi#0001`**: Getting NHK16 audio
-* **`(anonymous)`**: Adding SQL + NHK16 audio support
-* **`Renji-xD#8182`**: Getting Forvo audio, adding Forvo audio support
-* **`Marv#5144`**: Creating and maintaining the torrent + testing out the rewritten add-on
-* **`shoui 🐈#0520`**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
-* **`ctpk`**: Investigated and patched a bug with `.aac` files not having the correct mime type
-* **`jamesnicolas`**: Creator of [Yomichan Forvo Server for Anki](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
-* **`KamWithK`**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android. Also gave advice for improving the database.
-* **`DillonWall`**: Creator of [Generate Batch Audio](https://github.com/DillonWall/generate-batch-audio-anki-addon). This allows you to backfill existing cards with the local audio server, or anything else.
+* **Zetta#3033**: Creator of the original addon + gave advice for improving query speed
+* **kezi#0001**: Getting NHK16 audio
+* **(anonymous)**: Adding SQL + NHK16 audio support
+* **[@Renji-XD](https://github.com/Renji-XD)**: Getting Forvo audio, adding Forvo audio support
+* **[@MarvNC](https://github.com/MarvNC)**: Creating and maintaining the torrent + testing out the rewritten add-on
+* **[@shoui520](https://github.com/shoui520)**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
+* **[@ctpk](https://github.com/ctpk)**: Investigated and patched a bug with `.aac` files not having the correct mime type
+* **[@jamesnicolas](https://github.com/jamesnicolas)**: Creator of [Yomichan Forvo Server for Anki](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
+* **[@KamWithK](https://github.com/KamWithK)**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android. Also gave advice for improving the database.
+* **[@DillonWall](https://github.com/DillonWall)**: Creator of [Generate Batch Audio](https://github.com/DillonWall/generate-batch-audio-anki-addon). This allows you to backfill existing cards with the local audio server, or anything else.
 
 
 ## License
