@@ -6,6 +6,8 @@ runs a local server of which Yomichan can fetch audio files from.
 With this setup, you are able to create Anki cards nearly instantaneously,
 and get word audio without a working internet connection.
 
+Core maintainer: [@Aquafina-water-bottle](https://www.github.com/Aquafina-water-bottle)
+
 <sup>
 P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-mining-note/jpresources/">my other resources</a> if you're interested!
 </sup>
@@ -66,7 +68,7 @@ There is currently no way of using this on iOS/AnkiMobile.
     This add-on only works for Anki versions 2.1.50 and above.
     If you are using Anki versions 2.1.49 or below, I highly recommend updating.
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
-    [here](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old).
+    [here](https://github.com/themoeway/local-audio-yomichan/tree/old).
 
 1. Move the downloaded audio files to the correct place.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
@@ -169,7 +171,7 @@ These are additional instructions and tips if something doesn't work as expected
 
 *   If nothing else works, you have questions, etc., feel free to contact
     me on discord `Aquafina water bottle#3026`,
-    or [submit an issue](https://github.com/Aquafina-water-bottle/local-audio-yomichan/issues).
+    or [submit an issue](https://github.com/themoeway/local-audio-yomichan/issues).
     I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
 
 
@@ -207,7 +209,7 @@ These are additional instructions and tips if something doesn't work as expected
 
     > The files for now only includes audio files with an exact 1:1 mapping of a dictionary/Marv's JPDB frequency list term to the name of the file the user uploaded. Just because you don't get audio for an user it does not mean the user has no audio on Forvo. Just because you get audio it does not mean it actually matches the current word/reading. It is also not uncommon that people pronounce multiple readings in the same file.
 
-    The full quote can be found at the bottom of [the legacy instructions](https://github.com/Aquafina-water-bottle/local-audio-yomichan/tree/old), under "Original Message for v09".
+    The full quote can be found at the bottom of [the legacy instructions](https://github.com/themoeway/local-audio-yomichan/tree/old), under "Original Message for v09".
 
 </details>
 
@@ -215,7 +217,7 @@ These are additional instructions and tips if something doesn't work as expected
 ## Running without Anki
 If you wish to run the server without Anki, do the following:
 ```bash
-git clone https://github.com/Aquafina-water-bottle/local-audio-yomichan.git
+git clone https://github.com/themoeway/local-audio-yomichan.git
 cd local-audio-yomichan
 
 # You must fill `plugin/user_files` with the audio files, like with step 2 of the main instructions.
@@ -248,7 +250,7 @@ Huge thanks to everyone who made it happen:
 
 
 ## License
-[MIT](https://github.com/Aquafina-water-bottle/local-audio-yomichan/blob/master/LICENSE)
+[MIT](https://github.com/themoeway/local-audio-yomichan/blob/master/LICENSE)
 
 
 
