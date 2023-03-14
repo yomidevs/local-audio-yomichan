@@ -46,7 +46,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 These instructions setup the local audio server for the PC release of Anki.
 If you wish to use this on Android, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
-There is currently no way of using this on iOS/AnkiMobile.
+There is currently no way of using this on AnkiMobile (iOS).
 
 1. Download all the required audio files.
     They can be found at this [torrent link](https://nyaa.si/view/1625597).
