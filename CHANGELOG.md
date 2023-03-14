@@ -1,3 +1,6 @@
+## v1.3.3
+- Show the time for regenerating the database and for generating the Android database
+
 ## v1.3.2
 - Added condition in `__init__.py` to only run if it was imported by Anki
 - Added `run_server.py` to run the server without opening Anki

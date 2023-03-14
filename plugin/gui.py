@@ -3,13 +3,14 @@ from aqt.qt import *
 from aqt.utils import showInfo
 from aqt.operations import QueryOp
 
+import time
+
 from .db_utils import (
     init_db,
     android_gen,
     get_num_files_per_source,
     table_exists_and_has_data,
     table_must_be_updated,
-    update_db_version,
 )
 
 
@@ -25,7 +26,13 @@ def attempt_init_db_gui():
         regenerate_database_operation("Updating local audio database.")
 
 
-def regenerate_database_operation(msg="Generating local audio database."):
+def regenerate_database_operation(msg=False):
+    # for some reason, the qconnect call seems to pass in the "false" argument to msg
+    if not msg:
+        msg = "Generating local audio database."
+
+    start_time = time.time()
+
     op = QueryOp(
         # the active window (main window in this case)
         parent=mw,
@@ -34,7 +41,7 @@ def regenerate_database_operation(msg="Generating local audio database."):
         op=lambda _: regenerate_database_action(),
         # this function will be called if op completes successfully,
         # and it is given the return value of the op
-        success=lambda _: regenerate_database_success(),
+        success=lambda _: regenerate_database_success(start_time),
     )
 
     # if with_progress() is not called, no progress window will be shown.
@@ -49,11 +56,16 @@ def regenerate_database_action() -> int:
     return 1
 
 
-def regenerate_database_success() -> None:
-    showInfo(f"Local audio database was successfully regenerated!")
+def regenerate_database_success(start_time: float) -> None:
+    end_time = time.time()
+    total_time = "{:.1f}".format(end_time - start_time)
+
+    showInfo(f"Local audio database was successfully regenerated in {total_time} seconds!")
 
 
 def generate_android_database_operation():
+    start_time = time.time()
+
     op = QueryOp(
         # the active window (main window in this case)
         parent=mw,
@@ -62,7 +74,7 @@ def generate_android_database_operation():
         op=lambda _: generate_android_database_action(),
         # this function will be called if op completes successfully,
         # and it is given the return value of the op
-        success=lambda _: generate_android_database_success(),
+        success=lambda _: generate_android_database_success(start_time),
     )
 
     # if with_progress() is not called, no progress window will be shown.
@@ -77,9 +89,12 @@ def generate_android_database_action():
     return 1
 
 
-def generate_android_database_success():
+def generate_android_database_success(start_time: float):
+    end_time = time.time()
+    total_time = "{:.1f}".format(end_time - start_time)
+
     showInfo(
-        f"Local audio database for AnkiConnect Android was successfully generated!"
+        f"Local audio database for AnkiConnect Android was successfully generated in {total_time} seconds!"
     )
 
 
