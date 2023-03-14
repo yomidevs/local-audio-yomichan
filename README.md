@@ -2,7 +2,8 @@
 # Local Audio Server for Yomichan
 
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
-runs a local server of which Yomichan can fetch audio files from.
+runs a local server of which Yomichan can fetch audio files from,
+using a database containing over 200,000 unique expressions.
 With this setup, you are able to create Anki cards nearly instantaneously,
 and get word audio without a working internet connection.
 
@@ -26,27 +27,26 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. If you do not have internet access, you can still add audio to your cards.
 
+1. Compared to standard Yomichan, this does improve coverage because it adds the Forvo and NHK 2016 source.
+
 </details>
 
 <details> <summary><b>Disadvantages:</b> <i>(click here)</i> </summary>
 
 1. This setup requires about **5GB of free space**.
 
-1. It only has the coverage of JPod 101, NHK 2016, and select audio from Forvo
-    (which is still very high, as over 200,000 unique expressions are covered).
-    To increase audio coverage, it would be ideal to also include an extra
-    [Forvo audio source](https://learnjapanese.moe/yomichan/#bonus-adding-forvo-extra-audio-source).
+1. Despite having wide coverage, some words may simply not be covered by the local audio server.
+    Attempting to fetch these words will fallback to online sources,
+    which means that there will be no improvement in speed.
 
 </details>
 
 
 ## Steps
 
-<!-- TODO uncomment when AnkiconnectAndroid release is close to being out as well
-These instructions only work on the PC release of Anki.
+These instructions setup the local audio server for the PC release of Anki.
 If you wish to use this on Android, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
 There is currently no way of using this on iOS/AnkiMobile.
--->
 
 1. Download all the required audio files.
     They can be found at this [torrent link](https://nyaa.si/view/1625597).
@@ -139,9 +139,17 @@ There is currently no way of using this on iOS/AnkiMobile.
 
     Play all the sources from the above (読む) to ensure the sound is properly fetched.
 
+
 ## Optional Steps: Backfill cards
 DillonWall made [a fantastic add-on](https://github.com/DillonWall/generate-batch-audio-anki-addon)
 that can backfill cards from any custom URL, including this local audio server.
+
+
+## Optional Steps: Online Forvo Audio Sources
+To increase audio coverage, I recommend including an extra
+[Forvo audio source](https://learnjapanese.moe/yomichan/#bonus-adding-forvo-extra-audio-source).
+Although the audio is fetched online, this vastly improves coverage compared to the
+standard Yomichan sources and this local audio server.
 
 
 ## Troubleshooting
