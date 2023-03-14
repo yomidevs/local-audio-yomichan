@@ -145,7 +145,7 @@ DillonWall made [a fantastic add-on](https://github.com/DillonWall/generate-batc
 that can backfill cards from any custom URL, including this local audio server.
 
 
-## Optional Steps: Online Forvo Audio Sources
+## Optional Steps: Online Forvo Audio Source
 To increase audio coverage, I recommend including an extra
 [Forvo audio source](https://learnjapanese.moe/yomichan/#bonus-adding-forvo-extra-audio-source).
 Although the audio is fetched online, this vastly improves coverage compared to the
