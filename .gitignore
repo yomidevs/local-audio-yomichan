@@ -212,6 +212,7 @@ plugin/android.db-journal
 plugin/user_files/*_files/
 plugin/user_files/*_files
 plugin/user_files/*.db
+plugin/user_files/*.db-journal
 plugin/user_files/*.txt
 plugin/meta.json
 
