@@ -264,16 +264,16 @@ Huge thanks to everyone who made it happen:
 
 <details> <summary>Transferring from the deprecated add-on <i>(click here)</i></summary>
 
-The expected display name of the addon is "Local Audio Server for Yomichan".
-If your addon has the name "Yomichan Local Audio Server", then you are using the deprecated version.
+*   The expected display name of the addon is "Local Audio Server for Yomichan".
+    If your addon has the name "Yomichan Local Audio Server", then you are using the deprecated version.
 
-To transfer from the deprecated addon to this addon, do the following:
-- Disable the old addon
-- Download the new add-on (`1045800357`)
-- Move the user_files folder from the old add-on's folder (likely 955441350) to the new add-on's folder. Do not copy any other files from the old add-on
-- Restart Anki
+    To transfer from the deprecated addon to this addon, do the following:
+    - Disable the old addon
+    - Download the new add-on (`1045800357`)
+    - Move the user_files folder from the old add-on's folder (likely `955441350`) to the new add-on's folder. Do not copy any other files from the old add-on
+    - Restart Anki
 
-If that doesn't work for some reason, see the troubleshooting section (you might have to regenerate the database): https://github.com/Aquafina-water-bottle/local-audio-yomichan#troubleshooting
+    If that doesn't work for some reason, see the [troubleshooting section](#troubleshooting) (you might have to regenerate the database).
 
 </details>
 
