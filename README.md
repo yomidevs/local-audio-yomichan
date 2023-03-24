@@ -211,17 +211,6 @@ These are additional instructions and tips if something doesn't work as expected
     http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
-<details> <summary>Notes on Forvo Audio Sourcing <i>(click here)</i></summary>
-
-* The following is a slightly edited quote from person who got the Forvo audio:
-
-    > The files for now only includes audio files with an exact 1:1 mapping of a dictionary/Marv's JPDB frequency list term to the name of the file the user uploaded. Just because you don't get audio for an user it does not mean the user has no audio on Forvo. Just because you get audio it does not mean it actually matches the current word/reading. It is also not uncommon that people pronounce multiple readings in the same file.
-
-    The full quote can be found at the bottom of [the legacy instructions](https://github.com/themoeway/local-audio-yomichan/tree/old), under "Original Message for v09".
-
-</details>
-
-
 ## Running without Anki
 If you wish to run the server without Anki, do the following:
 ```bash
@@ -259,6 +248,34 @@ Huge thanks to everyone who made it happen:
 
 ## License
 [MIT](https://github.com/themoeway/local-audio-yomichan/blob/master/LICENSE)
+
+
+## Other
+
+<details> <summary>Notes on Forvo Audio Sourcing <i>(click here)</i></summary>
+
+* The following is a slightly edited quote from person who got the Forvo audio:
+
+    > The files for now only includes audio files with an exact 1:1 mapping of a dictionary/Marv's JPDB frequency list term to the name of the file the user uploaded. Just because you don't get audio for an user it does not mean the user has no audio on Forvo. Just because you get audio it does not mean it actually matches the current word/reading. It is also not uncommon that people pronounce multiple readings in the same file.
+
+    The full quote can be found at the bottom of [the legacy instructions](https://github.com/themoeway/local-audio-yomichan/tree/old), under "Original Message for v09".
+
+</details>
+
+<details> <summary>Transferring from the deprecated add-on <i>(click here)</i></summary>
+
+The expected display name of the addon is "Local Audio Server for Yomichan".
+If your addon has the name "Yomichan Local Audio Server", then you are using the deprecated version.
+
+To transfer from the deprecated addon to this addon, do the following:
+- Disable the old addon
+- Download the new add-on (`1045800357`)
+- Move the user_files folder from the old add-on's folder (likely 955441350) to the new add-on's folder. Do not copy any other files from the old add-on
+- Restart Anki
+
+If that doesn't work for some reason, see the troubleshooting section (you might have to regenerate the database): https://github.com/Aquafina-water-bottle/local-audio-yomichan#troubleshooting
+
+</details>
 
 
 
