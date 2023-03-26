@@ -59,6 +59,8 @@ There is currently no way of using this on AnkiMobile (iOS).
 
     </details>
 
+1. Extract the `7z` file. To do this, use [7zip](https://7-zip.org/download.html).
+
 1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
     * Copy and paste this code: `1045800357`
@@ -167,7 +169,7 @@ These are additional instructions and tips if something doesn't work as expected
     the audio files were either misplaced, or Anki was restarted before moving
     the audio files into the proper location.
 
-    Ensure that within step 3, your file structure matches the expected file structure,
+    Ensure that within step 4, your file structure matches the expected file structure,
     and then try regenerating the database
     by navigating to `Tools` →  `Local Audio Server` →  `Regenerate database`.
 
@@ -175,7 +177,7 @@ These are additional instructions and tips if something doesn't work as expected
     If you have (or suspect you may have):
     * Temporarily move the `user_files` folder outside of the add-on folder (to avoid re-downloading the audio files torrent again).
     * Delete the add-on.
-    * Start again from step 2.
+    * Start again from step 3.
 
 *   If nothing else works, you have questions, etc., feel free to contact
     me on discord `Aquafina water bottle#3026`,
@@ -217,7 +219,7 @@ If you wish to run the server without Anki, do the following:
 git clone https://github.com/themoeway/local-audio-yomichan.git
 cd local-audio-yomichan
 
-# You must fill `plugin/user_files` with the audio files, like with step 2 of the main instructions.
+# You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
 # If you are on a *unix OS and you have already setup the Anki add-on, you can run the commands below:
 ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/forvo_files ./plugin/user_files/forvo_files
 ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_alternate_files ./plugin/user_files/jpod_alternate_files
