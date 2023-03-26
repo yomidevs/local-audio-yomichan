@@ -60,6 +60,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     </details>
 
 1. Extract the `7z` file. To do this, use [7zip](https://7-zip.org/download.html).
+    If 7zip fails to extract the file, try downloading the file again (the `7z` file could be corrupted).
 
 1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
