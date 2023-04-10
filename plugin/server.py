@@ -99,12 +99,12 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         elif "expression" in parsed_qcomps:
             term = parsed_qcomps["expression"][0]
         else:
-            raise Exception("Cannot find term or expression in query")
+            raise Exception(f"Cannot find term or expression in query: {self.path}")
 
         if "reading" in parsed_qcomps:
             reading = parsed_qcomps["reading"][0]
         else:
-            raise Exception("Cannot find reading in query")
+            raise Exception(f"Cannot find reading in query: {self.path}")
 
         if "sources" in parsed_qcomps:
             sources = parsed_qcomps["sources"][0].split(",")
