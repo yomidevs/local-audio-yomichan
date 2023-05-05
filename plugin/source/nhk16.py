@@ -93,9 +93,9 @@ def get_display_text(accent):
                 # seem to be mostly in the numbers section.
                 continue
 
-            # TODO what even is the point of this?
-            # if we want the display to be hiragana, shouldn't we iterate through all mora???
-            #mora_list[index] = katakana_to_hiragana(mora_list[index])
+            # This is specifically to differentiate between silenced mora and regular mora,
+            # since it's pretty difficult to represent it any other way in Yomichan
+            mora_list[index] = katakana_to_hiragana(mora_list[index])
 
         pitch_accent = int(word_segment["pitchAccent"])
         if pitch_accent + pitch_offset > -1:
