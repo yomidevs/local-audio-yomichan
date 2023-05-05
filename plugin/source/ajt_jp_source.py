@@ -56,7 +56,8 @@ class AJTJapaneseSource(AudioSource):
         except Exception:
             print(f"pitch_number is not an integer: {ajt_file}")
             return None
-        mora_list.insert(pitch_accent, "＼")
+        if pitch_accent > 0:
+            mora_list.insert(pitch_accent, "＼")
         return "".join(mora_list) + f" [{pitch_accent}]"
 
     def add_entries(self, connection: sqlite3.Connection):
