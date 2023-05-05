@@ -18,6 +18,7 @@ from .consts import *
 # versions when the entries.db database schemas has changed and must be regenerated
 UPDATE_VERSIONS = [
     (1, 3, 0),
+    (1, 4, 0),
 ]
 
 
@@ -57,6 +58,7 @@ def android_write(og_cur, cur):
             data blob NOT NULL
         );
     """
+
     create_index_sql = f"""
         CREATE INDEX idx_android ON android(file, source);
     """
@@ -212,11 +214,16 @@ def init_db():
         # - expression (term): the main lookup key, potentially in kanji
         # - reading: kana only version of expression. If null, then no reading was
         #   available from the source.
-        # - file: file path to the audio
+        # - source: one of "jpod", "jpod_alternate", "forvo", "nhk16", "shinmeikai8"
+        # - file: file path to the audio, rooted at user_files/MEDIA_FOLDER
         #   Allows for easier sorting for more ideal results without post processing
         #   or unions + subqueries.
         # - speaker: contains the forvo username. Null for anything that isn't forvo.
-        # - display: contains the display for nhk16. Null for anything that isn't nhk16.
+        # - display: contains the display for nhk16 and shinmeikai8. Otherwise Null.
+        #
+        # NOTES:
+        # - the reading can be exactly the same as the expression (for kana only terms)
+        # - the reading can be in katakana
         create_table_sql = """
             CREATE TABLE entries (
                 id integer PRIMARY KEY NOT NULL,
@@ -250,12 +257,14 @@ def init_db():
         cursor.execute(create_idx_expr_reading_sql)
 
         # optimize second query
+        # TODO: remove this index
         create_idx_expr_reading_speaker_sql = f"""
             CREATE INDEX idx_reading_speaker ON entries(expression, reading, speaker);
         """
         cursor.execute(create_idx_expr_reading_speaker_sql)
 
         # optimize third query
+        # TODO: remove this index
         create_idx_expr_reading_speaker_sql = f"""
             CREATE INDEX idx_all ON entries(expression, reading, source);
         """
@@ -294,6 +303,7 @@ def execute_query(cursor: sqlite3.Connection, qcomps: QueryComponents) -> list[A
     #        WHEN ? THEN 1
     #        WHEN ? THEN 2
     #        WHEN ? THEN 3
+    #        WHEN ? THEN 4
     #      END),
     #      speaker,
     #      reading
@@ -312,6 +322,7 @@ def execute_query(cursor: sqlite3.Connection, qcomps: QueryComponents) -> list[A
     #        WHEN ? THEN 1
     #        WHEN ? THEN 2
     #        WHEN ? THEN 3
+    #        WHEN ? THEN 4
     #      END),
     #      (CASE speaker
     #        WHEN ? THEN 0
@@ -334,6 +345,7 @@ def execute_query(cursor: sqlite3.Connection, qcomps: QueryComponents) -> list[A
     #        WHEN ? THEN 0
     #        WHEN ? THEN 1
     #        WHEN ? THEN 2
+    #        WHEN ? THEN 4
     #      END),
     #      reading
     #    """

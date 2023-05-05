@@ -5,16 +5,12 @@ from pathlib import Path
 from typing import Final
 
 from .audio_source import AudioSource, AudioSourceData
-from ..util import get_program_root_path
+from ..util import get_program_root_path, split_into_mora
 from ..consts import *
 
 num2fullwidth = str.maketrans("0123456789", "０１２３４５６７８９")
 
 num_map = {0: "零", 1: "一", 2: "二", 3: "三", 4: "四", 5: "五", 6: "六", 7: "七", 8: "八", 9: "九", 10: "十", 11: "十一", 12: "十二", 13: "十三", 14: "十四", 15: "十五", 16: "十六", 17: "十七", 18: "十八", 19: "十九", 20: "二十", 21: "二十一", 22: "二十二", 23: "二十三", 24: "二十四", 25: "二十五", 26: "二十六", 27: "二十七", 28: "二十八", 29: "二十九", 30: "三十", 31: "三十一", 32: "三十二", 33: "三十三", 34: "三十四", 35: "三十五", 36: "三十六", 37: "三十七", 38: "三十八", 39: "三十九", 40: "四十", 41: "四十一", 42: "四十二", 43: "四十三", 44: "四十四", 45: "四十五", 46: "四十六", 47: "四十七", 48: "四十八", 49: "四十九", 50: "五十", 51: "五十一", 52: "五十二", 53: "五十三", 54: "五十四", 55: "五十五", 56: "五十六", 57: "五十七", 58: "五十八", 59: "五十九", 60: "六十", 61: "六十一", 62: "六十二", 63: "六十三", 64: "六十四", 65: "六十五", 66: "六十六", 67: "六十七", 68: "六十八", 69: "六十九", 70: "七十", 71: "七十一", 72: "七十二", 73: "七十三", 74: "七十四", 75: "七十五", 76: "七十六", 77: "七十七", 78: "七十八", 79: "七十九", 80: "八十", 81: "八十一", 82: "八十二", 83: "八十三", 84: "八十四", 85: "八十五", 86: "八十六", 87: "八十七", 88: "八十八", 89: "八十九", 90: "九十", 91: "九十一", 92: "九十二", 93: "九十三", 94: "九十四", 95: "九十五", 96: "九十六", 97: "九十七", 98: "九十八", 99: "九十九", 100: "百", 1000: "千", 10000: "一万"}
-
-# digraphs not necessarily two characters.
-# e.g., キ゚ャ is considered three.
-digraphs = ["りゃ", "みゃ", "ひゃ", "にゃ", "ちゃ", "しゃ", "きゃ", "りゅ", "みゅ", "ひゅ", "にゅ", "ちゅ", "しゅ", "きゅ", "りょ", "みょ", "ひょ", "にょ", "ちょ", "しょ", "きょ", "ぎゃ", "じゃ", "びゃ", "ぴゃ", "き゚ゃ", "ぎゅ", "じゅ", "びゅ", "ぴゅ", "き゚ゅ", "ぎょ", "じょ", "びょ", "ぴょ", "き゚ょ", "ヴぁ", "ふぁ", "ゔぃ", "うぃ", "ふぃ", "でぃ", "てぃ", "どぅ", "とぅ", "ゔぇ", "うぇ", "ふぇ", "ちぇ", "じぇ", "しぇ", "ゔぉ", "うぉ", "ふぉ", "リャ", "ミャ", "ヒャ", "ニャ", "チャ", "シャ", "キャ", "リュ", "ミュ", "ヒュ", "ニュ", "チュ", "シュ", "キュ", "リョ", "ミョ", "ヒョ", "ニョ", "チョ", "ショ", "キョ", "ギャ", "ジャ", "ビャ", "ピャ", "キ゚ャ", "ギュ", "ジュ", "ビュ", "ピュ", "キ゚ュ", "ギョ", "ジョ", "ビョ", "ピョ", "キ゚ョ", "ヴァ", "ファ", "ヴィ", "ウィ", "フィ", "ディ", "ティ", "ドゥ", "トゥ", "ヴェ", "ウェ", "フェ", "チェ", "ジェ", "シェ", "ヴォ", "ウォ", "フォ", "か゚", "き゚", "く゚", "け゚", "こ゚", "カ゚", "キ゚", "ク゚", "ケ゚", "コ゚"]
 
 katakana_chart = "ァアィイゥウェエォオカガカ゚キギキ゚クグク゚ケゲケ゚コゴコ゚サザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヽヾ"
 hiragana_chart = "ぁあぃいぅうぇえぉおかがか゚きぎき゚くぐく゚けげけ゚こごこ゚さざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞ"
@@ -61,22 +57,6 @@ def parse_headwords(headword_list, delimiter):
     return kanji_list
 
 
-def split_into_mora(pronunciation):
-    mora_list = []
-    while len(pronunciation) > 0:
-        found = False
-        for d in digraphs:
-            if pronunciation.find(d) == 0:
-                pronunciation = pronunciation.removeprefix(d)
-                mora_list.append(d)
-                found = True
-                break
-        if not found:
-            c = pronunciation[0]
-            pronunciation = pronunciation.removeprefix(c)
-            mora_list.append(c)
-    return mora_list
-
 
 def get_sound_relpath(accent, file_to_relpath):
     sound_file = accent["soundFile"]
@@ -112,7 +92,11 @@ def get_display_text(accent):
                 # there are 59 of these invalid(?) entries.
                 # seem to be mostly in the numbers section.
                 continue
-            mora_list[index] = katakana_to_hiragana(mora_list[index])
+
+            # TODO what even is the point of this?
+            # if we want the display to be hiragana, shouldn't we iterate through all mora???
+            #mora_list[index] = katakana_to_hiragana(mora_list[index])
+
         pitch_accent = int(word_segment["pitchAccent"])
         if pitch_accent + pitch_offset > -1:
             pitch_accent = pitch_accent + pitch_offset
