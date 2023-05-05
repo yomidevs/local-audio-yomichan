@@ -33,7 +33,7 @@ class AJTFile(TypedDict):
 
 
 class AJTMeta(TypedDict):
-    version: str
+    version: int
     # other fields are currently ignored for the purposes of this add-on
 
 

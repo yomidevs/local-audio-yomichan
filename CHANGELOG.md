@@ -1,3 +1,6 @@
+## v1.4.0
+- Added shinmeikai 8 audio source (thanks [tatsumoto-ren](https://github.com/Ajatt-Tools/shinmeikai_8_pronunciations_index)!)
+
 ## v1.3.3
 - Show the time for regenerating the database and for generating the Android database
 
