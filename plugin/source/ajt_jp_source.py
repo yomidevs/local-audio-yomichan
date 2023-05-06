@@ -69,6 +69,9 @@ class AJTJapaneseSource(AudioSource):
         program_root_path = get_program_root_path()
         index_file = os.path.join(program_root_path, self.data.media_dir, "index.json")
 
+        if not os.path.isfile(index_file): # don't error if it simply doesn't exist
+            return
+
         with open(index_file, encoding="utf-8") as f:
             entries: AJTIndex = json.load(f)
             files = entries["files"]
