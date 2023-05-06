@@ -27,7 +27,8 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. If you do not have internet access, you can still add audio to your cards.
 
-1. Compared to standard Yomichan, this does improve coverage because it adds the Forvo and NHK 2016 source.
+1. Compared to standard Yomichan, this improves coverage because it adds various sources not covered
+    by Yomichan, such as Forvo, NHK 2016, and Shinmeikai 8.
 
 </details>
 

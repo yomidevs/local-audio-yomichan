@@ -7,7 +7,7 @@ from ..consts import DISPLAY
 
 class Shinmeikai8AudioSource(AJTJapaneseSource):
     def get_name(self, row):
-        return "shinmeikai8 " + row[DISPLAY]
+        return "SMK8 " + row[DISPLAY]
 
 
 SHINMEIKAI8_DATA: Final = AudioSourceData("shinmeikai8", "user_files/shinmeikai8_files")
