@@ -1,3 +1,11 @@
+"""
+# count distinct entries:
+select count(*) from (select distinct expression from entries)
+
+# count all entries
+select count(*) from entries
+"""
+
 import os
 from pathlib import Path
 import sqlite3
@@ -15,10 +23,10 @@ from .all_sources import ID_TO_SOURCE_MAP, SOURCES
 from .consts import *
 
 
+
 # versions when the entries.db database schemas has changed and must be regenerated
 UPDATE_VERSIONS = [
     (1, 3, 0),
-    (1, 4, 0),
 ]
 
 

@@ -1,5 +1,5 @@
 ## v1.4.0
-- Added shinmeikai 8 audio source (thanks [tatsumoto-ren](https://github.com/Ajatt-Tools/shinmeikai_8_pronunciations_index)!)
+- Added shinmeikai 8 audio source (and basic ability to import any AJT Japanese audio source). Thanks to [tatsumoto-ren](https://github.com/Ajatt-Tools/shinmeikai_8_pronunciations_index) for scraping the audio.
 
 ## v1.3.3
 - Show the time for regenerating the database and for generating the Android database

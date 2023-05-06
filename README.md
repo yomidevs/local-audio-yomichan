@@ -3,7 +3,7 @@
 
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
 runs a local server of which Yomichan can fetch audio files from,
-using a database containing over 200,000 unique expressions.
+using a database containing over 250,000 unique expressions.
 With this setup, you are able to create Anki cards nearly instantaneously,
 and get word audio without a working internet connection.
 

@@ -48,6 +48,19 @@ def split_into_mora(pronunciation):
     return mora_list
 
 
+KATAKANA_CHART = "ァアィイゥウェエォオカガカ゚キギキ゚クグク゚ケゲケ゚コゴコ゚サザシジスズセゼソゾタダチヂッツヅテデトドナニヌネノハバパヒビピフブプヘベペホボポマミムメモャヤュユョヨラリルレロヮワヰヱヲンヴヵヶヽヾ"
+HIRAGANA_CHART = "ぁあぃいぅうぇえぉおかがか゚きぎき゚くぐく゚けげけ゚こごこ゚さざしじすずせぜそぞただちぢっつづてでとどなにぬねのはばぱひびぴふぶぷへべぺほぼぽまみむめもゃやゅゆょよらりるれろゎわゐゑをんゔゕゖゝゞ"
+KATA2HIRA = str.maketrans(KATAKANA_CHART, HIRAGANA_CHART)
+HIRA2KATA = str.maketrans(HIRAGANA_CHART, KATAKANA_CHART)
+
+
+def katakana_to_hiragana(kana):
+    return kana.translate(KATA2HIRA)
+
+def hiragana_to_katakana(kana):
+    return kana.translate(HIRA2KATA)
+
+
 class URLComponents(NamedTuple):
     scheme: str
     netloc: str

@@ -4,7 +4,7 @@ import sqlite3
 from typing import Final, TypedDict, Optional
 
 from .audio_source import AudioSource
-from ..util import split_into_mora, get_program_root_path
+from ..util import split_into_mora, get_program_root_path, hiragana_to_katakana
 
 
 """
@@ -50,11 +50,14 @@ SQL: Final[
 
 class AJTJapaneseSource(AudioSource):
     def get_display_text(self, ajt_file: AJTFile) -> Optional[str]:
-        mora_list = split_into_mora(ajt_file["kana_reading"])
+        """
+        displays as katakana with number and downstep, i.e. "ヨ＼ム [1]"
+        """
+        mora_list = split_into_mora(hiragana_to_katakana(ajt_file["kana_reading"]))
         try:
             pitch_accent = int(ajt_file["pitch_number"])
         except Exception:
-            print(f"pitch_number is not an integer: {ajt_file}")
+            print(f"({self.data.id}) pitch_number is not an integer: {ajt_file}")
             return None
         if pitch_accent > 0:
             mora_list.insert(pitch_accent, "＼")
