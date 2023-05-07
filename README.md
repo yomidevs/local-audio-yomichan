@@ -18,7 +18,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 <details> <summary><b>Advantages:</b> <i>(click here)</i> </summary>
 
 1. Most audio is gotten in **almost instantly**. Without the local audio server,
-    fetching the audio can take anywhere from three seconds to a full minute
+    fetching the audio can take anywhere from one second to a full minute
     (on particularly bad days).
 
     Most of the delay from Yomichan when creating cards is from fetching the audio.
