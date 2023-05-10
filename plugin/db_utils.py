@@ -1,9 +1,7 @@
 """
-# count distinct entries:
-select count(*) from (select distinct expression from entries)
-
-# count all entries
-select count(*) from entries
+# generate yomu.db
+delete from entries where expression != "読む"
+vacuum # so empty space is removed
 """
 
 import os
@@ -19,7 +17,8 @@ from .util import (
     get_program_root_path,
     QueryComponents,
 )
-from .all_sources import ID_TO_SOURCE_MAP, SOURCES
+#from .all_sources import ID_TO_SOURCE_MAP, SOURCES
+from .config import ALL_SOURCES
 from .consts import *
 
 
@@ -38,7 +37,7 @@ def android_gen():
     original_db_path = get_db_path()
     android_db_path = get_android_db_path()
 
-    ## literally copy entries.db -> android.db
+    # literally copy entries.db -> android.db
     shutil.copy(original_db_path, android_db_path)
 
     with sqlite3.connect(android_db_path) as android_connection:
@@ -86,7 +85,7 @@ def android_write(og_cur, cur):
     for row in rows:
         file_name = row[0]
         source_id = row[1]
-        source = ID_TO_SOURCE_MAP[source_id]
+        source = ALL_SOURCES[source_id]
 
         full_file_path = os.path.join(
             get_program_root_path(), source.get_media_dir_path(), file_name
@@ -180,22 +179,33 @@ def update_db_version():
         f.write(ver)
 
 
-def get_num_files_per_source():
-    result = []
+def get_num_files_per_source(conn: sqlite3.Connection) -> dict[str, int]:
+    result = {}
 
-    with sqlite3.connect(get_db_path()) as conn:
-        cursor = conn.cursor()
-        rows = cursor.execute(
-            "SELECT source, count(source) FROM entries GROUP BY source"
-        ).fetchall()
-        for row in rows:
-            source, count = row
-            result.append(f"{source}: {count}")
+    cursor = conn.cursor()
+    rows = cursor.execute(
+        "SELECT source, count(source) FROM entries GROUP BY source"
+    ).fetchall()
+    for row in rows:
+        source, count = row
+        result[source] = count
+    cursor.close()
 
-    if len(result) == 0:
-        return "Database is empty."
+    return result
 
-    return "\n".join(result)
+
+def get_count(conn: sqlite3.Connection) -> int:
+    cursor = conn.cursor()
+    return cursor.execute(
+        "SELECT COUNT(*) FROM entries"
+    ).fetchone()[0]
+
+
+def get_unique_count(conn: sqlite3.Connection) -> int:
+    cursor = conn.cursor()
+    return cursor.execute(
+        "SELECT COUNT(*) FROM (SELECT DISTINCT expression FROM entries)"
+    ).fetchone()[0]
 
 
 def init_db():
@@ -279,7 +289,7 @@ def init_db():
         cursor.execute(create_idx_expr_reading_speaker_sql)
         cursor.close()
 
-        for source in SOURCES:
+        for source in ALL_SOURCES.values():
             print(f"(init_db) Adding entries from {source.data.id}...")
             source.add_entries(connection)
 
@@ -366,7 +376,7 @@ def execute_query(cursor: sqlite3.Connection, qcomps: QueryComponents) -> list[A
     """
 
     # filters by sources if necessary
-    if len(qcomps.sources) != len(SOURCES):
+    if len(qcomps.sources) != len(ALL_SOURCES):
         n_question_marks = ",".join(["?"] * len(qcomps.sources))
         query_where += f"""
             AND (source in ({n_question_marks}))

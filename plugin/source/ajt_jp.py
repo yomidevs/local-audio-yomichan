@@ -4,7 +4,8 @@ import sqlite3
 from typing import Final, TypedDict, Optional
 
 from .audio_source import AudioSource
-from ..util import split_into_mora, get_program_root_path, hiragana_to_katakana
+from ..util import get_program_root_path
+from ..jp_util import split_into_mora, hiragana_to_katakana
 
 
 """

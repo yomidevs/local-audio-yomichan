@@ -19,11 +19,12 @@ from .util import (
     get_android_db_path,
 )
 from .consts import *
-from .all_sources import SOURCES, ID_TO_SOURCE_MAP
+from .config import ALL_SOURCES
 from .db_utils import execute_query
 
 
 class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
+
     def log_error(self, *args, **kwargs):
         """By default, SimpleHTTPRequestHandler logs to stderr.  This would
         cause Anki to show an error, even on successful requests
@@ -109,7 +110,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         if "sources" in parsed_qcomps:
             sources = parsed_qcomps["sources"][0].split(",")
         else:
-            sources = [s.data.id for s in SOURCES]
+            sources = list(ALL_SOURCES.keys())
 
         if "user" in parsed_qcomps:
             user = [u.strip() for u in parsed_qcomps["user"][0].split(",")]
@@ -127,8 +128,8 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         full_path = unquote(parse_result.path)
 
         path_parts = full_path.split("/", 2)
-        if len(path_parts) == 3 and (source_id := path_parts[1]) in ID_TO_SOURCE_MAP:
-            audio_source = ID_TO_SOURCE_MAP[source_id]
+        if len(path_parts) == 3 and (source_id := path_parts[1]) in ALL_SOURCES:
+            audio_source = ALL_SOURCES[source_id]
             file_path = path_parts[2]
             self.get_audio(audio_source.get_media_dir_path(), file_path)
             # self._get_audio_android(audio_source.data.id, file_path)
@@ -143,17 +144,22 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
                 source = row[SOURCE]
                 file = row[FILE]
 
-                audio_source = ID_TO_SOURCE_MAP.get(source, None)
+                audio_source = ALL_SOURCES.get(source, None)
                 if audio_source is None:
                     print(f"(do_GET) unknown source {source}")
                     continue
 
-                name = audio_source.get_name(row)
+                # we use the %s substitutions so it's more compatible between other languages
+                display = row[DISPLAY]
+                if display is not None:
+                    name = audio_source.data.display % row[DISPLAY]
+                else:
+                    name = audio_source.data.display
                 url = audio_source.construct_file_url(file)
                 entry = {"name": name, "url": url}
                 audio_sources_json_list.append(entry)
 
-        # Build JSON that yomichan requires
+        # Build JSON that Yomichan requires
         # Ref: https://github.com/FooSoft/yomichan/blob/master/ext/data/schemas/custom-audio-list-schema.json
         resp = {"type": "audioSourceList", "audioSources": audio_sources_json_list}
         print(audio_sources_json_list)

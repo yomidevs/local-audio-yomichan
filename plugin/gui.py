@@ -1,9 +1,11 @@
+import time
+import sqlite3
+from typing import Optional
+
 from aqt import mw, gui_hooks
-from aqt.qt import *
+from aqt.qt import qconnect, QAction
 from aqt.utils import showInfo
 from aqt.operations import QueryOp
-
-import time
 
 from .db_utils import (
     init_db,
@@ -11,7 +13,11 @@ from .db_utils import (
     get_num_files_per_source,
     table_exists_and_has_data,
     table_must_be_updated,
+    get_count,
+    get_unique_count,
 )
+
+from .util import get_db_path
 
 
 def attempt_init_db_gui():
@@ -26,7 +32,7 @@ def attempt_init_db_gui():
         regenerate_database_operation("Updating local audio database.")
 
 
-def regenerate_database_operation(msg=False):
+def regenerate_database_operation(msg: Optional[str]=None):
     # for some reason, the qconnect call seems to pass in the "false" argument to msg
     if not msg:
         msg = "Generating local audio database."
@@ -98,8 +104,24 @@ def generate_android_database_success(start_time: float):
     )
 
 
-def action_get_num_files_per_source():
-    showInfo(get_num_files_per_source())
+def show_stats():
+    with sqlite3.connect(get_db_path()) as conn:
+        count = get_count(conn)
+        files_per_source = get_num_files_per_source(conn)
+        unique_count = get_unique_count(conn)
+
+        if count == 0:
+            msg = "Database is empty."
+        else:
+            files_per_source_str = "<br>".join(f"{f}: {src_count}" for f, src_count in files_per_source.items())
+
+            msg = f"""{files_per_source_str}<br>
+            <br>
+            Unique: {unique_count}<br>
+            Total: {count}
+            """
+        showInfo(msg, title="Local Audio Statistics")
+
 
 
 def init_gui():
@@ -113,8 +135,8 @@ def init_gui():
     qconnect(action.triggered, regenerate_database_operation)
     menu_local_audio.addAction(action)
 
-    action2 = QAction("Get number of entries per source", mw)
-    qconnect(action2.triggered, action_get_num_files_per_source)
+    action2 = QAction("Show statistics", mw)
+    qconnect(action2.triggered, show_stats)
     menu_local_audio.addAction(action2)
 
     # generate android db (android.db)
