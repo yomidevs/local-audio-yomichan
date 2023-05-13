@@ -223,15 +223,45 @@ cd local-audio-yomichan
 
 # You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
 # If you are on a *unix OS and you have already setup the Anki add-on, you can run the commands below:
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/forvo_files ./plugin/user_files/forvo_files
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_alternate_files ./plugin/user_files/jpod_alternate_files
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_files ./plugin/user_files/jpod_files
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/nhk16_files ./plugin/user_files/nhk16_files
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ./plugin/user_files
 
 # After filling in `plugin/user_files` with the audio files, you can now run the server.
 # Ensure you have python 3.10.6 or above.
 python3 run_server.py
 ```
+
+## Configuring sources
+Sources can be manually configured using a config file.
+To configure your sources:
+
+1. Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
+1. Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
+1. Copy `default_config.json` into `user_files`, and rename it as `config.json`.
+
+    <details> <summary>Expected file structure <i>(click here)</i></summary>
+
+        1045800357
+        ├── db_utils.py
+        ├── server.py
+        ├── default_config.json
+        ├── ...
+        └── user_files
+            ├── config.json
+            ├── forvo_files
+            │   └── ...
+            ├── jpod_alternate_files
+            │   └── ...
+            ├── jpod_files
+            │   └── ...
+            └── nhk16_files
+                └── ...
+
+    </details>
+
+### Config Usage Notes
+- Whenever you edit your config, make sure you restart Anki and regenerate the database.
+    This will ensure your changes are fully applied.
+- Do NOT edit `default_config.json`, because this file will get overwritten on every add-on update.
 
 
 ## Credits & Acknowledgements
