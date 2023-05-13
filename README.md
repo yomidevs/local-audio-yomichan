@@ -275,7 +275,7 @@ python3 run_server.py
     Instructions can be found at the top of the [`link.ps1`](./link.ps1) script.
 
 - Linux and MacOS users can run:
-    ```
+    ```bash
     git clone https://github.com/themoeway/local-audio-yomichan.git
     cd local-audio-yomichan
     ./link.sh
