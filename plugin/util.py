@@ -1,4 +1,4 @@
-import os
+from pathlib import Path
 from typing import NamedTuple
 from dataclasses import dataclass
 
@@ -8,16 +8,16 @@ from .consts import DB_FILE_NAME, ANDROID_DB_FILE_NAME
 
 def get_program_root_path():
     return (
-        os.path.dirname(os.path.realpath(__file__)).replace("\\", "/").removesuffix("/")
+        Path(__file__).parent
     )
 
 
 def get_db_path():
-    return os.path.join(get_program_root_path(), DB_FILE_NAME)
+    return get_program_root_path().joinpath(DB_FILE_NAME)
 
 
 def get_android_db_path():
-    return os.path.join(get_program_root_path(), ANDROID_DB_FILE_NAME)
+    return get_program_root_path().joinpath(ANDROID_DB_FILE_NAME)
 
 
 class URLComponents(NamedTuple):

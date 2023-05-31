@@ -1,8 +1,8 @@
 from __future__ import annotations  # for Python 3.7-3.9
 
-import os
 import json
 import sqlite3
+from pathlib import Path
 from typing import Optional, Final, TypedDict
 # THIS REQUIRES A PIP INSTALL, making it impossible to use in Anki...
 #from typing_extensions import NotRequired
@@ -76,11 +76,10 @@ class AJTJapaneseSource(AudioSource):
 
     def add_entries(self, connection: sqlite3.Connection):
         cur = connection.cursor()
+        index_file = self.get_media_dir_path().joinpath("index.json")
 
-        program_root_path = get_program_root_path()
-        index_file = os.path.join(program_root_path, self.data.media_dir, "index.json")
-
-        if not os.path.isfile(index_file): # don't error if it simply doesn't exist
+        if not index_file.is_file(): # don't error if it simply doesn't exist
+            print(f"({self.__class__.__name__}) Cannot find entries file: {index_file}")
             return
 
         with open(index_file, encoding="utf-8") as f:
@@ -89,12 +88,15 @@ class AJTJapaneseSource(AudioSource):
 
             for expression, word_files in entries["headwords"].items():
                 for word_file in word_files:
-                    file = os.path.join("media", word_file)  # relative path
+                    fullpath = self.get_media_dir_path().joinpath("media").joinpath(word_file)
+                    relpath = fullpath.relative_to(self.get_media_dir_path())
+                    if not fullpath.is_file():
+                        continue
                     ajt_file = files.get(word_file, None)
                     if ajt_file is not None:
                         reading = ajt_file["kana_reading"]
                         display = self.get_display_text(ajt_file)
-                        cur.execute(SQL, (expression, reading, self.data.id, display, file))
+                        cur.execute(SQL, (expression, reading, self.data.id, display, str(relpath)))
 
         cur.close()
         connection.commit()

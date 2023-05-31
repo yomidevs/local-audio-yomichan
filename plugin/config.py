@@ -9,8 +9,8 @@ Source schema:
 - display: string used to display in Yomichan. Uses %s for the "DISPLAY" column.
 """
 
-import os
 import json
+from pathlib import Path
 from typing import TypedDict, Final, Type
 
 from .source.jpod import JPodAudioSource
@@ -43,11 +43,11 @@ class JsonConfig(TypedDict):
 
 
 def get_default_config_path():
-    return os.path.join(get_program_root_path(), DEFAULT_CONFIG_FILE_NAME)
+    return get_program_root_path().joinpath(DEFAULT_CONFIG_FILE_NAME)
 
 
 def get_config_path():
-    return os.path.join(get_program_root_path(), CONFIG_FILE_NAME)
+    return get_program_root_path().joinpath(CONFIG_FILE_NAME)
 
 
 def read_config() -> JsonConfig:
@@ -55,7 +55,7 @@ def read_config() -> JsonConfig:
     read default config, unless user config is found
     """
     config_path = get_config_path()
-    if not os.path.isfile(config_path):
+    if not config_path.is_file():
         default_config_path = get_default_config_path()
         with open(default_config_path, encoding="utf-8") as f:
             return json.load(f)

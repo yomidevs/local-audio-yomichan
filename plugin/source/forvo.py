@@ -1,5 +1,5 @@
-import os
 import sqlite3
+from pathlib import Path
 from typing import Final
 
 from .audio_source import AudioSource, AudioSourceData
@@ -9,26 +9,15 @@ from ..util import get_program_root_path
 
 class ForvoAudioSource(AudioSource):
     def add_entries(self, connection: sqlite3.Connection):
-        program_root_path = get_program_root_path()
-        start = os.path.join(program_root_path, self.data.media_dir)
-
         sql = "INSERT INTO entries (expression, source, speaker, display, file) VALUES (?,?,?,?,?)"
         cur = connection.cursor()
 
-        for root, _, files in os.walk(start, topdown=False):
-            for name in files:
-                path = os.path.join(root, name)
-                relative_path = os.path.relpath(path, start)
-
-                if not name.endswith(".mp3"):
-                    print(f"(ForvoAudioSource) skipping non-mp3 file: {relative_path}")
-                    continue
-
-                speaker = os.path.basename(root)
-                display = speaker
-                expr = os.path.splitext(name)[0]
-
-                cur.execute(sql, (expr, self.data.id, speaker, display, relative_path))
+        for path in self.find_media_files():
+            relative_path = str(path.relative_to(self.get_media_dir_path()))
+            speaker = path.parent.name
+            display = speaker
+            expr = path.stem
+            cur.execute(sql, (expr, self.data.id, speaker, display, relative_path))
 
         cur.close()
         connection.commit()

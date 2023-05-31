@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import os
 import http.server
 import json
 import sqlite3
@@ -37,17 +36,29 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         pass
 
     def get_audio(self, media_dir, file_path):
-        audio_file = os.path.join(get_program_root_path(), media_dir, file_path)
-        if not Path(audio_file).is_file():
+        audio_file = media_dir.joinpath(file_path)
+        if not audio_file.is_file():
             self.send_response(400)
             return
 
-        if audio_file.endswith(".mp3"):
+        if audio_file.suffix == (".mp3"):
             self.send_response(200)
             self.send_header("Content-type", "audio/mpeg")
-        elif audio_file.endswith(".aac"):
+        elif audio_file.suffix == (".aac"):
             self.send_response(200)
             self.send_header("Content-type", "audio/aac")
+        elif audio_file.suffix == (".m4a"):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/mp4")
+        elif audio_file.suffix in ('.ogg', '.oga', '.opus'):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/ogg")
+        elif audio_file.suffix == (".flac"):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/flac")
+        elif audio_file.suffix == (".wav"):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/wav")
         else:
             self.send_response(400)
             return
@@ -61,12 +72,25 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         """
         internal testing method, shouldn't be used outside of testing the android db
         """
-        if file_path.endswith(".mp3"):
+        audio_file = Path(file_path)
+        if audio_file.suffix == (".mp3"):
             self.send_response(200)
             self.send_header("Content-type", "audio/mpeg")
-        elif file_path.endswith(".aac"):
+        elif audio_file.suffix == (".aac"):
             self.send_response(200)
             self.send_header("Content-type", "audio/aac")
+        elif audio_file.suffix == (".m4a"):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/mp4")
+        elif audio_file.suffix in ('.ogg', '.oga', '.opus'):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/ogg")
+        elif audio_file.suffix == (".flac"):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/flac")
+        elif audio_file.suffix == (".wav"):
+            self.send_response(200)
+            self.send_header("Content-type", "audio/wav")
         else:
             self.send_response(400)
             return
