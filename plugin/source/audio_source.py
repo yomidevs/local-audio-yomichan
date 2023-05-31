@@ -9,9 +9,11 @@ from urllib.parse import urlunparse
 
 from ..util import (
     get_program_root_path,
+    URLComponents,
+)
+from ..consts import (
     HOSTNAME,
     PORT,
-    URLComponents,
 )
 
 
@@ -19,6 +21,7 @@ from ..util import (
 class AudioSourceData:
     id: Final[str]  # also the table name
     media_dir: Final[str]
+    display: Final[str]
 
 
 class AudioSource(ABC):
@@ -31,9 +34,6 @@ class AudioSource(ABC):
         add entries to the `entries` table
         """
         pass
-
-    def get_name(self, row) -> str:
-        return self.data.id
 
     def construct_file_url(self, file_path: str):
         """

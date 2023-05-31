@@ -1,10 +1,15 @@
+from __future__ import annotations  # for Python 3.7-3.9
+
 import os
 import json
 import sqlite3
-from typing import Final, TypedDict, Optional
+from typing import Optional, Final, TypedDict
+# THIS REQUIRES A PIP INSTALL, making it impossible to use in Anki...
+#from typing_extensions import NotRequired
 
 from .audio_source import AudioSource
-from ..util import split_into_mora, get_program_root_path, hiragana_to_katakana
+from ..util import get_program_root_path
+from ..jp_util import split_into_mora, hiragana_to_katakana
 
 
 """
@@ -30,6 +35,8 @@ This is based off of the schema found under `AudioSource`
 class AJTFile(TypedDict):
     kana_reading: str
     pitch_number: str
+    #pitch_pattern: NotRequired[str]
+    pitch_pattern: str
 
 
 class AJTMeta(TypedDict):
@@ -57,6 +64,10 @@ class AJTJapaneseSource(AudioSource):
         try:
             pitch_accent = int(ajt_file["pitch_number"])
         except Exception:
+            # apparently, pitch_number can be something like "0+2", in which case we look for pitch_pattern
+            pitch_pattern = ajt_file.get("pitch_pattern", None)
+            if pitch_pattern is not None:
+                return pitch_pattern
             print(f"({self.data.id}) pitch_number is not an integer: {ajt_file}")
             return None
         if pitch_accent > 0:

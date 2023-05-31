@@ -5,6 +5,8 @@ PORT: Final = 5050
 DB_FILE_NAME: Final = "user_files/entries.db"
 ANDROID_DB_FILE_NAME: Final = "user_files/android.db"
 DB_VERSION_FILE_NAME: Final = "user_files/entries_version.txt"
+DEFAULT_CONFIG_FILE_NAME: Final = "default_config.json"
+CONFIG_FILE_NAME: Final = "user_files/config.json"
 LATEST_VERSION_FILE_NAME: Final = "version.txt"
 
 ROWID: Final = 0

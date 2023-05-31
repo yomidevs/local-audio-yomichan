@@ -119,7 +119,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
     * Set the `URL` field to:
         ```
-        http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}
+        http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,shinmeikai8,forvo&term={term}&reading={reading}
         ```
 
         Set this to be the **first entry** of the list,
@@ -188,15 +188,21 @@ These are additional instructions and tips if something doesn't work as expected
 
 
 ## Known Issues
-* NHK16 audio files are `.aac` files, but they are saved as `.mp3` files when the file is exported to Anki.
+* NHK16 audio files are `.aac` files, but they are named as `.mp3` files when the file is exported to Anki.
     The audio will play normally on desktop, but will raise an error in the iPhone app (AnkiMobile).
     This will be fixed once Yomichan updates their stable version with
     [this PR](https://github.com/FooSoft/yomichan/pull/2302).
 
-    > **Note**:
-    > As a temporary workaround, one can use a batch script to convert all the .aac files into .mp3 files
-    > (say, with ffmpeg), and then regenerate the database.
-    > The original .aac files should not be present within the folder anymore.
+    <details> <summary>Workarounds <i>(click here)</i></summary>
+
+    1. For NHK16, one can batch convert all .aac files into .mp3 files, and then regenerate the database.
+        This workaround will not work for the shinmeikai8 source,
+        because the files are hard-coded into the internal index file.
+    2. For each file that errors, rename the media file from `.mp3` to `.aac`.
+        Make sure you change both the file in the media directory, as well as the file name
+        in your `Audio` field within Anki.
+
+    </details>
 
 ## Usage Notes
 
@@ -215,6 +221,40 @@ These are additional instructions and tips if something doesn't work as expected
     http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
+## Configuring sources
+Sources can be manually configured using a config file.
+To configure your sources:
+
+1. Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
+1. Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
+1. Copy `default_config.json` into `user_files`, and rename it as `config.json`.
+
+    <details> <summary>Expected file structure <i>(click here)</i></summary>
+
+        1045800357
+        ├── db_utils.py
+        ├── server.py
+        ├── default_config.json
+        ├── ...
+        └── user_files
+            ├── config.json
+            ├── forvo_files
+            │   └── ...
+            ├── jpod_alternate_files
+            │   └── ...
+            ├── jpod_files
+            │   └── ...
+            └── nhk16_files
+                └── ...
+
+    </details>
+
+### Config Usage Notes
+- Whenever you edit your config, make sure you restart Anki and regenerate the database.
+    This will ensure your changes are fully applied.
+- Do NOT edit `default_config.json`, because this file will get overwritten on every add-on update.
+
+
 ## Running without Anki
 If you wish to run the server without Anki, do the following:
 ```bash
@@ -223,16 +263,23 @@ cd local-audio-yomichan
 
 # You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
 # If you are on a *unix OS and you have already setup the Anki add-on, you can run the commands below:
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/forvo_files ./plugin/user_files/forvo_files
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_alternate_files ./plugin/user_files/jpod_alternate_files
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/jpod_files ./plugin/user_files/jpod_files
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files/nhk16_files ./plugin/user_files/nhk16_files
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ./plugin/user_files
 
 # After filling in `plugin/user_files` with the audio files, you can now run the server.
 # Ensure you have python 3.10.6 or above.
 python3 run_server.py
 ```
 
+## Install from Source
+- For Windows users, the link script requires a bit of effort to run.
+    Instructions can be found at the top of the [`link.ps1`](./link.ps1) script.
+
+- Linux and MacOS users can run:
+    ```bash
+    git clone https://github.com/themoeway/local-audio-yomichan.git
+    cd local-audio-yomichan
+    ./link.sh
+    ```
 
 ## Credits & Acknowledgements
 A lot of people came together, one way or the other, to get this add-on to where it is today.

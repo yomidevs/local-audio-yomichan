@@ -3,7 +3,8 @@ import sqlite3
 from typing import Final
 
 from .audio_source import AudioSource, AudioSourceData
-from ..util import is_kana, get_program_root_path
+from ..util import get_program_root_path
+from ..jp_util import is_kana
 
 
 class JPodAudioSource(AudioSource):
@@ -56,9 +57,6 @@ class JPodAudioSource(AudioSource):
         cur.close()
         connection.commit()
 
-    def get_name(self, row):
-        return "JPod101"
 
-
-JPOD_DATA: Final = AudioSourceData("jpod", "user_files/jpod_files")
-JPOD_AUDIO_SOURCE: Final = JPodAudioSource(JPOD_DATA)
+#JPOD_DATA: Final = AudioSourceData("jpod", "user_files/jpod_files")
+#JPOD_AUDIO_SOURCE: Final = JPodAudioSource(JPOD_DATA)

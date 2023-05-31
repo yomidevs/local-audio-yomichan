@@ -12,7 +12,7 @@ class ForvoAudioSource(AudioSource):
         program_root_path = get_program_root_path()
         start = os.path.join(program_root_path, self.data.media_dir)
 
-        sql = "INSERT INTO entries (expression, source, speaker, file) VALUES (?,?,?,?)"
+        sql = "INSERT INTO entries (expression, source, speaker, display, file) VALUES (?,?,?,?,?)"
         cur = connection.cursor()
 
         for root, _, files in os.walk(start, topdown=False):
@@ -25,16 +25,10 @@ class ForvoAudioSource(AudioSource):
                     continue
 
                 speaker = os.path.basename(root)
+                display = speaker
                 expr = os.path.splitext(name)[0]
 
-                cur.execute(sql, (expr, self.data.id, speaker, relative_path))
+                cur.execute(sql, (expr, self.data.id, speaker, display, relative_path))
 
         cur.close()
         connection.commit()
-
-    def get_name(self, row):
-        return f"Forvo ({row[SPEAKER]})"
-
-
-FORVO_DATA: Final = AudioSourceData("forvo", "user_files/forvo_files")
-FORVO_AUDIO_SOURCE: Final = ForvoAudioSource(FORVO_DATA)

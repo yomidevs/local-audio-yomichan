@@ -1,3 +1,6 @@
+## v1.5.0
+- Added a json config file, so sources are slightly easier to configure if necessary
+
 ## v1.4.0
 - Added shinmeikai 8 audio source (and basic ability to import any AJT Japanese audio source). Thanks to [tatsumoto-ren](https://github.com/Ajatt-Tools/shinmeikai_8_pronunciations_index) for scraping the audio.
 
