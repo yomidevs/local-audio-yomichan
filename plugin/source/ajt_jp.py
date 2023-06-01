@@ -33,6 +33,7 @@ This is based off of the schema found under `AudioSource`
 
 
 class AJTFile(TypedDict):
+    #kana_reading: NotRequired[str]
     kana_reading: str
     pitch_number: str
     #pitch_pattern: NotRequired[str]
@@ -60,8 +61,13 @@ class AJTJapaneseSource(AudioSource):
         """
         displays as katakana with number and downstep, i.e. "ヨ＼ム [1]"
         """
-        mora_list = split_into_mora(hiragana_to_katakana(ajt_file["kana_reading"]))
+        reading = ajt_file.get("kana_reading", None)
+        if reading is None:
+            return None
+        mora_list = split_into_mora(hiragana_to_katakana(reading))
         try:
+            if ajt_file["pitch_number"] == "?":
+                return None
             pitch_accent = int(ajt_file["pitch_number"])
         except Exception:
             # apparently, pitch_number can be something like "0+2", in which case we look for pitch_pattern
@@ -94,7 +100,7 @@ class AJTJapaneseSource(AudioSource):
                         continue
                     ajt_file = files.get(word_file, None)
                     if ajt_file is not None:
-                        reading = ajt_file["kana_reading"]
+                        reading = ajt_file.get("kana_reading", None)
                         display = self.get_display_text(ajt_file)
                         cur.execute(SQL, (expression, reading, self.data.id, display, str(relpath)))
 

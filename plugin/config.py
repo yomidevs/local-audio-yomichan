@@ -54,14 +54,19 @@ def read_config() -> JsonConfig:
     """
     read default config, unless user config is found
     """
-    config_path = get_config_path()
-    if not config_path.is_file():
-        default_config_path = get_default_config_path()
-        with open(default_config_path, encoding="utf-8") as f:
-            return json.load(f)
+    default_config_path = get_default_config_path()
+    with open(default_config_path, encoding="utf-8") as f:
+        config = json.load(f)
 
-    with open(config_path, encoding="utf-8") as f:
-        return json.load(f)
+    config_path = get_config_path()
+
+    if config_path.is_file():
+        with open(config_path, encoding="utf-8") as f:
+            user_config = json.load(f)
+            for k, v in user_config.items():
+                config[k] = v
+
+    return config
 
 
 def get_all_sources() -> dict[str, AudioSource]:
