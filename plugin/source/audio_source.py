@@ -50,4 +50,7 @@ class AudioSource(ABC):
         return urlunparse(parts)
 
     def get_media_dir_path(self) -> str:
+        if os.path.isabs(self.data.media_dir):
+            return self.data.media_dir
         return os.path.join(get_program_root_path(), self.data.media_dir)
+
