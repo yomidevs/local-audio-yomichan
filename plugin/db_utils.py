@@ -5,11 +5,13 @@ vacuum # so empty space is removed
 """
 
 import os
-from pathlib import Path
-import sqlite3
+import json
 import shutil
-
-from typing import Any
+import sqlite3
+from pathlib import Path
+from typing import Any, TypedDict
+from dataclasses import dataclass, field
+from collections import defaultdict
 
 from .util import (
     get_android_db_path,
@@ -27,6 +29,23 @@ from .consts import *
 UPDATE_VERSIONS = [
     (1, 3, 0),
 ]
+
+
+class ExpressionInfo(TypedDict):
+    kanji: str
+    override_reading: str # NotRequired[str]
+
+class ExpressionGroup(TypedDict):
+    reading: str
+    expressions: list[ExpressionInfo]
+
+@dataclass
+class ExpressionMeta:
+    expression: str
+    reading: str
+    found_sources: set[str] = field(default_factory=set)
+
+
 
 
 def android_gen():
@@ -208,6 +227,89 @@ def get_unique_count(conn: sqlite3.Connection) -> int:
     ).fetchone()[0]
 
 
+INSERT_ROW_SQL = "INSERT INTO entries (expression, reading, source, speaker, display, file) VALUES (?,?,?,?,?,?)"
+
+def fill_jmdict_forms_entry(conn: sqlite3.Connection, row: Any, expression: str, reading: str):
+    cursor = conn.cursor()
+    #print(expression, reading, row[SOURCE])
+    cursor.execute(INSERT_ROW_SQL, (expression, reading, row[SOURCE], row[SPEAKER], row[DISPLAY], row[FILE]))
+    cursor.close()
+
+
+SEARCH_QUERY = f"""
+    SELECT * FROM entries WHERE (
+        expression = ? AND reading = ?
+    )
+    """
+
+def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
+    counter = 0
+
+    meta_list: list[ExpressionMeta] = []
+    group_reading = group["reading"]
+    for expression in group["expressions"]:
+        kanji = expression["kanji"]
+        reading = expression.get("reading", group_reading)
+        meta_list.append(ExpressionMeta(kanji, reading))
+
+    # this could be done slightly more efficiently with a group query, but
+    # I'm too lazy to properly do it (requires sorting by expression/reading pair, etc.).
+    all_rows = []
+    for meta in meta_list:
+        rows = conn.execute(SEARCH_QUERY, (meta.expression, meta.reading)).fetchall()
+        all_rows.extend(rows)
+
+    if len(all_rows) == 0:
+        return 0
+
+    first_from_source: dict[str, list[Any]] = defaultdict(list) # Any being row
+
+    for row in all_rows:
+        expression = row[EXPRESSION]
+        reading = row[READING]
+        source = row[SOURCE]
+
+        # checks if the row is a "duplicate" (same row excluding reading, expression, id)
+        is_duplicate = False
+        for existing_row in first_from_source[source]:
+            if existing_row[SOURCE:] == row[SOURCE:]:
+                is_duplicate = True
+                break
+        if not is_duplicate:
+            first_from_source[source].append(row)
+
+        # if the expression and reading matches, make sure the source was found
+        for meta in meta_list:
+            if meta.expression == expression and meta.reading == reading:
+                meta.found_sources.add(source)
+
+    for source, rows in first_from_source.items():
+        for meta in meta_list:
+            if source not in meta.found_sources:
+                for row in rows:
+                    fill_jmdict_forms_entry(conn, row, meta.expression, meta.reading)
+                    counter += 1
+
+    return counter
+
+
+def fill_jmdict_forms(conn: sqlite3.Connection):
+    print(f"(init_db) Filling out JMdict forms...")
+    jmdict_forms_file = get_program_root_path().joinpath(JMDICT_FORMS_JSON_FILE_NAME)
+    if not jmdict_forms_file.is_file():
+        return
+
+    with open(jmdict_forms_file) as f:
+        groups: list[ExpressionGroup] = json.load(f)
+
+    counter = 0
+    for group in groups:
+        counter += fill_jmdict_forms_group(conn, group)
+    print(f"(init_db) Extra terms filled with JMdict forms: {counter}")
+
+    conn.commit()
+
+
 def init_db():
     print("Initializing database. This make take a while...")
 
@@ -228,6 +330,7 @@ def init_db():
         # initializes entries table
         drop_table_sql = "DROP TABLE IF EXISTS entries"
         cursor.execute(drop_table_sql)
+        cursor.execute("vacuum")
 
         # - expression (term): the main lookup key, potentially in kanji
         # - reading: kana only version of expression. If null, then no reading was
@@ -292,6 +395,8 @@ def init_db():
         for source in ALL_SOURCES.values():
             print(f"(init_db) Adding entries from {source.data.id}...")
             source.add_entries(connection)
+
+    fill_jmdict_forms(connection)
 
     print("Finished initializing database!")
 
