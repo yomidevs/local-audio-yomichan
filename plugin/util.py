@@ -7,6 +7,9 @@ from .consts import DB_FILE_NAME, ANDROID_DB_FILE_NAME
 
 
 def get_program_root_path():
+    """
+    gets 'plugin' folder in repo, or the add-on ID on AnkiWeb
+    """
     return (
         Path(__file__).parent
     )

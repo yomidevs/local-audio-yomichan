@@ -10,6 +10,7 @@ Source schema:
 """
 
 import json
+from pathlib import Path
 from typing import TypedDict, Final, Type
 
 from .source.jpod import JPodAudioSource
@@ -76,6 +77,16 @@ def get_all_sources() -> dict[str, AudioSource]:
         type = source_json["type"]
         path = source_json["path"]
         display = source_json["display"]
+
+        # checks for source_meta.json
+        source_meta_path = get_program_root_path() / path / "source_meta.json"
+        if source_meta_path.is_file():
+            with open(source_meta_path) as f:
+                source_meta = json.load(f)
+                meta_type = source_meta.get("type", None)
+                if meta_type is not None:
+                    type = meta_type
+
         AudioSourceClass = SOURCE_TYPES[type]
         data = AudioSourceData(id, path, display)
         source = AudioSourceClass(data)
