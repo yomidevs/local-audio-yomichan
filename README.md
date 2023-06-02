@@ -90,23 +90,31 @@ There is currently no way of using this on AnkiMobile (iOS).
             ├── server.py
             ├── ...
             └── user_files
+                ├── jmdict_forms.json
                 ├── forvo_files
                 │   ├── akitomo
                 │   │   └── 目的.mp3
                 │   ├── kaoring
                 │   │   └── ...
                 │   └── ...
-                ├── jpod_alternate_files
-                │   ├── よむ - 読む.mp3
-                │   └── ...
                 ├── jpod_files
-                │   ├── よむ - 読む.mp3
-                │   └── ...
-                └── nhk16_files
-                    ├── audio
-                    │   ├── 20170616125910.aac
+                │   ├── media
+                │   │   ├── 000113d2d8419a26e97eacc0b7cfd675.mp3
+                │   │   ├── 0001d108dd8f99509769192effc1f9e4.mp3
+                │   │   └── ...
+                │   ├── index.json
+                │   └── source_meta.json
+                ├── nhk16_files
+                │   ├── audio
+                │   │   ├── 20170616125910.aac
+                │   │   └── ...
+                │   └── entries.json
+                └── shinmeikai8_files
+                    ├── media
+                    │   ├── 00001.aac
+                    │   ├── 00002.aac
                     │   └── ...
-                    └── entries.json
+                    └── index.json
 
         </details>
 
