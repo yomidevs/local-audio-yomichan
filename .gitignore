@@ -215,6 +215,7 @@ plugin/user_files/*.db
 plugin/user_files/*.db-journal
 plugin/user_files/*.txt
 plugin/user_files/config.json
+plugin/user_files/jmdict*.json
 plugin/meta.json
 
 localaudio.ankiaddon

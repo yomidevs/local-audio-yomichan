@@ -1,9 +1,6 @@
 import sqlite3
-from pathlib import Path
-from typing import Final
 
-from .audio_source import AudioSource, AudioSourceData
-from ..util import get_program_root_path
+from .audio_source import AudioSource
 from ..jp_util import is_kana
 
 
@@ -47,7 +44,3 @@ class JPodAudioSource(AudioSource):
 
         cur.close()
         connection.commit()
-
-
-#JPOD_DATA: Final = AudioSourceData("jpod", "user_files/jpod_files")
-#JPOD_AUDIO_SOURCE: Final = JPodAudioSource(JPOD_DATA)

@@ -10,7 +10,6 @@ Source schema:
 """
 
 import json
-from pathlib import Path
 from typing import TypedDict, Final, Type
 
 from .source.jpod import JPodAudioSource

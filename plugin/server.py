@@ -14,7 +14,6 @@ from pathlib import Path
 from .util import (
     QueryComponents,
     get_db_path,
-    get_program_root_path,
     get_android_db_path,
 )
 from .consts import *

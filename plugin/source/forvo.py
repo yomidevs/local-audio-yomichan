@@ -1,10 +1,7 @@
 import sqlite3
-from pathlib import Path
-from typing import Final
 
-from .audio_source import AudioSource, AudioSourceData
+from .audio_source import AudioSource
 from ..consts import *
-from ..util import get_program_root_path
 
 
 class ForvoAudioSource(AudioSource):

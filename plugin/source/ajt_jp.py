@@ -2,13 +2,11 @@ from __future__ import annotations  # for Python 3.7-3.9
 
 import json
 import sqlite3
-from pathlib import Path
 from typing import Optional, Final, TypedDict
 # THIS REQUIRES A PIP INSTALL, making it impossible to use in Anki...
 #from typing_extensions import NotRequired
 
 from .audio_source import AudioSource
-from ..util import get_program_root_path
 from ..jp_util import split_into_mora, hiragana_to_katakana
 
 

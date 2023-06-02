@@ -1,10 +1,7 @@
 import json
 import sqlite3
-from pathlib import Path
-from typing import Final
 
-from .audio_source import AudioSource, AudioSourceData
-from ..util import get_program_root_path
+from .audio_source import AudioSource
 from ..jp_util import split_into_mora, is_kana, katakana_to_hiragana
 from ..consts import *
 
