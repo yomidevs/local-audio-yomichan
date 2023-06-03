@@ -58,7 +58,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     2. MP3 audio (4.9 GiB) - Older and less efficient codec, but needed for compatibility with AnkiMobile on iOS which does not support Opus currently. Audio is encoded with LAME `V3` preset.
         - Download torrent (magnet link)
 
-    3. Original audio (? GiB) - The completely raw, unprocessed audio files. Audio quality and codecs vary between each source. Only download this if you know what you are doing.
+    3. Original audio (5.4 GiB) - The completely raw, unprocessed audio files. Audio quality and codecs vary between each source. Only download this if you know what you are doing. This will contain duplicates and a few broken files. See [the build scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) for how this original audio was filtered and processed to create the above collections.
         - Download torrent (magnet link)
 
     If you have never downloaded from a torrent before, I highly recommend using the
