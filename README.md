@@ -64,7 +64,9 @@ There is currently no way of using this on AnkiMobile (iOS).
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
-1. Extract the `.tar.xz` file. To extract the file, Windows users can use [7zip](https://7-zip.org/download.html). Linux and MacOS users can use either the default GUI archive manager or the `tar -xf` command.
+1. Extract the `.tar.xz` file.
+    * **Windows** users can use [7zip](https://7-zip.org/download.html).
+    * **Linux and MacOS** users can use either the default GUI archive manager or the `tar -xf` command.
 
 1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
@@ -83,7 +85,7 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         ![image](./img/view_files.png)
 
-    * Copy the entire `user_files` folder (from the first step) into this folder.
+    * Copy the entire `user_files` folder (from the second step) into this folder.
 
         <details> <summary>Expected file structure <i>(click here)</i></summary>
 
@@ -201,7 +203,7 @@ These are additional instructions and tips if something doesn't work as expected
 
 * If you wish to reorder the priority of sources or remove sources,
     you can specify the sources using the custom URL.
-    For example, this gets fetches audio with the following priority list: Forvo, JPod, NHK16. Note that Shinmeikai8 audio is NOT fetched.
+    For example, this fetches audio with the following priority: Forvo, JPod, NHK16. Note that Shinmeikai8 audio is NOT fetched.
 
     ```
     http://localhost:5050/?term={term}&reading={reading}&sources=forvo,jpod,nhk16
