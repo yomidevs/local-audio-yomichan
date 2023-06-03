@@ -110,15 +110,17 @@ def main():
     if command == "anki":
         field = "Key" if args.key else "Word"
         note_ids = invoke("findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"')
+        notes_info = invoke("notesInfo", notes=note_ids)
         if len(note_ids) > 1:
             print("Multiple cards found!")
+            print([info["fields"]["Key"]["value"] for info in notes_info])
             return
         if len(note_ids) < 1:
             print("No cards found!")
             return
 
-        note_info = invoke("notesInfo", notes=note_ids)[0]
 
+        note_info = notes_info[0]
         word_reading = note_info["fields"]["WordReading"]["value"]
 
         word = note_info["fields"]["Word"]["value"]
