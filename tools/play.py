@@ -119,7 +119,6 @@ def main():
             print("No cards found!")
             return
 
-
         note_info = notes_info[0]
         word_reading = note_info["fields"]["WordReading"]["value"]
 
@@ -144,6 +143,8 @@ def main():
         try:
             if user_input == "e":
                 exit_loop = True
+            elif user_input.strip() == "":
+                pass
             elif user_input.startswith("a"): # add audio
                 idx = int(user_input[1:])
                 url = sources[idx]["url"]
