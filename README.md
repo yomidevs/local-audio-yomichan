@@ -127,7 +127,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
     * Set the `URL` field to:
         ```
-        http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,shinmeikai8,forvo&term={term}&reading={reading}
+        http://localhost:5050/?term={term}&reading={reading}
         ```
 
         Set this to be the **first entry** of the list,
