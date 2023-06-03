@@ -50,17 +50,16 @@ There is currently no way of using this on AnkiMobile (iOS).
 
 1. Download all the required audio files.
     
-    - **Ogg/Opus audio (1.9 GB) (Recommended)** - The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster) and is compatible everywhere except AnkiMobile on iOS. Audio has been encoded at 32k VBR.
+    - **Ogg/Opus audio (2.5 GiB) (Recommended)** - The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster) and is compatible everywhere except AnkiMobile on iOS. Audio has been encoded at 32k VBR.
         - Download torrent (magnet link)
-    - MP3 audio (4.1 GB) - Older and less efficient codec, but needed for compatibility with **AnkiMobile on iOS** which does not support Opus currently. Audio is encoded with LAME `V3` preset.
+    - MP3 audio (4.9 GiB) - Older and less efficient codec, but needed for compatibility with **AnkiMobile on iOS** which does not support Opus currently. Audio is encoded with LAME `V3` preset.
         - Download torrent (magnet link)
 
 
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
-1. Extract the `7z` file. To do this, use [7zip](https://7-zip.org/download.html).
-    If 7zip fails to extract the file, try downloading the file again (the `7z` file could be corrupted).
+1. Extract the `.tar.xz` file. Windows users can use [7zip](https://7-zip.org/download.html). Linux and MacOS users can use either the default GUI archive manager or the `tar -xf` command.
 
 1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
