@@ -27,18 +27,17 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. If you do not have internet access, you can still add audio to your cards.
 
-1. Compared to standard Yomichan, this improves coverage because it adds various sources not covered
-    by Yomichan, such as Forvo, NHK 2016, and Shinmeikai 8.
+1. Compared to standard Yomichan, this improves coverage because it adds various sources not covered by Yomichan, such as Forvo, NHK 2016, and Shinmeikai 8.
+
+1. Volume normalization has been applied to the audio, and silence has been trimmed from the beginning and end of the source files.
 
 </details>
 
 <details> <summary><b>Disadvantages:</b> <i>(click here)</i> </summary>
 
-1. This setup requires about **5GB of free space**.
+1. This setup requires about **2 GB of free space**.
 
-1. Despite having wide coverage, some words may simply not be covered by the local audio server.
-    Attempting to fetch these words will fallback to online sources,
-    which means that there will be no improvement in speed.
+1. This setup requires Anki to be open or the server to be run manually (see below) in order for Yomichan to fetch audio from it. However, Yomichan can still fall back to its default sources if `local-audio-yomichan` is unavailable or does not have the requested word.
 
 </details>
 
@@ -50,15 +49,15 @@ If you wish to use this on Android, see [here](https://github.com/KamWithK/Ankic
 There is currently no way of using this on AnkiMobile (iOS).
 
 1. Download all the required audio files.
-    They can be found at this [torrent link](https://nyaa.si/view/1625597).
+    
+    - **Ogg/Opus audio (1.9 GB) (Recommended)** - The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster) and is compatible everywhere except AnkiMobile on iOS. Audio has been encoded at 32k VBR.
+        - Download torrent (magnet link)
+    - MP3 audio (4.1 GB) - Older and less efficient codec, but needed for compatibility with **AnkiMobile on iOS** which does not support Opus currently. Audio is encoded with LAME `V3` preset.
+        - Download torrent (magnet link)
+
+
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
-
-    <details> <summary>Magnet link <i>(click here)</i></summary>
-
-        magnet:?xt=urn:btih:15f4557bc3e5464609bc1f9ac444db3611b97541&dn=Yomichan%20Japanese%20Local%20Audio%20-%20JapanesePod101%20%28JPod%29%2C%20NHK%2C%20Forvo%20Select%20Users&tr=http%3A%2F%2Fnyaa.tracker.wf%3A7777%2Fannounce&tr=udp%3A%2F%2Fopen.stealth.si%3A80%2Fannounce&tr=udp%3A%2F%2Ftracker.opentrackr.org%3A1337%2Fannounce&tr=udp%3A%2F%2Fexodus.desync.com%3A6969%2Fannounce&tr=udp%3A%2F%2Ftracker.torrent.eu.org%3A451%2Fannounce
-
-    </details>
 
 1. Extract the `7z` file. To do this, use [7zip](https://7-zip.org/download.html).
     If 7zip fails to extract the file, try downloading the file again (the `7z` file could be corrupted).
@@ -81,7 +80,6 @@ There is currently no way of using this on AnkiMobile (iOS).
         ![image](./img/view_files.png)
 
     * Copy the entire `user_files` folder (from the first step) into this folder.
-      Note: the other files in the torrent are now outdated, and should **not** be copied.
 
         <details> <summary>Expected file structure <i>(click here)</i></summary>
 
@@ -93,26 +91,26 @@ There is currently no way of using this on AnkiMobile (iOS).
                 ├── jmdict_forms.json
                 ├── forvo_files
                 │   ├── akitomo
-                │   │   └── 目的.mp3
+                │   │   └── 目的.opus
                 │   ├── kaoring
                 │   │   └── ...
                 │   └── ...
                 ├── jpod_files
                 │   ├── media
-                │   │   ├── 000113d2d8419a26e97eacc0b7cfd675.mp3
-                │   │   ├── 0001d108dd8f99509769192effc1f9e4.mp3
+                │   │   ├── 000113d2d8419a26e97eacc0b7cfd675.opus
+                │   │   ├── 0001d108dd8f99509769192effc1f9e4.opus
                 │   │   └── ...
                 │   ├── index.json
                 │   └── source_meta.json
                 ├── nhk16_files
                 │   ├── audio
-                │   │   ├── 20170616125910.aac
+                │   │   ├── 20170616125910.opus
                 │   │   └── ...
                 │   └── entries.json
                 └── shinmeikai8_files
                     ├── media
-                    │   ├── 00001.aac
-                    │   ├── 00002.aac
+                    │   ├── 00001.opus
+                    │   ├── 00002.opus
                     │   └── ...
                     └── index.json
 
@@ -127,7 +125,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
     * Set the `URL` field to:
         ```
-        http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,shinmeikai8,forvo&term={term}&reading={reading}
+        http://localhost:5050/?sources=jpod,nhk16,shinmeikai8,forvo&term={term}&reading={reading}
         ```
 
         Set this to be the **first entry** of the list,
@@ -195,23 +193,6 @@ These are additional instructions and tips if something doesn't work as expected
     I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
 
 
-## Known Issues
-* NHK16 audio files are `.aac` files, but they are named as `.mp3` files when the file is exported to Anki.
-    The audio will play normally on desktop, but will raise an error in the iPhone app (AnkiMobile).
-    This will be fixed once Yomichan updates their stable version with
-    [this PR](https://github.com/FooSoft/yomichan/pull/2302).
-
-    <details> <summary>Workarounds <i>(click here)</i></summary>
-
-    1. For NHK16, one can batch convert all .aac files into .mp3 files, and then regenerate the database.
-        This workaround will not work for the shinmeikai8 source,
-        because the files are hard-coded into the internal index file.
-    2. For each file that errors, rename the media file from `.mp3` to `.aac`.
-        Make sure you change both the file in the media directory, as well as the file name
-        in your `Audio` field within Anki.
-
-    </details>
-
 ## Usage Notes
 
 * As this is an Anki add-on, this will only run when Anki is open.
@@ -226,7 +207,7 @@ These are additional instructions and tips if something doesn't work as expected
 
     For example, the following will get forvo audio in the priority of strawberrybrown, then akitomo. All other users **will not be included in the search**.
     ```
-    http://localhost:5050/?sources=jpod,jpod_alternate,nhk16,forvo&term={term}&reading={reading}&user=strawberrybrown,akitomo
+    http://localhost:5050/?sources=jpod,nhk16,forvo&term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
 ## Configuring sources
@@ -248,7 +229,7 @@ To configure your sources:
             ├── config.json
             ├── forvo_files
             │   └── ...
-            ├── jpod_alternate_files
+            ├── shinmeikai8_files
             │   └── ...
             ├── jpod_files
             │   └── ...
