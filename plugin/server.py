@@ -21,7 +21,18 @@ from .config import ALL_SOURCES
 from .db_utils import execute_query
 
 
+
 class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
+
+    SUFFIX_TO_MIME_TYPE = {
+        ".mp3": "audio/mpeg",
+        ".aac": "audio/aac",
+        ".m4a": "audio/mp4",
+        ".ogg": "audio/ogg",
+        ".oga": "audio/ogg",
+        ".opus": "audio/ogg",
+        ".flac": "audio/flac",
+    }
 
     def log_error(self, *args, **kwargs):
         """By default, SimpleHTTPRequestHandler logs to stderr.  This would
@@ -40,28 +51,12 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             self.send_response(400)
             return
 
-        if audio_file.suffix == (".mp3"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/mpeg")
-        elif audio_file.suffix == (".aac"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/aac")
-        elif audio_file.suffix == (".m4a"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/mp4")
-        elif audio_file.suffix in ('.ogg', '.oga', '.opus'):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/ogg")
-        elif audio_file.suffix == (".flac"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/flac")
-        elif audio_file.suffix == (".wav"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/wav")
-        else:
+        mime_type = LocalAudioHandler.SUFFIX_TO_MIME_TYPE.get(audio_file.suffix, None)
+        if mime_type is None:
             self.send_response(400)
             return
-
+        self.send_response(200)
+        self.send_header("Content-type", mime_type)
         self.end_headers()
 
         with open(audio_file, "rb") as fh:
@@ -72,28 +67,13 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         internal testing method, shouldn't be used outside of testing the android db
         """
         audio_file = Path(file_path)
-        if audio_file.suffix == (".mp3"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/mpeg")
-        elif audio_file.suffix == (".aac"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/aac")
-        elif audio_file.suffix == (".m4a"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/mp4")
-        elif audio_file.suffix in ('.ogg', '.oga', '.opus'):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/ogg")
-        elif audio_file.suffix == (".flac"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/flac")
-        elif audio_file.suffix == (".wav"):
-            self.send_response(200)
-            self.send_header("Content-type", "audio/wav")
-        else:
+
+        mime_type = LocalAudioHandler.SUFFIX_TO_MIME_TYPE.get(audio_file.suffix, None)
+        if mime_type is None:
             self.send_response(400)
             return
-
+        self.send_response(200)
+        self.send_header("Content-type", mime_type)
         self.end_headers()
 
         android_db_path = get_android_db_path()
