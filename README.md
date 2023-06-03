@@ -27,17 +27,19 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. If you do not have internet access, you can still add audio to your cards.
 
-1. Compared to standard Yomichan, this improves coverage because it adds various sources not covered by Yomichan, such as Forvo, NHK 2016, and Shinmeikai 8.
+1. Compared to standard Yomichan, this **improves audio coverage** because it adds various sources not covered by Yomichan, such as Forvo, NHK 2016, and Shinmeikai 8.
 
-1. Volume normalization has been applied to the audio, and silence has been trimmed from the beginning and end of the source files.
+1. Much [pre-processing](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) has been done to this audio to make it as high quality as possible:
+    - All audio is normalized, so the volume remains relatively similar for each file.
+    - Silence has been trimmed from the beginning and end of each file.
 
 </details>
 
 <details> <summary><b>Disadvantages:</b> <i>(click here)</i> </summary>
 
-1. This setup requires about **2 GB of free space**.
+1. This setup requires about **3 GB of free space**.
 
-1. This setup requires Anki to be open or the server to be run manually (see below) in order for Yomichan to fetch audio from it. However, Yomichan can still fall back to its default sources if `local-audio-yomichan` is unavailable or does not have the requested word.
+1. This setup requires Anki to be open or the server to be [run manually](#running-without-anki) in order for Yomichan to fetch audio from it. However, Yomichan can still fall back to its default sources if `local-audio-yomichan` is unavailable or does not have the requested word.
 
 </details>
 
@@ -48,18 +50,21 @@ These instructions setup the local audio server for the PC (Windows, MacOS, Linu
 If you wish to use this on Android, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
 There is currently no way of using this on AnkiMobile (iOS).
 
-1. Download all the required audio files.
-    
-    - **Ogg/Opus audio (2.5 GiB) (Recommended)** - The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster) and is compatible everywhere except AnkiMobile on iOS. Audio has been encoded at 32k VBR.
-        - Download torrent (magnet link)
-    - MP3 audio (4.9 GiB) - Older and less efficient codec, but needed for compatibility with **AnkiMobile on iOS** which does not support Opus currently. Audio is encoded with LAME `V3` preset.
+1. Download all the required audio files. You have three main options:
+
+    1. **Ogg/Opus audio (2.5 GiB) (Recommended)** - The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster). However, **Opus is NOT compatible with AnkiMobile on iOS**. If you are using AnkiMobile, please use the 2nd option (MP3 audio) below. Audio has been encoded at 32k VBR.
         - Download torrent (magnet link)
 
+    2. MP3 audio (4.9 GiB) - Older and less efficient codec, but needed for compatibility with AnkiMobile on iOS which does not support Opus currently. Audio is encoded with LAME `V3` preset.
+        - Download torrent (magnet link)
+
+    3. Original audio (? GiB) - The completely raw, unprocessed audio files. Audio quality and codecs vary between each source. Only download this if you know what you are doing.
+        - Download torrent (magnet link)
 
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
-1. Extract the `.tar.xz` file. Windows users can use [7zip](https://7-zip.org/download.html). Linux and MacOS users can use either the default GUI archive manager or the `tar -xf` command.
+1. Extract the `.tar.xz` file. To extract the file, Windows users can use [7zip](https://7-zip.org/download.html). Linux and MacOS users can use either the default GUI archive manager or the `tar -xf` command.
 
 1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
@@ -189,29 +194,34 @@ These are additional instructions and tips if something doesn't work as expected
 *   If nothing else works, you have questions, etc., feel free to contact
     me on discord `Aquafina water bottle#3026`,
     or [submit an issue](https://github.com/themoeway/local-audio-yomichan/issues).
-    I exist on the [TheMoeWay](https://learnjapanese.moe/join/) and Refold (Japanese) servers.
+    I exist on the [TheMoeWay](https://learnjapanese.moe/join/) (see [this thread](https://discord.com/channels/617136488840429598/1074057444365443205)) and Refold (Japanese) servers.
 
 
-## Usage Notes
+## Configuring sources
 
-* As this is an Anki add-on, this will only run when Anki is open.
-    See [here](#running-without-anki) if you wish to run the server without Anki.
+* If you wish to reorder the priority of sources or remove sources,
+    you can specify the sources using the custom URL.
+    For example, this gets fetches audio with the following priority list: Forvo, JPod, NHK16. Note that Shinmeikai8 audio is NOT fetched.
 
-* The sources can be rearranged to give priority to a different source.
-    For example, if you want Forvo to have the highest priority, use
-    `sources=forvo,jpod,jpod_alternate,nhk16`
-    (under the Custom URL step).
+    ```
+    http://localhost:5050/?term={term}&reading={reading}&sources=forvo,jpod,nhk16
+    ```
 
 * For Forvo audio specifically, you can modify the priority of users by using `&user=`.
 
     For example, the following will get forvo audio in the priority of strawberrybrown, then akitomo. All other users **will not be included in the search**.
     ```
-    http://localhost:5050/?sources=jpod,nhk16,forvo&term={term}&reading={reading}&user=strawberrybrown,akitomo
+    http://localhost:5050/?term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
-## Configuring sources
-Sources can be manually configured using a config file.
-To configure your sources:
+## Config File
+
+If you want even more power, sources can be manually configured using a config file.
+On top of changing the priority of sources and removing sources, you can do the following:
+- Specify a path for each source folder. You can use this to store audio files in a different drive.
+- Add entirely new audio sources
+
+### Config Setup
 
 1. Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
 1. Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
@@ -225,7 +235,7 @@ To configure your sources:
         ├── default_config.json
         ├── ...
         └── user_files
-            ├── config.json
+            ├── config.json <-- Create this file!
             ├── forvo_files
             │   └── ...
             ├── shinmeikai8_files
@@ -241,6 +251,8 @@ To configure your sources:
 - Whenever you edit your config, make sure you restart Anki and regenerate the database.
     This will ensure your changes are fully applied.
 - Do NOT edit `default_config.json`, because this file will get overwritten on every add-on update.
+- If you want to change the priority of sources, ensure that your custom URL does NOT have the `sources` parameter.
+    The URL `sources` parameter overrides the config's source priority!
 
 
 ## Running without Anki
@@ -250,11 +262,11 @@ git clone https://github.com/themoeway/local-audio-yomichan.git
 cd local-audio-yomichan
 
 # You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
-# If you are on a *unix OS and you have already setup the Anki add-on, you can run the commands below:
+# If you are on a *unix OS and you have already setup the Anki add-on, you can run the command below:
 ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ./plugin/user_files
 
 # After filling in `plugin/user_files` with the audio files, you can now run the server.
-# Ensure you have python 3.10.6 or above.
+# Ensure you have python 3.9 or above.
 python3 run_server.py
 ```
 
@@ -281,6 +293,8 @@ Huge thanks to everyone who made it happen:
 * **[@MarvNC](https://github.com/MarvNC)**: Creating and maintaining the torrent + testing out the rewritten add-on
 * **[@shoui520](https://github.com/shoui520)**: Maintaining and popularizing the original set of instructions that these instructions were initially based off of
 * **[@ctpk](https://github.com/ctpk)**: Investigated and patched a bug with `.aac` files not having the correct mime type
+* **[@Mansive](https://github.com/Mansive)**: Helped with [pre-processing the audio](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts)
+* **[@tsweet64](https://github.com/tsweet64)**: Added support for more audio types, and helped with [pre-processing the audio](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts)
 * **[@jamesnicolas](https://github.com/jamesnicolas)**: Creator of [Yomichan Forvo Server for Anki](https://github.com/jamesnicolas/yomichan-forvo-server). The original code was heavily based off of this project.
 * **[@KamWithK](https://github.com/KamWithK)**: Creator of [Ankiconnect Android](https://github.com/KamWithK/AnkiconnectAndroid). This allows the local audio server to work on Android. Also gave advice for improving the database.
 * **[@DillonWall](https://github.com/DillonWall)**: Creator of [Generate Batch Audio](https://github.com/DillonWall/generate-batch-audio-anki-addon). This allows you to backfill existing cards with the local audio server, or anything else.
