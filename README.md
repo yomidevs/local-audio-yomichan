@@ -330,7 +330,7 @@ Huge thanks to everyone who made it happen:
     To transfer from the deprecated addon to this addon, do the following:
     - Disable the old addon
     - Download the new add-on (`1045800357`)
-    - Move the user_files folder from the old add-on's folder (likely `955441350`) to the new add-on's folder. Do not copy any other files from the old add-on
+    - Move the `user_files` folder from the old add-on's folder (likely `955441350`) to the new add-on's folder. Do not copy any other files from the old add-on
     - Restart Anki
 
     If that doesn't work for some reason, see the [troubleshooting section](#troubleshooting) (you might have to regenerate the database).
@@ -338,8 +338,23 @@ Huge thanks to everyone who made it happen:
 </details>
 
 
-<details> <summary>Updating to new audio <i>(click here)</i></summary>
+<details> <summary>Updating to the new audio <i>(click here)</i></summary>
 
-*   TODO
+*   Previously, the audio provided was the raw scraped audio without any processing. These files have a few problems:
+    - JPod files had many duplicate files, and multiple readings pointing to the same file.
+    - Some files were encoded as `aac` files, which lead to problems with playing on AnkiMobile.
+    - Audio was not normalized and can contain a good amount of silence around each word. This is especially true for Forvo audio.
+    - etc.
+    To fix these problems and more, all of the audio was [pre-processed](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) using various scripts (generously made by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64)). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
+
+    If you are interested in updating your audio, here's what you have to do:
+    1. Update the add-on (`Tools` →  `Add-ons` →  `Check for Updates`)
+    2. Navigate to this add-on folder:
+        * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
+        * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
+    3. Move the `user_files` folder somewhere findable (i.e. maybe your desktop).
+        This will serve as a backup in case anything fails.
+    4. Start from [step 1 of the regular instructions](#steps) (and ignore the 3rd step of downloading the add-on)
+    5. Enjoy your new audio!
 
 </details>
