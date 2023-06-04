@@ -137,6 +137,10 @@ There is currently no way of using this on AnkiMobile (iOS).
         Set this to be the **first entry** of the list,
         if you already have other entries.
 
+        The end result should look like this:
+
+        ![image](./img/custom_url_json.png)
+
 1. Restart Anki. You should see a message saying "Generating local audio database",
     and should take some time to finish.
 
