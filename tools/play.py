@@ -13,23 +13,28 @@ WARNING:
 - Requires *nix systems (as `/tmp/` and `mpv` is hard coded) (TODO: make configurable)
 
 Usage:
+
+`anki` command:
+    - attempts to find a unique card
+    - gets reading from WordReading
+`current` command:
+    - equivalent of `anki`, but uses the current card as shown on the reviewer screen.
+`local` command:
+    - directly queries the server with the word and reading
+    - cannot add the result to any card, can only play
+
+Usage (audio selector):
+
 > 0
     - play the audio at index 0
 > 3
     - play the audio at index 3
 > a
-    - adds the audio with index 0 to the card
+    - adds the audio with index 0 to the card (if `anki` or `current`)
 > a3
-    - adds the audio with index 3 to the card
+    - adds the audio with index 3 to the card (if `anki` or `current`)
 > e
     - exit
-
-`anki` command:
-    - attempts to find a unique card
-    - gets reading from WordReading
-`local` command:
-    - directly queries the server with the word and reading
-    - cannot add the result to any card, can only play
 
 """
 
@@ -86,6 +91,8 @@ def get_args():
     local.add_argument("word", type=str)
     local.add_argument("reading", type=str)
 
+    subparsers.add_parser("current") # anki current
+
     return parser.parse_args()
 
 def plain_to_kana(text: str):
@@ -129,6 +136,8 @@ def pretty_print_sources(sources):
 def main():
     args = get_args()
     command = args.command
+    note_id = None
+
     if command == "anki":
         field = "Key" if args.key else "Word"
         note_ids = invoke("findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"')
@@ -141,15 +150,29 @@ def main():
             print("No cards found!")
             return
 
+        note_id = note_ids[0]
         note_info = notes_info[0]
         word_reading = note_info["fields"]["WordReading"]["value"]
 
         word = note_info["fields"]["Word"]["value"]
         reading = plain_to_kana(word_reading)
 
+        print(word, reading)
+
+    elif command == "current":
+        note_info = invoke("guiCurrentCard")
+        word_reading = note_info["fields"]["WordReading"]["value"]
+
+        word = note_info["fields"]["Word"]["value"]
+        reading = plain_to_kana(word_reading)
+        note_id = invoke("cardsToNotes", cards=[note_info["cardId"]])[0]
+
+        print(word, reading)
+
     else: # local
         word = args.word
         reading = args.reading
+
 
     r = requests.get(f'http://localhost:5050/?term={word}&reading={reading}')
 
@@ -161,17 +184,17 @@ def main():
         pretty_print_sources(sources)
         print()
 
-        user_input = input("> ")
+        user_input = input("> ").strip()
         try:
             if user_input == "e":
                 exit_loop = True
-            elif user_input.strip() == "":
+            elif user_input == "":
                 pass
             elif user_input.startswith("a"): # add audio
-                if user_input.strip() == "a":
+                if user_input == "a":
                     idx = 0
                 else:
-                    idx = int(user_input[1:].strip())
+                    idx = int(user_input[1:])
 
                 if 0 <= idx < len(sources):
                     url = sources[idx]["url"]
@@ -179,7 +202,8 @@ def main():
                     print(f"Invalid index: {idx}")
                     continue
 
-                send_audio(url, note_ids[0], word, reading)
+                assert note_id is not None
+                send_audio(url, note_id, word, reading)
                 exit_loop = True
 
             else: # play audio
