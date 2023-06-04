@@ -173,7 +173,7 @@ def main():
                 else:
                     idx = int(user_input[1:].strip())
 
-                if 0 < idx <= len(sources):
+                if 0 <= idx < len(sources):
                     url = sources[idx]["url"]
                 else:
                     print(f"Invalid index: {idx}")
@@ -185,7 +185,7 @@ def main():
             else: # play audio
                 idx = int(user_input)
 
-                if 0 < idx <= len(sources):
+                if 0 <= idx < len(sources):
                     url = sources[idx]["url"]
                 else:
                     print(f"Invalid index: {idx}")
