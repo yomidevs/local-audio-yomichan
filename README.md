@@ -352,9 +352,9 @@ Huge thanks to everyone who made it happen:
     2. Navigate to this add-on folder:
         * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
         * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
-    3. Move the `user_files` folder somewhere findable (i.e. maybe your desktop).
+    3. Move the `user_files` folder somewhere findable (i.e. your desktop).
         This will serve as a backup in case anything fails.
-    4. Start from [step 1 of the regular instructions](#steps) (and ignore the 3rd step of downloading the add-on)
+    4. Start from [step 1 of the standard instructions](#steps) (and ignore the 3rd step of downloading the add-on)
     5. If you are using AnkiConnectAndroid, make sure to [regenerate and redownload the Android database](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
     6. Enjoy your new audio!
 
