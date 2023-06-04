@@ -207,15 +207,31 @@ These are additional instructions and tips if something doesn't work as expected
 
 * If you wish to reorder the priority of sources or remove sources,
     you can specify the sources using the custom URL.
-    For example, this fetches audio with the following priority: Forvo, JPod, NHK16. Note that Shinmeikai8 audio is NOT fetched.
+
+    Here are a few examples:
+
+    <details>
+    <summary>NHK16, Shinmeikai8, Forvo, JPod (the order I personally use)</summary>
 
     ```
-    http://localhost:5050/?term={term}&reading={reading}&sources=forvo,jpod,nhk16
+    http://localhost:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo,jpod
     ```
+
+    </details>
+
+
+    <details>
+    <summary>JPod, NHK16, Shinmeikai8 (Forvo will never be fetched!)</summary>
+
+    ```
+    http://localhost:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8
+    ```
+
+    </details>
 
 * For Forvo audio specifically, you can modify the priority of users by using `&user=`.
 
-    For example, the following will get forvo audio in the priority of strawberrybrown, then akitomo. All other users **will not be included in the search**.
+    For example, the following will get Forvo audio in the priority of strawberrybrown, then akitomo. All other users **will not be included in the search**.
     ```
     http://localhost:5050/?term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
