@@ -5,10 +5,32 @@ Maybe this can be an add-on (or part of one) later?
 Requirements:
 - requests library (`pip install requests`)
 - mpv
+- 'anki' command:
+    - Anki-Connect (with Anki open)
 
 WARNING:
 - Hard coded to use "JP Mining Note" (TODO: make configurable)
 - Requires *nix systems (as `/tmp/` and `mpv` is hard coded) (TODO: make configurable)
+
+Usage:
+> 0
+    - play the audio at index 0
+> 3
+    - play the audio at index 3
+> a
+    - adds the audio with index 0 to the card
+> a3
+    - adds the audio with index 3 to the card
+> e
+    - exit
+
+`anki` command:
+    - attempts to find a unique card
+    - gets reading from WordReading
+`local` command:
+    - directly queries the server with the word and reading
+    - cannot add the result to any card, can only play
+
 """
 
 import re
@@ -146,15 +168,28 @@ def main():
             elif user_input.strip() == "":
                 pass
             elif user_input.startswith("a"): # add audio
-                idx = int(user_input[1:])
-                url = sources[idx]["url"]
+                if user_input.strip() == "a":
+                    idx = 0
+                else:
+                    idx = int(user_input[1:].strip())
+
+                if 0 < idx <= len(sources):
+                    url = sources[idx]["url"]
+                else:
+                    print(f"Invalid index: {idx}")
+                    continue
 
                 send_audio(url, note_ids[0], word, reading)
                 exit_loop = True
 
             else: # play audio
                 idx = int(user_input)
-                url = sources[idx]["url"]
+
+                if 0 < idx <= len(sources):
+                    url = sources[idx]["url"]
+                else:
+                    print(f"Invalid index: {idx}")
+                    continue
 
                 print(url)
                 r2 = requests.get(url)
