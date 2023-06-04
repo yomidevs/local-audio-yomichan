@@ -345,7 +345,7 @@ Huge thanks to everyone who made it happen:
     - Some files were encoded as `aac` files, which lead to problems with playing on AnkiMobile.
     - Audio was not normalized and can contain a good amount of silence around each word. This is especially true for Forvo audio.
     - etc.
-    To fix these problems and more, all of the audio was [pre-processed](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) using various scripts (generously made by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64)). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
+    To fix these problems and more, all of the audio was [pre-processed](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) using various scripts (generously provided by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64)). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
 
     If you are interested in updating your audio, here's what you have to do:
     1. Update the add-on (`Tools` →  `Add-ons` →  `Check for Updates`)
@@ -355,6 +355,7 @@ Huge thanks to everyone who made it happen:
     3. Move the `user_files` folder somewhere findable (i.e. maybe your desktop).
         This will serve as a backup in case anything fails.
     4. Start from [step 1 of the regular instructions](#steps) (and ignore the 3rd step of downloading the add-on)
-    5. Enjoy your new audio!
+    5. If you are using AnkiConnectAndroid, make sure to [regenerate and redownload the Android database](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
+    6. Enjoy your new audio!
 
 </details>
