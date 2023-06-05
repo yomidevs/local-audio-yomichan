@@ -45,7 +45,10 @@ import shlex
 import urllib
 import argparse
 import subprocess
+
+from pathlib import Path
 from time import localtime, strftime
+from urllib.parse import urlparse
 
 import requests
 
@@ -106,9 +109,9 @@ def os_cmd(cmd):
 
 def send_audio(url: str, note_id: int, word: str, reading: str):
     suffix = url[url.rfind("."):]
-    print(suffix)
+    source = Path(urlparse(url).path).parts[1] # crazy hack to get the top most directory
 
-    file_name = f"local_audio_{word}_{reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
+    file_name = f"local_audio_{source}_{word}_{reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
     print(file_name)
 
     audio_data = [{
