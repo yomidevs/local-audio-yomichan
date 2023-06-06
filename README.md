@@ -85,11 +85,11 @@ There is currently no way of using this on AnkiMobile (iOS).
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
-1. Extract the `.tar.xz` file.
+2. Extract the `.tar.xz` file.
     * **Windows** users can use [7zip](https://7-zip.org/download.html).
     * **Linux and MacOS** users can use either the default GUI archive manager or the `tar -xf` command.
 
-1. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
+3. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
     * Copy and paste this code: `1045800357`
 
@@ -100,7 +100,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
     [here](https://github.com/themoeway/local-audio-yomichan/tree/old).
 
-1. Move the downloaded audio files to the correct place.
+4. Move the downloaded audio files to the correct place.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
     * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
 
@@ -143,7 +143,7 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         </details>
 
-1. Add the URL in Yomichan.
+5. Add the URL in Yomichan.
     * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
 
@@ -162,10 +162,10 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         ![image](./img/custom_url_json.png)
 
-1. Restart Anki. You should see a message saying "Generating local audio database",
+6. Restart Anki. You should see a message saying "Generating local audio database",
     and should take some time to finish.
 
-1. Ensure that everything works. To do this, play some audio from Yomichan.
+7. Ensure that everything works. To do this, play some audio from Yomichan.
     You should notice two things:
 
     - The audio should be played almost immediately after clicking the play button.
@@ -402,6 +402,7 @@ Huge thanks to everyone who made it happen:
     3. Move the `user_files` folder somewhere findable (i.e. your desktop).
         This will serve as a backup in case anything fails.
     4. Start from [step 1 of the standard instructions](#steps) (and ignore the 3rd step of downloading the add-on)
+        - Note that the URL has changed from previous versions. Remember to override the URL at step 5!
     5. If you are using AnkiConnectAndroid, make sure to [regenerate and redownload the Android database](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
     6. Enjoy your new audio!
 
