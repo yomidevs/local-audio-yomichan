@@ -231,8 +231,9 @@ INSERT_ROW_SQL = "INSERT INTO entries (expression, reading, source, speaker, dis
 
 def fill_jmdict_forms_entry(conn: sqlite3.Connection, row: Any, expression: str, reading: str):
     cursor = conn.cursor()
-    #print(expression, reading, row[SOURCE])
-    cursor.execute(INSERT_ROW_SQL, (expression, reading, row[SOURCE], row[SPEAKER], row[DISPLAY], row[FILE]))
+    params = (expression, reading, row[SOURCE], row[SPEAKER], row[DISPLAY], row[FILE])
+    #print("ADDING", params)
+    cursor.execute(INSERT_ROW_SQL, params)
     cursor.close()
 
 
@@ -243,6 +244,13 @@ SEARCH_QUERY = f"""
     """
 
 def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
+    """
+    Algorithm:
+
+    - get all rows that match the expressions and reading of the json
+    - for each expression/reading pair in the json:
+        - create a new row if it isn't a duplicate
+    """
     counter = 0
 
     # metadata for each entry in the group
@@ -273,12 +281,20 @@ def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
                 audio_row_slice = tuple(row[SOURCE:])
                 meta.found_audio_row_slices.add(audio_row_slice)
 
+    #print("META LIST:")
+    #for meta in meta_list:
+    #    print("META", meta.expression, meta.reading, meta.found_audio_row_slices)
+
+    # switch for-loop order so audio_row_slice can be created n times instead of n*m times
     for row in all_rows:
         audio_row_slice = tuple(row[SOURCE:])
         for meta in meta_list:
             if audio_row_slice not in meta.found_audio_row_slices:
+                #print("WILL_ADD", meta.expression, meta.reading, audio_row_slice, meta.found_audio_row_slices)
+                meta.found_audio_row_slices.add(audio_row_slice)
                 fill_jmdict_forms_entry(conn, row, meta.expression, meta.reading)
                 counter += 1
+        #print()
 
     return counter
 
