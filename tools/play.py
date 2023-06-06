@@ -45,7 +45,10 @@ import shlex
 import urllib
 import argparse
 import subprocess
+
+from pathlib import Path
 from time import localtime, strftime
+from urllib.parse import urlparse
 
 import requests
 
@@ -86,12 +89,14 @@ def get_args():
     anki = subparsers.add_parser("anki")
     anki.add_argument("word", type=str)
     anki.add_argument("--key", action="store_true", help="search key instead of word field")
+    anki.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
 
     local = subparsers.add_parser("local")
     local.add_argument("word", type=str)
     local.add_argument("reading", type=str)
 
-    subparsers.add_parser("current") # anki current
+    current = subparsers.add_parser("current") # anki current
+    current.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
 
     return parser.parse_args()
 
@@ -106,9 +111,9 @@ def os_cmd(cmd):
 
 def send_audio(url: str, note_id: int, word: str, reading: str):
     suffix = url[url.rfind("."):]
-    print(suffix)
+    source = Path(urlparse(url).path).parts[1] # crazy hack to get the top most directory
 
-    file_name = f"local_audio_{word}_{reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
+    file_name = f"local_audio_{source}_{word}_{reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
     print(file_name)
 
     audio_data = [{
@@ -138,34 +143,35 @@ def main():
     command = args.command
     note_id = None
 
-    if command == "anki":
-        field = "Key" if args.key else "Word"
-        note_ids = invoke("findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"')
-        notes_info = invoke("notesInfo", notes=note_ids)
-        if len(note_ids) > 1:
-            print("Multiple cards found!")
-            print([info["fields"]["Key"]["value"] for info in notes_info])
-            return
-        if len(note_ids) < 1:
-            print("No cards found!")
-            return
+    if command == "anki" or command == "current":
+        if command == "anki":
+            field = "Key" if args.key else "Word"
+            note_ids = invoke("findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"')
+            notes_info = invoke("notesInfo", notes=note_ids)
+            if len(note_ids) > 1:
+                print("Multiple cards found!")
+                print([info["fields"]["Key"]["value"] for info in notes_info])
+                return
+            if len(note_ids) < 1:
+                print("No cards found!")
+                return
 
-        note_id = note_ids[0]
-        note_info = notes_info[0]
-        word_reading = note_info["fields"]["WordReading"]["value"]
+            note_id = note_ids[0]
+            note_info = notes_info[0]
+        else: # current
+            note_info = invoke("guiCurrentCard")
+            note_id = invoke("cardsToNotes", cards=[note_info["cardId"]])[0]
 
-        word = note_info["fields"]["Word"]["value"]
-        reading = plain_to_kana(word_reading)
-
-        print(word, reading)
-
-    elif command == "current":
-        note_info = invoke("guiCurrentCard")
-        word_reading = note_info["fields"]["WordReading"]["value"]
-
-        word = note_info["fields"]["Word"]["value"]
-        reading = plain_to_kana(word_reading)
-        note_id = invoke("cardsToNotes", cards=[note_info["cardId"]])[0]
+        db_word, db_reading = args.db_search
+        if db_word is None or db_reading is None:
+            # use word from Anki
+            word = note_info["fields"]["Word"]["value"]
+            word_reading = note_info["fields"]["WordReading"]["value"]
+            reading = plain_to_kana(word_reading)
+        else:
+            # we search the database with the field
+            word = db_word
+            reading = db_reading
 
         print(word, reading)
 

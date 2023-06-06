@@ -43,7 +43,7 @@ class ExpressionGroup(TypedDict):
 class ExpressionMeta:
     expression: str
     reading: str
-    found_sources: set[str] = field(default_factory=set)
+    found_audio_row_slices: set[tuple] = field(default_factory=set)
 
 
 
@@ -245,6 +245,7 @@ SEARCH_QUERY = f"""
 def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
     counter = 0
 
+    # metadata for each entry in the group
     meta_list: list[ExpressionMeta] = []
     group_reading = group["reading"]
     for expression in group["expressions"]:
@@ -262,33 +263,22 @@ def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
     if len(all_rows) == 0:
         return 0
 
-    first_from_source: dict[str, list[Any]] = defaultdict(list) # Any being row
-
     for row in all_rows:
         expression = row[EXPRESSION]
         reading = row[READING]
-        source = row[SOURCE]
-
-        # checks if the row is a "duplicate" (same row excluding reading, expression, id)
-        is_duplicate = False
-        for existing_row in first_from_source[source]:
-            if existing_row[SOURCE:] == row[SOURCE:]:
-                is_duplicate = True
-                break
-        if not is_duplicate:
-            first_from_source[source].append(row)
 
         # if the expression and reading matches, make sure the source was found
         for meta in meta_list:
             if meta.expression == expression and meta.reading == reading:
-                meta.found_sources.add(source)
+                audio_row_slice = tuple(row[SOURCE:])
+                meta.found_audio_row_slices.add(audio_row_slice)
 
-    for source, rows in first_from_source.items():
+    for row in all_rows:
+        audio_row_slice = tuple(row[SOURCE:])
         for meta in meta_list:
-            if source not in meta.found_sources:
-                for row in rows:
-                    fill_jmdict_forms_entry(conn, row, meta.expression, meta.reading)
-                    counter += 1
+            if audio_row_slice not in meta.found_audio_row_slices:
+                fill_jmdict_forms_entry(conn, row, meta.expression, meta.reading)
+                counter += 1
 
     return counter
 
