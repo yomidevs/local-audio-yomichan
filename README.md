@@ -52,14 +52,35 @@ There is currently no way of using this on AnkiMobile (iOS).
 
 1. Download all the required audio files. You have three main options:
 
-    1. **Ogg/Opus audio (2.5 GiB) (Recommended)** - The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster). However, **Opus is NOT compatible with AnkiMobile on iOS**, nor is it compatible with certain old Android devices (Android 4 and below). If you are using an incompatible device, please use the 2nd option (MP3 audio) below. Audio has been encoded at 32k VBR.
-        - Download torrent (magnet link)
+    1.  <details>
+        <summary><b>Ogg/Opus audio (2.5 GiB) (Recommended)</b></summary>
 
-    2. MP3 audio (4.9 GiB) - Older and less efficient codec, but needed for compatibility with pretty much all devices. Audio is encoded with LAME `V3` preset.
-        - Download torrent (magnet link)
+        > The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster). However, **Opus is NOT compatible with the following**:
+        > - **AnkiMobile on iOS**
+        > - Very old Android devices (Android 4 and below)
+        > - AnkiWeb
+        >
+        > If you fall into one of the above categories, please use the 2nd option (MP3 audio) below.
+        >
+        > - Download torrent (magnet link)
 
-    3. Original audio (5.4 GiB) - The completely raw, unprocessed audio files. *Only download this if you know what you are doing.* This will contain duplicates, a few broken files, differing audio quality, and different codecs per source. See [the build scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) for how this original audio was filtered and processed to create the above collections.
-        - Download torrent (magnet link)
+        </details>
+
+    1.  <details>
+        <summary>MP3 audio (4.9 GiB)</summary>
+
+        > Older and less efficient codec, but needed for compatibility with pretty much all devices.
+        > - Download torrent (magnet link)
+
+        </details>
+
+    1.  <details>
+        <summary>Original audio (5.4 GiB)</summary>
+
+        > The completely raw, unprocessed audio files. *Only download this if you know what you are doing.* This will contain duplicates, a few broken files, differing audio quality, and different codecs per source. See [the build scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) for how this original audio was filtered and processed to create the above collections.
+        > - Download torrent (magnet link)
+
+        </details>
 
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
@@ -337,6 +358,16 @@ Huge thanks to everyone who made it happen:
     The full quote can be found at the bottom of [the legacy instructions](https://github.com/themoeway/local-audio-yomichan/tree/old), under "Original Message for v09".
 
 </details>
+
+
+<details> <summary>Some Technical Information on the Audio <i>(click here)</i></summary>
+
+* Opus audio has been encoded at 32k VBR.
+* MP3 audio is encoded with LAME `V3` preset.
+
+</details>
+
+
 
 <details> <summary>Transferring from the deprecated add-on <i>(click here)</i></summary>
 
