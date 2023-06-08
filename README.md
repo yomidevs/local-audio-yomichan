@@ -393,12 +393,14 @@ Huge thanks to everyone who made it happen:
     * A new source has been added (thanks to [@tatsumoto-ren](https://github.com/tatsumoto-ren)) <ruby>新明解<rt>しんめいかい</rt></ruby>８ (internal id: `shinmeikai8`).
     * JPod files were found to be mostly contained of literal duplicate files. To solve this, we changed the internal storage format to simply link the correct words to unique files, which ended up clearing some 30% of the JPod database.
     * Using JMdict word variants data (JMdict Forms), we increased word coverage by mapping audio from variants to other variants with the same reading.
-    Credits where credit is due: None of this would have been possible
+
+    However, credit where credit is due: None of this would have been possible
     (hell, none of this would've even started)
     if it wasn't for [@Mansive](https://github.com/Mansive), [@tsweet64](https://github.com/tsweet64),
     and their hard work on [these pre-processing scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts). Thanks once again for everything!
 
     If you are interested in updating your audio, here's what you'll need to do:
+
     1. Ensure the add-on is updated (`Tools` →  `Add-ons` →  `Check for Updates`)
     2. Navigate to this add-on folder:
         * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
