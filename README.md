@@ -228,24 +228,23 @@ These are additional instructions and tips if something doesn't work as expected
 
     Here are a few examples:
 
-    <details>
-    <summary>JPod, NHK16, Shinmeikai8, Forvo (the original default order)</summary>
+    *   <details>
+        <summary>JPod, NHK16, Shinmeikai8, Forvo (the original default order)</summary>
 
-    ```
-    http://localhost:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8,forvo
-    ```
+        ```
+        http://localhost:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8,forvo
+        ```
 
-    </details>
+        </details>
 
+    *   <details>
+        <summary>NHK16, Shinmeikai8, Forvo (JPod will never be fetched!)</summary>
 
-    <details>
-    <summary>NHK16, Shinmeikai8, Forvo (JPod will never be fetched!)</summary>
+        ```
+        http://localhost:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo
+        ```
 
-    ```
-    http://localhost:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo
-    ```
-
-    </details>
+        </details>
 
 * For Forvo audio specifically, you can modify the priority of users by using `&user=`.
 
