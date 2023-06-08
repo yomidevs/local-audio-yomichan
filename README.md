@@ -1,6 +1,8 @@
 
 # Local Audio Server for Yomichan
 
+<sup>A new audio collection was released on (TODO date)! If you are using the old audio collection, see how to use the new collection [here ("Updating to the new audio")](#other) </sup>
+
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
 runs a local server of which Yomichan can fetch audio files from,
 using a database containing over 250,000 unique expressions.
@@ -252,6 +254,13 @@ These are additional instructions and tips if something doesn't work as expected
     ```
     http://localhost:5050/?term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
+
+    Here is the list of available users:
+    * `akitomo`
+    * `kaoring`
+    * `poyotan`
+    * `skent`
+    * `strawberrybrown`
 
 ## Config File
 
