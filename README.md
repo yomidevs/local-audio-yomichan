@@ -1,7 +1,7 @@
 
 # Local Audio Server for Yomichan
 
-<sup>A new audio collection was released on (TODO date)! If you are using the old audio collection, see how to use the new collection [here ("Updating to the new audio")](#other) </sup>
+<sup>Announcement: A new audio collection was released on (TODO date)! If you are using the old audio collection, see how to use the new collection [here](#other) ("Updating to the new audio collection") </sup>
 
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
 runs a local server of which Yomichan can fetch audio files from,
@@ -390,7 +390,7 @@ Huge thanks to everyone who made it happen:
 </details>
 
 
-<details> <summary>Updating to the new audio <i>(click here)</i></summary>
+<details> <summary>Updating to the new audio collection <i>(click here)</i></summary>
 
 *   New collections of audio for the Local Audio Server has been finally released! These new collections improve on the old collections quite a bit:
     * Forvo audio is very inconsistent in raw audio quality. To solve this, **we normalized all of the audio** (so the volume is mostly constant between all files) and stripped most silence from the ends of the audio files.
