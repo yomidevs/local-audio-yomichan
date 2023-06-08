@@ -387,12 +387,7 @@ Huge thanks to everyone who made it happen:
 
 <details> <summary>Updating to the new audio <i>(click here)</i></summary>
 
-*   Previously, the audio provided was the raw scraped audio without any processing. These files have a few problems:
-    - JPod files had many duplicate files, and multiple readings pointing to the same file.
-    - Some files were encoded as `aac` files, which lead to problems with playing on AnkiMobile.
-    - Audio was not normalized and can contain a good amount of silence around each word. This is especially true for Forvo audio.
-    - etc.
-    To fix these problems and more, all of the audio was [pre-processed](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) using various scripts (generously provided by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64)). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
+*   Previously, the audio provided was the raw scraped audio without any processing. These files have a [good number of problems](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts), so all of the audio was pre-processed using various scripts generously provided by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
 
     If you are interested in updating your audio, here's what you have to do:
     1. Update the add-on (`Tools` →  `Add-ons` →  `Check for Updates`)
@@ -401,9 +396,16 @@ Huge thanks to everyone who made it happen:
         * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
     3. Move the `user_files` folder somewhere findable (i.e. your desktop).
         This will serve as a backup in case anything fails.
-    4. Start from [step 1 of the standard instructions](#steps) (and ignore the 3rd step of downloading the add-on)
-        - Note that the URL has changed from previous versions. Remember to override the URL at step 5!
-    5. If you are using AnkiConnectAndroid, make sure to [regenerate and redownload the Android database](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
-    6. Enjoy your new audio!
+    4. Download the desired audio from [step 1 of the standard instructions](#steps), extract the archive, and move the extracted `user_files` into the add-on folder.
+    5. Restart Anki, and then regenerate the Local Audio Database (`Tools` →  `Local Audio Server` →  `Regenerate database`)
+    6. Change your custom URL (JSON) value to the following:
+        ```
+        http://localhost:5050/?term={term}&reading={reading}
+        ```
+        NOTE: This will change the order of the sources to `nhk16,shinmeikai8,forvo,jpod`.
+        This default order has been changed from before, to optimize for Japanese correctness over literal audio quality.
+        If you want to use the previous default source order (or some other order), please see [here](https://github.com/tsweet64/local-audio-yomichan/tree/better_audio_readme#configuring-sources).
+    7. If you are using AnkiConnectAndroid, make sure to [regenerate the Android database and send it to your device](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
+    8. Enjoy your new audio!
 
 </details>
