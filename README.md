@@ -195,11 +195,11 @@ These are additional instructions and tips if something doesn't work as expected
 
 *   Make sure the database was properly generated.
 
+    <img align="right" src="./img/num_per_source.png">
+
     To determine if the database was properly generated,
     navigate to `Tools` →  `Local Audio Server` →  `Get number of entries per source`.
-    The expected result is the image below:
-
-    ![image](./img/num_per_source.png)
+    The expected result is the image to the right:
 
     If there are missing sources, or you see "Database is empty", that means that
     the audio files were either misplaced, or Anki was restarted before moving
