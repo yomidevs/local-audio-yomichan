@@ -387,7 +387,7 @@ Huge thanks to everyone who made it happen:
 *   New collections of audio for the Local Audio Server has been finally released! These new collections improve on the old collections quite a bit:
     * Forvo audio is very inconsistent in raw audio quality. To solve this, **we normalized all of the audio** (so the volume is mostly constant between all files) and stripped most silence from the ends of the audio files.
     * We now offer two collections: `opus` and `mp3`. The `opus` provides the most optimal storage format, whereas `mp3` collection provides the most compatible format. Most notably, **if you are using AnkiMobile, you can now use all audio sources** by using the `mp3` collection!
-    * A new source has been added (thanks to [@tatsumoto-ren](https://github.com/tatsumoto-ren)) <ruby>新明解<rt>しんめいかい</rt></ruby>８ (internal id: `shinmeikai8`).
+    * A new source has been added (thanks to [@tatsumoto-ren](https://github.com/tatsumoto-ren)): <ruby>新明解<rt>しんめいかい</rt></ruby>８ (internal id: `shinmeikai8`).
     * JPod files were found to be mostly contained of literal duplicate files. To solve this, we changed the internal storage format to simply link the correct words to unique files, which ended up clearing some 30% of the JPod database.
     * Using JMdict word variants data (JMdict Forms), we increased word coverage by mapping audio from variants to other variants with the same reading.
 
