@@ -60,7 +60,8 @@ There is currently no way of using this on AnkiMobile (iOS).
         > - Very old Android devices (Android 4 and below)
         > - AnkiWeb
         >
-        > If you fall into one of the above categories, please use the 2nd option (MP3 audio) below.
+        > <br>
+        > If you use Anki under any of the above, please use the 2nd option (MP3 audio) below.
         >
         > - Download torrent (magnet link)
 
@@ -144,10 +145,9 @@ There is currently no way of using this on AnkiMobile (iOS).
         </details>
 
 5. Add the URL in Yomichan.
+
     * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
-
-        ![image](./img/configre_audio_playback_sources.png)
 
     * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
     * Set the `URL` field to:
@@ -158,9 +158,8 @@ There is currently no way of using this on AnkiMobile (iOS).
         Set this to be the **first entry** of the list,
         if you already have other entries.
 
-        The end result should look like this:
+    ![image](./img/custom_url_json.gif)
 
-        ![image](./img/custom_url_json.png)
 
 6. Restart Anki. You should see a message saying "Generating local audio database",
     and should take some time to finish.
