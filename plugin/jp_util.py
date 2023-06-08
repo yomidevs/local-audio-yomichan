@@ -42,3 +42,10 @@ def is_kana(word):
             return False
     return True
 
+
+def is_hiragana(word):
+    for char in word:
+        if char < "ぁ" or char > "ゞ":
+            return False
+    return True
+

@@ -19,6 +19,7 @@ from .util import (
     get_program_root_path,
     QueryComponents,
 )
+from .jp_util import is_hiragana
 #from .all_sources import ID_TO_SOURCE_MAP, SOURCES
 from .config import ALL_SOURCES
 from .consts import *
@@ -229,30 +230,27 @@ def get_unique_count(conn: sqlite3.Connection) -> int:
 
 INSERT_ROW_SQL = "INSERT INTO entries (expression, reading, source, speaker, display, file) VALUES (?,?,?,?,?,?)"
 
-def fill_jmdict_forms_entry(conn: sqlite3.Connection, row: Any, expression: str, reading: str):
-    cursor = conn.cursor()
-    params = (expression, reading, row[SOURCE], row[SPEAKER], row[DISPLAY], row[FILE])
-    #print("ADDING", params)
-    cursor.execute(INSERT_ROW_SQL, params)
-    cursor.close()
-
-
 SEARCH_QUERY = f"""
     SELECT * FROM entries WHERE (
         expression = ? AND reading = ?
     )
     """
 
-def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
+def backfill_jmdict_forms_rows(conn: sqlite3.Connection, group: ExpressionGroup, new_rows: list[Any], new_rows_set: set[Any]):
     """
     Algorithm:
-
     - get all rows that match the expressions and reading of the json
     - for each expression/reading pair in the json:
         - create a new row if it isn't a duplicate
-    """
-    counter = 0
 
+    - NOTES:
+        - We must NOT update the table until the very end, to furfill our assumption that
+            the data is not transitive (i.e. 六 == 陸 and 陸 == 碌 does NOT imply 六 == 碌)
+        - If we do update the table while during the algorithm, the pitch accents from
+            六 can transfer (六 -> 陸 -> 碌), which is not correct!!
+        - When checking for duplicates, we must check that the row is not in the
+            "going to be added" list as well!
+    """
     # metadata for each entry in the group
     meta_list: list[ExpressionMeta] = []
     group_reading = group["reading"]
@@ -265,17 +263,24 @@ def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
     # I'm too lazy to properly do it (requires sorting by expression/reading pair, etc.).
     all_rows = []
     for meta in meta_list:
-        rows = conn.execute(SEARCH_QUERY, (meta.expression, meta.reading)).fetchall()
-        all_rows.extend(rows)
+        # NOTE: we skip hiragana only words from the query! This is because we shouldn't map
+        # hiragana words -> kanji words, as we cannot guarantee that our data of hiragana words
+        # actually are talking about the correct kanji word.
+        # It's probably safe to keep katakana words though, since those are a bit more unique.
+        if not is_hiragana(meta.expression):
+            rows = conn.execute(SEARCH_QUERY, (meta.expression, meta.reading)).fetchall()
+            all_rows.extend(rows)
 
     if len(all_rows) == 0:
         return 0
 
+    # DUPLICATE CHECKING from original index
     for row in all_rows:
         expression = row[EXPRESSION]
         reading = row[READING]
 
-        # if the expression and reading matches, make sure the source was found
+        # if the expression and reading matches, make sure we ddd the audio_row_slice to
+        # the found slices var, so we don't add itself back to the database
         for meta in meta_list:
             if meta.expression == expression and meta.reading == reading:
                 audio_row_slice = tuple(row[SOURCE:])
@@ -287,19 +292,22 @@ def fill_jmdict_forms_group(conn: sqlite3.Connection, group: ExpressionGroup):
 
     # switch for-loop order so audio_row_slice can be created n times instead of n*m times
     for row in all_rows:
-        audio_row_slice = tuple(row[SOURCE:])
+        audio_row_slice = row[SOURCE:] # already a tuple
         for meta in meta_list:
             if audio_row_slice not in meta.found_audio_row_slices:
-                #print("WILL_ADD", meta.expression, meta.reading, audio_row_slice, meta.found_audio_row_slices)
                 meta.found_audio_row_slices.add(audio_row_slice)
-                fill_jmdict_forms_entry(conn, row, meta.expression, meta.reading)
-                counter += 1
-        #print()
-
-    return counter
+                new_row = (meta.expression, meta.reading) + row[SOURCE:]
+                # if we check for containment in new_rows, it kills the runtime speed
+                if new_row not in new_rows_set:
+                    new_rows.append(new_row)
+                    new_rows_set.add(new_row)
 
 
 def fill_jmdict_forms(conn: sqlite3.Connection):
+    """
+    Backfills the database using Jmdict variant forms data
+    """
+
     print(f"(init_db) Filling out JMdict forms...")
     jmdict_forms_file = get_program_root_path().joinpath(JMDICT_FORMS_JSON_FILE_NAME)
     if not jmdict_forms_file.is_file():
@@ -308,10 +316,18 @@ def fill_jmdict_forms(conn: sqlite3.Connection):
     with open(jmdict_forms_file) as f:
         groups: list[ExpressionGroup] = json.load(f)
 
-    counter = 0
+    rows = []
+    rows_set = set()
     for group in groups:
-        counter += fill_jmdict_forms_group(conn, group)
-    print(f"(init_db) Extra terms filled with JMdict forms: {counter}")
+        backfill_jmdict_forms_rows(conn, group, rows, rows_set)
+
+    cursor = conn.cursor()
+    for row in rows:
+        #print("ADDING", row)
+        cursor.execute(INSERT_ROW_SQL, row)
+    cursor.close()
+
+    print(f"(init_db) Extra terms filled with JMdict forms: {len(rows)}")
 
     conn.commit()
 
