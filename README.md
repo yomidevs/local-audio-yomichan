@@ -387,7 +387,16 @@ Huge thanks to everyone who made it happen:
 
 <details> <summary>Updating to the new audio <i>(click here)</i></summary>
 
-*   Previously, the audio provided was the raw scraped audio without any processing. These files have a [good number of problems](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts), so all of the audio was [pre-processed](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts) using various scripts (generously provided by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64)). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
+*   New collections of audio for the Local Audio Server has been finally released! These new collections improve on the old collections quite a bit:
+    * Forvo audio is very inconsistent in raw audio quality. To solve this, **we normalized all of the audio** (so the volume is mostly constant between all files) and stripped most silence from the ends of the audio files.
+    * We now offer two collections: `opus` and `mp3`. The `opus` provides the most optimal storage format, whereas `mp3` collection provides the most compatible format. Most notably, **if you are using AnkiMobile, you can now use all audio sources** by using the `mp3` collection!
+    * A new source has been added (thanks to T\*tsumoto) <ruby>新明解<rt>しんめいかい</rt></ruby>８ (internal id: `shinmeikai8`).
+    * JPod files were found to be mostly contained of literal duplicate files. To solve this, we changed the internal storage format to simply link the correct words to unique files, which ended up clearing some 30% of the JPod database.
+    * Using JMdict word variants data (JMdict Forms), we increased word coverage by mapping audio from variants to other variants with the same reading.
+    Credits where credit is due: None of this would have been possible
+    (hell, none of this would've even started)
+    if it wasn't for [@Mansive](https://github.com/Mansive), [@tsweet64](https://github.com/tsweet64),
+    and their hard work on [these pre-processing scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts). Thanks once again for everything!
 
     If you are interested in updating your audio, here's what you'll need to do:
     1. Ensure the add-on is updated (`Tools` →  `Add-ons` →  `Check for Updates`)
