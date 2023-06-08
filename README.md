@@ -387,10 +387,10 @@ Huge thanks to everyone who made it happen:
 
 <details> <summary>Updating to the new audio <i>(click here)</i></summary>
 
-*   Previously, the audio provided was the raw scraped audio without any processing. These files have a [good number of problems](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts), so all of the audio was pre-processed using various scripts generously provided by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
+*   Previously, the audio provided was the raw scraped audio without any processing. These files have a [good number of problems](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts), so all of the audio was [pre-processed](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts) using various scripts (generously provided by [@Mansive](https://github.com/Mansive) and [@tsweet64](https://github.com/tsweet64)). Additionally, the new audio contains a new source: SMK8 (short for <ruby>新明解<rt>しんめいかい</rt></ruby>８).
 
-    If you are interested in updating your audio, here's what you have to do:
-    1. Update the add-on (`Tools` →  `Add-ons` →  `Check for Updates`)
+    If you are interested in updating your audio, here's what you'll need to do:
+    1. Ensure the add-on is updated (`Tools` →  `Add-ons` →  `Check for Updates`)
     2. Navigate to this add-on folder:
         * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
         * Click `View files` to the right. Your file explorer should now be under `Anki2/addons21/1045800357`.
@@ -402,9 +402,11 @@ Huge thanks to everyone who made it happen:
         ```
         http://localhost:5050/?term={term}&reading={reading}
         ```
-        NOTE: This will change the order of the sources to `nhk16,shinmeikai8,forvo,jpod`.
-        This default order has been changed from before, to optimize for Japanese correctness over literal audio quality.
-        If you want to use the previous default source order (or some other order), please see [here](https://github.com/tsweet64/local-audio-yomichan/tree/better_audio_readme#configuring-sources).
+        This URL removes the `sources` parameter, so sources can be added without having to
+        change the URL in the future. However, please note that the **default source order has changed**
+        to `nhk16,shinmeikai8,forvo,jpod`, to optimize for Japanese correctness over literal audio quality.
+        If you want to change the order the sources (i.e. to restore the previous default order), see
+        [here](https://github.com/tsweet64/local-audio-yomichan/tree/better_audio_readme#configuring-sources).
     7. If you are using AnkiConnectAndroid, make sure to [regenerate the Android database and send it to your device](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
     8. Enjoy your new audio!
 
