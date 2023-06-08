@@ -1,18 +1,6 @@
 {
   "sources": [
     {
-      "type": "jpod",
-      "id": "jpod",
-      "path": "user_files/jpod_files",
-      "display": "Jpod101"
-    },
-    {
-      "type": "jpod",
-      "id": "jpod_alternate",
-      "path": "user_files/jpod_alternate_files",
-      "display": "JPod101 Alt"
-    },
-    {
       "type": "nhk",
       "id": "nhk16",
       "path": "user_files/nhk16_files",
@@ -29,6 +17,18 @@
       "id": "forvo",
       "path": "user_files/forvo_files",
       "display": "Forvo (%s)"
+    },
+    {
+      "type": "jpod",
+      "id": "jpod",
+      "path": "user_files/jpod_files",
+      "display": "Jpod101"
+    },
+    {
+      "type": "jpod",
+      "id": "jpod_alternate",
+      "path": "user_files/jpod_alternate_files",
+      "display": "JPod101 Alt"
     }
   ]
 }
