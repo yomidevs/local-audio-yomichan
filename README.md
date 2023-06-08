@@ -232,20 +232,20 @@ These are additional instructions and tips if something doesn't work as expected
     Here are a few examples:
 
     <details>
-    <summary>NHK16, Shinmeikai8, Forvo, JPod (the order I personally use)</summary>
+    <summary>JPod, NHK16, Shinmeikai8, Forvo (the original default order)</summary>
 
     ```
-    http://localhost:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo,jpod
+    http://localhost:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8,forvo
     ```
 
     </details>
 
 
     <details>
-    <summary>JPod, NHK16, Shinmeikai8 (Forvo will never be fetched!)</summary>
+    <summary>NHK16, Shinmeikai8, Forvo (JPod will never be fetched!)</summary>
 
     ```
-    http://localhost:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8
+    http://localhost:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo
     ```
 
     </details>
