@@ -149,14 +149,12 @@ There is currently no way of using this on AnkiMobile (iOS).
     * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
 
-    * Click `Add`, and set the source to be `Add Custom URL (JSON)`.
-    * Set the `URL` field to:
+    * Set the first source to be `Custom URL (JSON)`.
+    * Under the first source, set the `URL` field to:
         ```
         http://localhost:5050/?term={term}&reading={reading}
         ```
-
-        Set this to be the **first entry** of the list,
-        if you already have other entries.
+    * If you have other sources, feel free to re-add them under the first source.
 
     ![image](./img/custom_url_json.gif)
 
