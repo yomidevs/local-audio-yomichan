@@ -1,3 +1,12 @@
+## v1.6.0
+- Added powershell linking script, so people can install from source on Windows
+- Switched some path handling to pathlib (thanks to tsweet64)
+- Support a lot more audio formats, like opus, ogg, etc. (thanks to tsweet64)
+- Config file now falls back to the default if keys are missing
+- Support jmdict_forms.json parsing (to fill in jmdict variant forms)
+- Support source_meta.json within each source to override the type
+- Change default order to nhk16,shinmeikai8,forvo,jpod
+
 ## v1.5.0
 - Added a json config file, so sources are slightly easier to configure if necessary
 
