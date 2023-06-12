@@ -1,7 +1,7 @@
 
 # Local Audio Server for Yomichan
 
-> <sup>**Announcement**: A new audio collection was released on (TODO date)! See how to upgrade to the new collection [here](#other) ("Updating to the new audio collection") </sup>
+> <sup>**Announcement**: A new audio collection was released on 2023/06/11! See how to upgrade to the new collection [here](#other) ("Updating to the new audio collection") </sup>
 
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
 runs a local server of which Yomichan can fetch audio files from,
