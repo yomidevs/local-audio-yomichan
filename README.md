@@ -65,7 +65,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         > <br>
         > If you use Anki under any of the above, please use the 2nd option (MP3 audio) below.
         >
-        > - Download torrent (magnet link)
+        > - Download: [torrent]()・[magnet](magnet:?xt=urn:btih:ef90ec428e6abcd560ffc85a2a1c083e0399d003&dn=local-yomichan-audio-collection-2023-06-11-opus.tar.xz&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2fnyaa.tracker.wf%3a7777%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.moeking.me%3a6969%2fannounce&tr=udp%3a%2f%2fopentracker.i2p.rocks%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.zerobytes.xyz%3a1337%2fannounce)
 
         </details>
 
@@ -73,15 +73,15 @@ There is currently no way of using this on AnkiMobile (iOS).
         <summary>MP3 audio (4.9 GiB)</summary>
 
         > Older and less efficient codec, but needed for compatibility with pretty much all devices.
-        > - Download torrent (magnet link)
+        > - Download: [torrent]()・[magnet](magnet:?xt=urn:btih:5bd0aa89667860e68b31a585dc6e7a2bfc811702&dn=local-yomichan-audio-collection-2023-06-11-mp3.tar.xz&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2fnyaa.tracker.wf%3a7777%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.moeking.me%3a6969%2fannounce&tr=udp%3a%2f%2fopentracker.i2p.rocks%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.zerobytes.xyz%3a1337%2fannounce)
 
         </details>
 
     1.  <details>
         <summary>Original audio (5.4 GiB)</summary>
 
-        > The completely raw, unprocessed audio files. *Only download this if you know what you are doing.* This will contain duplicates, a few broken files, differing audio quality, and different codecs per source. See [the build scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) for how this original audio was filtered and processed to create the above collections.
-        > - Download torrent (magnet link)
+        > The completely raw, unprocessed audio files. *Only download this if you know what you are doing.* This will contain duplicates, a few broken files, inconsistent audio quality, and different codecs per source. See [the build scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) for how this original audio was filtered and processed to create the above collections.
+        > - Download: [torrent]()・[magnet](magnet:?xt=urn:btih:e80dc4b9dd837257a181dd378325e6b433f55071&dn=local-yomichan-audio-collection-2023-06-11-original.tar.xz&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2fnyaa.tracker.wf%3a7777%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.moeking.me%3a6969%2fannounce&tr=udp%3a%2f%2fopentracker.i2p.rocks%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.zerobytes.xyz%3a1337%2fannounce)
 
         </details>
 
