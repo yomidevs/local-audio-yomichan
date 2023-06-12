@@ -1,3 +1,6 @@
+## v1.6.1
+- Fixed a bug where some files weren't being opened with utf-8 encoding
+
 ## v1.6.0
 - Added powershell linking script, so people can install from source on Windows
 - Switched some path handling to pathlib (thanks to tsweet64)

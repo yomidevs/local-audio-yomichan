@@ -313,7 +313,7 @@ def fill_jmdict_forms(conn: sqlite3.Connection):
     if not jmdict_forms_file.is_file():
         return
 
-    with open(jmdict_forms_file) as f:
+    with open(jmdict_forms_file, encoding="utf-8") as f:
         groups: list[ExpressionGroup] = json.load(f)
 
     rows = []

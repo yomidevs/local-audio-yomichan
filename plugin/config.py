@@ -81,7 +81,7 @@ def get_all_sources() -> dict[str, AudioSource]:
         # checks for source_meta.json
         source_meta_path = get_program_root_path() / path / "source_meta.json"
         if source_meta_path.is_file():
-            with open(source_meta_path) as f:
+            with open(source_meta_path, encoding="utf-8") as f:
                 source_meta = json.load(f)
                 meta_type = source_meta.get("type", None)
                 if meta_type is not None:
