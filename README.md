@@ -108,7 +108,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     [qBittorrent](https://www.qbittorrent.org/) client.
 
 2. Extract the `.tar.xz` file.
-    * **Windows** users can use [7zip](https://7-zip.org/download.html).
+    * **Windows** users can use [7zip](https://7-zip.org/download.html). Note that 7zip users must extract the resulting `tar` file as well.
     * **Linux and MacOS** users can use either the default GUI archive manager or the `tar -xf` command.
 
 3. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
