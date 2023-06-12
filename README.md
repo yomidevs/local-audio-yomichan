@@ -441,7 +441,7 @@ Huge thanks to everyone who made it happen:
         change the URL in the future. However, please note that the **default source order has changed**
         to `nhk16,shinmeikai8,forvo,jpod`, to optimize for Japanese correctness over literal audio quality.
         If you want to change the order the sources (i.e. to restore the previous default order), see
-        [here](https://github.com/tsweet64/local-audio-yomichan/tree/better_audio_readme#configuring-sources).
+        [here](https://github.com/themoeway/local-audio-yomichan#configuring-sources).
     7. If you are using AnkiConnectAndroid, make sure to update the app, [regenerate the Android database and send it to your device](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
         Don't forget to update the URL in Yomichan.
     8. Enjoy your new audio!
