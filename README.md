@@ -4,10 +4,11 @@
 > <sup>**Announcement**: A new audio collection was released on 2023/06/11! See how to upgrade to the new collection [here](#other) ("Updating to the new audio collection") </sup>
 
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
-runs a local server of which Yomichan can fetch audio files from,
+runs a local server that Yomichan fetches audio files from,
 using a database containing over 250,000 unique expressions.
 With this setup, you are able to create Anki cards nearly instantaneously,
-and get word audio without a working internet connection.
+get word audio without a working internet connection,
+and increase the quality and coverage of word audio.
 
 Core maintainer: [**@Aquafina-water-bottle**](https://www.github.com/Aquafina-water-bottle)
 
@@ -29,11 +30,12 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. If you do not have internet access, you can still add audio to your cards.
 
-1. Compared to standard Yomichan, this **improves audio coverage** because it adds various sources not covered by Yomichan, such as Forvo, NHK 2016, and Shinmeikai 8.
+1. Compared to standard Yomichan, this **improves audio coverage** because it adds various sources not covered by Yomichan: Forvo (select users), NHK 2016, and Shinmeikai 8.
 
 1. Much [pre-processing](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) has been done to this audio to make it as high quality as possible:
     - All audio is normalized, so the volume remains relatively similar for each file.
     - Silence has been trimmed from the beginning and end of each file.
+    - Using JMdict's data, variant forms with the same readings are back-filled with existing audio.
 
 </details>
 
@@ -256,12 +258,16 @@ These are additional instructions and tips if something doesn't work as expected
     http://localhost:5050/?term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
-    Here is the list of available users:
+    <details>
+    </summary>List of available Forvo users</summary>
+
     * `akitomo`
     * `kaoring`
     * `poyotan`
     * `skent`
     * `strawberrybrown`
+
+    </details>
 
 ## Config File
 
