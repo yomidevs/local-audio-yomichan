@@ -259,7 +259,7 @@ These are additional instructions and tips if something doesn't work as expected
     ```
 
     <details>
-    </summary>List of available Forvo users</summary>
+    <summary>List of available Forvo users</summary>
 
     * `akitomo`
     * `kaoring`
