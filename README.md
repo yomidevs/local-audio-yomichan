@@ -52,7 +52,7 @@ These instructions setup the local audio server for the PC (Windows, MacOS, Linu
 If you wish to use this on Android, see [here](https://github.com/KamWithK/AnkiconnectAndroid).
 There is currently no way of using this on AnkiMobile (iOS).
 
-1. Download all the required audio files. You have three main options:
+1. Download all the required audio files. You have two main options:
 
     1.  <details>
         <summary><b>Ogg/Opus audio (2.5 GiB) (Recommended)</b></summary>
@@ -86,22 +86,6 @@ There is currently no way of using this on AnkiMobile (iOS).
         >     ```
         >
         >     </details>
-        </details>
-
-    1.  <details>
-        <summary>Original audio (5.4 GiB)</summary>
-
-        > The completely raw, unprocessed audio files. *Only download this if you know what you are doing.* This will contain duplicates, a few broken files, inconsistent audio quality, and different codecs per source. See [the build scripts](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) for how this original audio was filtered and processed to create the above collections.
-        > -   **Download the files from [this torrent](https://nyaa.si/view/1681653)**.
-        >     Alternatively, use the magnet link below:
-        >     <details><summary>Magnet link</summary>
-        >
-        >     ```
-        >     magnet:?xt=urn:btih:e80dc4b9dd837257a181dd378325e6b433f55071&dn=local-yomichan-audio-collection-2023-06-11-original.tar.xz&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2fnyaa.tracker.wf%3a7777%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.moeking.me%3a6969%2fannounce&tr=udp%3a%2f%2fopentracker.i2p.rocks%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.zerobytes.xyz%3a1337%2fannounce
-        >     ```
-        >
-        >     </details>
-
         </details>
 
     If you have never downloaded from a torrent before, I highly recommend using the
@@ -388,6 +372,7 @@ Huge thanks to everyone who made it happen:
 
 * Opus audio has been encoded at 32k VBR.
 * MP3 audio is encoded with LAME `V3` preset.
+* The original audio can be found in the [build scripts repo](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts#local-audio-yomichan-build-scripts)
 
 </details>
 
