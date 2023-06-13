@@ -171,8 +171,6 @@ There is currently no way of using this on AnkiMobile (iOS).
     You should notice two things:
 
     - The audio should be played almost immediately after clicking the play button.
-        Note that if you're using the memory based version,
-        the first audio play will take a while to load as mentioned above (in the comparison).
     - After playing the audio, you should be able to see the available sources
         by right-clicking on the play button.
 
