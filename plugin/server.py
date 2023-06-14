@@ -105,10 +105,11 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         else:
             raise Exception(f"Cannot find term or expression in query: {self.path}")
 
+        # reading field should actually be optional, to query just for the term / expression
         if "reading" in parsed_qcomps:
             reading = parsed_qcomps["reading"][0]
         else:
-            raise Exception(f"Cannot find reading in query: {self.path}")
+            reading = None
 
         if "sources" in parsed_qcomps:
             sources = parsed_qcomps["sources"][0].split(",")

@@ -495,12 +495,17 @@ def execute_query(cursor: sqlite3.Connection, qcomps: QueryComponents) -> list[A
     #      reading
     #    """
 
-    params = [qcomps.expression, qcomps.reading]
-
-    query_where = f"""
-        expression = ?
-        AND (reading IS NULL OR reading = ?)
-    """
+    if qcomps.reading is None: # do not check reading at all
+        params = [qcomps.expression]
+        query_where = f"""
+            expression = ?
+        """
+    else:
+        params = [qcomps.expression, qcomps.reading]
+        query_where = f"""
+            expression = ?
+            AND (reading IS NULL OR reading = ?)
+        """
 
     # filters by sources if necessary
     if len(qcomps.sources) != len(ALL_SOURCES):

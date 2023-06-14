@@ -20,7 +20,7 @@ Usage:
 `current` command:
     - equivalent of `anki`, but uses the current card as shown on the reviewer screen.
 `local` command:
-    - directly queries the server with the word and reading
+    - directly queries the server with the word (and optionally, reading)
     - cannot add the result to any card, can only play
 
 Usage (audio selector):
@@ -93,7 +93,7 @@ def get_args():
 
     local = subparsers.add_parser("local")
     local.add_argument("word", type=str)
-    local.add_argument("reading", type=str)
+    local.add_argument("--reading", type=str, default=None)
 
     current = subparsers.add_parser("current") # anki current
     current.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
@@ -177,10 +177,14 @@ def main():
 
     else: # local
         word = args.word
-        reading = args.reading
+        reading = args.reading # note: can be None!
 
 
-    r = requests.get(f'http://localhost:5050/?term={word}&reading={reading}')
+    if reading is None:
+        query_url = f'http://localhost:5050/?term={word}'
+    else:
+        query_url = f'http://localhost:5050/?term={word}&reading={reading}'
+    r = requests.get(query_url)
 
     sources = r.json().get("audioSources")
 

@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import NamedTuple
+from typing import NamedTuple, Optional
 from dataclasses import dataclass
 
 from .consts import DB_FILE_NAME, ANDROID_DB_FILE_NAME
@@ -35,7 +35,7 @@ class URLComponents(NamedTuple):
 @dataclass(frozen=True)
 class QueryComponents:
     expression: str
-    reading: str
+    reading: Optional[str]
     sources: list[str]
     user: list[str]
 
