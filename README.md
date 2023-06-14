@@ -61,7 +61,7 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         > The [Opus](https://opus-codec.org/) audio codec provides much better quality at lower bitrates (which saves a lot of space and makes syncing large collections faster).
         >
-        > **However, Opus is NOT compatible with AnkiMobile on iOS, Android 4, and AnkiWeb.**
+        > **However, Opus is NOT compatible with AnkiMobile (iOS), Android 4, and AnkiWeb.**
         > If you use any of these, please use the 2nd option (MP3 audio) below.
         >
         > -   **Download the files from [this torrent](https://nyaa.si/view/1681655)**.
