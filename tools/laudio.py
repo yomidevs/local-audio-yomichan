@@ -14,6 +14,10 @@ Usage:
     - gets reading from the word reading field
 `current` command:
     - equivalent of `anki`, but uses the current card as shown on the reviewer screen.
+    - NOTE: The preview screen does not work.
+    - NOTE: Adding audio will refresh the reviewer screen, which may switch the
+        current card to something different. Make sure you rate the card
+        before adding the audio.
 `play` command:
     - directly queries the server with the word (and optionally, reading)
     - cannot add the result to any card, can only play
