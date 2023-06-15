@@ -17,6 +17,7 @@ from .util import (
     get_android_db_path,
     get_db_path,
     get_program_root_path,
+    get_version_file_path,
     QueryComponents,
 )
 from .jp_util import is_hiragana
@@ -188,9 +189,7 @@ def update_db_version():
     writes the current version to the db version file
     """
     db_version_file = os.path.join(get_program_root_path(), DB_VERSION_FILE_NAME)
-    latest_version_file = os.path.join(
-        get_program_root_path(), LATEST_VERSION_FILE_NAME
-    )
+    latest_version_file = get_version_file_path()
 
     with open(latest_version_file) as f:
         ver = f.read().strip()

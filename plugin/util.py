@@ -2,7 +2,7 @@ from pathlib import Path
 from typing import NamedTuple, Optional
 from dataclasses import dataclass
 
-from .consts import DB_FILE_NAME, ANDROID_DB_FILE_NAME
+from .consts import DB_FILE_NAME, ANDROID_DB_FILE_NAME, LATEST_VERSION_FILE_NAME
 
 
 
@@ -21,6 +21,10 @@ def get_db_path():
 
 def get_android_db_path():
     return get_program_root_path().joinpath(ANDROID_DB_FILE_NAME)
+
+
+def get_version_file_path():
+    return get_program_root_path().joinpath(LATEST_VERSION_FILE_NAME)
 
 
 class URLComponents(NamedTuple):

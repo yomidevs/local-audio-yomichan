@@ -15,6 +15,7 @@ from .util import (
     QueryComponents,
     get_db_path,
     get_android_db_path,
+    get_version_file_path,
 )
 from .consts import *
 from .config import ALL_SOURCES
@@ -125,11 +126,34 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         return qcomps
 
+    def send_version(self):
+        latest_version_file = get_version_file_path()
+        with open(latest_version_file) as f:
+            ver = f.read().strip()
+        payload = f"Local Audio Server v{ver}".encode("utf-8")
+
+        self.send_response(200)
+        self.send_header("Content-type", "text/plain; charset=UTF-8")
+        self.send_header("Content-Length", str(len(payload)))
+        self.end_headers()
+        self.wfile.write(payload)
+
     def do_GET(self):
+        print("GET:", self.path)
+
         # https://stackoverflow.com/questions/7894384/python-get-url-path-sections
-        urlparse(self.path).netloc
         parse_result = urlparse(self.path)
         full_path = unquote(parse_result.path)
+
+        # returns version as plaintext
+        if self.path.strip() == "/" or self.path.strip() == "":
+            self.send_version()
+            return
+
+        if full_path.strip() == "/favicon.ico":
+            # skip entirely
+            self.send_response(400)
+            return
 
         path_parts = full_path.split("/", 2)
         if len(path_parts) == 3 and (source_id := path_parts[1]) in ALL_SOURCES:
