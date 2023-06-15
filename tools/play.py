@@ -42,9 +42,9 @@ import re
 import sys
 import json
 import shlex
-import urllib
 import argparse
 import subprocess
+import urllib.request
 
 from pathlib import Path
 from time import localtime, strftime
@@ -67,7 +67,7 @@ def invoke(action: str, **params):
     requestJson = json.dumps(request(action, **params)).encode("utf-8")
     response = json.load(
         urllib.request.urlopen(
-            urllib.request.Request("http://localhost:8765", requestJson)
+            urllib.request.Request("http://127.0.0.1:8765", requestJson)
         )
     )
     if len(response) != 2:
@@ -81,65 +81,52 @@ def invoke(action: str, **params):
     return response["result"]
 
 
-
 def get_args():
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='command')
+    subparsers = parser.add_subparsers(dest='command', required=True)
 
     anki = subparsers.add_parser("anki")
     anki.add_argument("word", type=str)
     anki.add_argument("--key", action="store_true", help="search key instead of word field")
     anki.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
 
-    local = subparsers.add_parser("local")
-    local.add_argument("word", type=str)
-    local.add_argument("--reading", type=str, default=None)
-
-    current = subparsers.add_parser("current") # anki current
+    current = subparsers.add_parser("current", help="play currently displayed Anki card") # short for "anki current"
     current.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
 
+    play = subparsers.add_parser("play")
+    play.add_argument("wordreading", type=str, nargs="+", action=required_length(1, 2))
+
     return parser.parse_args()
+
 
 def plain_to_kana(text: str):
     result = text.replace("&nbsp;", ' ')
     return rx_PLAIN_FURIGANA.sub(r"\2", result)
+
 
 def os_cmd(cmd):
     # shlex.split used for POSIX compatibility
     return cmd if sys.platform == "win32" else shlex.split(cmd)
 
 
-def send_audio(url: str, note_id: int, word: str, reading: str):
-    suffix = url[url.rfind("."):]
-    source = Path(urlparse(url).path).parts[1] # crazy hack to get the top most directory
-
-    file_name = f"local_audio_{source}_{word}_{reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
-    print(file_name)
-
-    audio_data = [{
-        "url": url,
-        "filename": file_name,
-        "fields": [
-            "WordAudio"
-        ]
-    }]
-
-    invoke("updateNoteFields", note={
-        "id": note_id,
-        "fields": {
-            "WordAudio": "",
-        },
-        "audio": audio_data
-    })
+def required_length(nmin: int, nmax: int):
+    """
+    taken from https://stackoverflow.com/a/4195302
+    """
+    class RequiredLength(argparse.Action):
+        def __call__(self, parser, args, values, option_string=None):
+            if not nmin<=len(values)<=nmax:
+                msg='argument "{f}" requires between {nmin} and {nmax} arguments'.format(
+                    f=self.dest,nmin=nmin,nmax=nmax)
+                raise argparse.ArgumentTypeError(msg)
+            setattr(args, self.dest, values)
+    return RequiredLength
 
 
-def pretty_print_sources(sources):
-    for i, source in enumerate(sources):
-        print("", i, source["name"])
-
-
-def main():
-    args = get_args()
+def parse_args(args) -> tuple[str | None, str | None, int | None]:
+    """
+    gets word, reading, and note_id from args
+    """
     command = args.command
     note_id = None
 
@@ -151,10 +138,10 @@ def main():
             if len(note_ids) > 1:
                 print("Multiple cards found!")
                 print([info["fields"]["Key"]["value"] for info in notes_info])
-                return
+                return (None, None, None)
             if len(note_ids) < 1:
                 print("No cards found!")
-                return
+                return (None, None, None)
 
             note_id = note_ids[0]
             note_info = notes_info[0]
@@ -175,29 +162,83 @@ def main():
 
         print(word, reading)
 
-    else: # local
-        word = args.word
-        reading = args.reading # note: can be None!
+    else: # play
+        # can be 1+ args
+        if len(args.wordreading) == 1:
+            word = args.wordreading[0]
+            reading = None
+        else: # len == 2
+            word, reading = args.wordreading
+
+    return word, reading, note_id
 
 
-    if reading is None:
-        query_url = f'http://localhost:5050/?term={word}'
-    else:
-        query_url = f'http://localhost:5050/?term={word}&reading={reading}'
-    r = requests.get(query_url)
+class AudioPlayer:
 
-    sources = r.json().get("audioSources")
+    def __init__(self, word: str, reading: str | None, note_id: int | None):
+        self.word = word
+        self.reading = reading
+        self.note_id = note_id
+        self.sources = self.get_sources()
 
-    exit_loop = False
-    while not exit_loop:
-        print()
-        pretty_print_sources(sources)
-        print()
 
-        user_input = input("> ").strip()
-        try:
+    def send_audio(self, url: str):
+        suffix = url[url.rfind("."):]
+        source = Path(urlparse(url).path).parts[1] # crazy hack to get the top most directory
+
+        file_name = f"local_audio_{source}_{self.word}_{self.reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
+        print(file_name)
+
+        audio_data = [{
+            "url": url,
+            "filename": file_name,
+            "fields": [
+                "WordAudio"
+            ]
+        }]
+
+        invoke("updateNoteFields", note={
+            "id": self.note_id,
+            "fields": {
+                "WordAudio": "",
+            },
+            "audio": audio_data
+        })
+
+
+    def pretty_print_sources(self, sources):
+        for i, source in enumerate(sources):
+            print("", i, source["name"])
+
+    def get_sources(self):
+        if self.reading is None:
+            query_url = f'http://localhost:5050/?term={self.word}'
+        else:
+            query_url = f'http://localhost:5050/?term={self.word}&reading={self.reading}'
+        r = requests.get(query_url)
+        sources = r.json().get("audioSources")
+        return sources
+
+    def play_audio(self, url: str):
+        r = requests.get(url)
+        with open("/tmp/local_audio", "wb") as f:
+            f.write(r.content)
+
+        subprocess.run(os_cmd("mpv /tmp/local_audio"), encoding="utf8")
+
+    def run_main_loop(self):
+        if len(self.sources) == 0:
+            print(f"No sources found for ({self.word}, {self.reading}). Exiting...")
+            return
+
+        while True:
+            print()
+            self.pretty_print_sources(self.sources)
+            print()
+
+            user_input = input("> ").strip()
             if user_input == "e":
-                exit_loop = True
+                return
             elif user_input == "":
                 pass
             elif user_input.startswith("a"): # add audio
@@ -206,35 +247,36 @@ def main():
                 else:
                     idx = int(user_input[1:])
 
-                if 0 <= idx < len(sources):
-                    url = sources[idx]["url"]
+                if 0 <= idx < len(self.sources):
+                    url = self.sources[idx]["url"]
                 else:
                     print(f"Invalid index: {idx}")
                     continue
 
-                assert note_id is not None
-                send_audio(url, note_id, word, reading)
-                exit_loop = True
+                assert self.note_id is not None
+                self.send_audio(url)
+                return
 
             else: # play audio
                 idx = int(user_input)
 
-                if 0 <= idx < len(sources):
-                    url = sources[idx]["url"]
+                if 0 <= idx < len(self.sources):
+                    url = self.sources[idx]["url"]
                 else:
                     print(f"Invalid index: {idx}")
                     continue
 
                 print(url)
-                r2 = requests.get(url)
-                with open("/tmp/local_audio", "wb") as f:
-                    f.write(r2.content)
+                self.play_audio(url)
 
-                subprocess.run(os_cmd("mpv /tmp/local_audio"), encoding="utf8")
-        except Exception as e:
-            #print(e)
-            raise e
-
+def main():
+    args = get_args()
+    word, reading, note_id = parse_args(args)
+    # TODO: accept either word is None or reading is None
+    if word is None:
+        return
+    player = AudioPlayer(word, reading, note_id)
+    player.run_main_loop()
 
 if __name__ == "__main__":
     main()
