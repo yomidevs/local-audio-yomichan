@@ -1,12 +1,11 @@
 """
-An internal CLI script to play and add audio from the local server.
+A CLI script to play and add audio from the local audio server.
 Maybe this can be an add-on (or part of this one) later?
 
 Requirements:
 - requests library (`pip install requests`)
 - mpv
-- 'anki' command:
-    - Anki-Connect (with Anki open)
+- Anki-Connect (with Anki open), if you want to add audio to Anki
 
 Usage:
 
@@ -18,6 +17,13 @@ Usage:
 `play` command:
     - directly queries the server with the word (and optionally, reading)
     - cannot add the result to any card, can only play
+
+Examples:
+
+$ python3 laudio.py current
+$ python3 laudio.py anki 偽物
+$ python3 laudio.py play 偽物
+$ python3 laudio.py play 偽物 にせもの
 
 Usage (audio selector):
 
