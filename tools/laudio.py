@@ -53,9 +53,7 @@ from urllib.parse import urlparse
 import requests
 
 
-
 rx_PLAIN_FURIGANA = re.compile(r" ?([^ >]+?)\[(.+?)\]")
-
 
 
 # taken from https://github.com/FooSoft/anki-connect#python
@@ -83,15 +81,31 @@ def invoke(action: str, **params):
 
 def get_args():
     parser = argparse.ArgumentParser()
-    subparsers = parser.add_subparsers(dest='command', required=True)
+    subparsers = parser.add_subparsers(dest="command", required=True)
 
     anki = subparsers.add_parser("anki")
     anki.add_argument("word", type=str)
-    anki.add_argument("--key", action="store_true", help="search key instead of word field")
-    anki.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
+    anki.add_argument(
+        "--key", action="store_true", help="search key instead of word field"
+    )
+    anki.add_argument(
+        "--db-search",
+        nargs=2,
+        type=str,
+        default=(None, None),
+        help="search the specified word and reading instead",
+    )
 
-    current = subparsers.add_parser("current", help="play currently displayed Anki card") # short for "anki current"
-    current.add_argument("--db-search", nargs=2, type=str, default=(None, None), help="search the specified word and reading instead")
+    current = subparsers.add_parser(
+        "current", help="play currently displayed Anki card"
+    )  # short for "anki current"
+    current.add_argument(
+        "--db-search",
+        nargs=2,
+        type=str,
+        default=(None, None),
+        help="search the specified word and reading instead",
+    )
 
     play = subparsers.add_parser("play")
     play.add_argument("wordreading", type=str, nargs="+", action=required_length(1, 2))
@@ -100,7 +114,7 @@ def get_args():
 
 
 def plain_to_kana(text: str):
-    result = text.replace("&nbsp;", ' ')
+    result = text.replace("&nbsp;", " ")
     return rx_PLAIN_FURIGANA.sub(r"\2", result)
 
 
@@ -113,13 +127,16 @@ def required_length(nmin: int, nmax: int):
     """
     taken from https://stackoverflow.com/a/4195302
     """
+
     class RequiredLength(argparse.Action):
         def __call__(self, parser, args, values, option_string=None):
-            if not nmin<=len(values)<=nmax:
-                msg='argument "{f}" requires between {nmin} and {nmax} arguments'.format(
-                    f=self.dest,nmin=nmin,nmax=nmax)
+            if not nmin <= len(values) <= nmax:
+                msg = 'argument "{f}" requires between {nmin} and {nmax} arguments'.format(
+                    f=self.dest, nmin=nmin, nmax=nmax
+                )
                 raise argparse.ArgumentTypeError(msg)
             setattr(args, self.dest, values)
+
     return RequiredLength
 
 
@@ -133,7 +150,9 @@ def parse_args(args) -> tuple[str | None, str | None, int | None]:
     if command == "anki" or command == "current":
         if command == "anki":
             field = "Key" if args.key else "Word"
-            note_ids = invoke("findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"')
+            note_ids = invoke(
+                "findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"'
+            )
             notes_info = invoke("notesInfo", notes=note_ids)
             if len(note_ids) > 1:
                 print("Multiple cards found!")
@@ -145,7 +164,7 @@ def parse_args(args) -> tuple[str | None, str | None, int | None]:
 
             note_id = note_ids[0]
             note_info = notes_info[0]
-        else: # current
+        else:  # current
             note_info = invoke("guiCurrentCard")
             note_id = invoke("cardsToNotes", cards=[note_info["cardId"]])[0]
 
@@ -162,49 +181,49 @@ def parse_args(args) -> tuple[str | None, str | None, int | None]:
 
         print(word, reading)
 
-    else: # play
+    else:  # play
         # can be 1+ args
         if len(args.wordreading) == 1:
             word = args.wordreading[0]
             reading = None
-        else: # len == 2
+        else:  # len == 2
             word, reading = args.wordreading
 
     return word, reading, note_id
 
 
 class AudioPlayer:
-
     def __init__(self, word: str, reading: str | None, note_id: int | None):
         self.word = word
         self.reading = reading
         self.note_id = note_id
         self.sources = self.get_sources()
 
-
     def send_audio(self, url: str):
-        suffix = url[url.rfind("."):]
-        source = Path(urlparse(url).path).parts[1] # crazy hack to get the top most directory
+        suffix = url[url.rfind(".") :]
+        source = Path(urlparse(url).path).parts[
+            1
+        ]  # crazy hack to get the top most directory
 
-        file_name = f"local_audio_{source}_{self.word}_{self.reading}_" + strftime("%Y-%m-%d-%H-%M-%S", localtime()) + suffix
+        file_name = (
+            f"local_audio_{source}_{self.word}_{self.reading}_"
+            + strftime("%Y-%m-%d-%H-%M-%S", localtime())
+            + suffix
+        )
         print(file_name)
 
-        audio_data = [{
-            "url": url,
-            "filename": file_name,
-            "fields": [
-                "WordAudio"
-            ]
-        }]
+        audio_data = [{"url": url, "filename": file_name, "fields": ["WordAudio"]}]
 
-        invoke("updateNoteFields", note={
-            "id": self.note_id,
-            "fields": {
-                "WordAudio": "",
+        invoke(
+            "updateNoteFields",
+            note={
+                "id": self.note_id,
+                "fields": {
+                    "WordAudio": "",
+                },
+                "audio": audio_data,
             },
-            "audio": audio_data
-        })
-
+        )
 
     def pretty_print_sources(self, sources):
         for i, source in enumerate(sources):
@@ -212,9 +231,11 @@ class AudioPlayer:
 
     def get_sources(self):
         if self.reading is None:
-            query_url = f'http://localhost:5050/?term={self.word}'
+            query_url = f"http://localhost:5050/?term={self.word}"
         else:
-            query_url = f'http://localhost:5050/?term={self.word}&reading={self.reading}'
+            query_url = (
+                f"http://localhost:5050/?term={self.word}&reading={self.reading}"
+            )
         r = requests.get(query_url)
         sources = r.json().get("audioSources")
         return sources
@@ -241,7 +262,7 @@ class AudioPlayer:
                 return
             elif user_input == "":
                 pass
-            elif user_input.startswith("a"): # add audio
+            elif user_input.startswith("a"):  # add audio
                 if user_input == "a":
                     idx = 0
                 else:
@@ -257,7 +278,7 @@ class AudioPlayer:
                 self.send_audio(url)
                 return
 
-            else: # play audio
+            else:  # play audio
                 idx = int(user_input)
 
                 if 0 <= idx < len(self.sources):
@@ -269,6 +290,7 @@ class AudioPlayer:
                 print(url)
                 self.play_audio(url)
 
+
 def main():
     args = get_args()
     word, reading, note_id = parse_args(args)
@@ -278,6 +300,6 @@ def main():
     player = AudioPlayer(word, reading, note_id)
     player.run_main_loop()
 
+
 if __name__ == "__main__":
     main()
-
