@@ -8,17 +8,14 @@ Requirements:
 - 'anki' command:
     - Anki-Connect (with Anki open)
 
-WARNING:
-- Requires *nix systems (as `/tmp/` and `mpv` is hard coded) (TODO: make configurable)
-
 Usage:
 
 `anki` command:
     - attempts to find a unique card
-    - gets reading from WordReading
+    - gets reading from the word reading field
 `current` command:
     - equivalent of `anki`, but uses the current card as shown on the reviewer screen.
-`local` command:
+`play` command:
     - directly queries the server with the word (and optionally, reading)
     - cannot add the result to any card, can only play
 
@@ -116,12 +113,13 @@ def get_args():
 
 def get_global_config():
     config = configparser.ConfigParser()
-    default_config = Path(__file__).parent.joinpath('default_config.ini')
-    user_config = Path(__file__).parent.joinpath('config.ini')
+    default_config = Path(__file__).parent.joinpath("default_config.ini")
+    user_config = Path(__file__).parent.joinpath("config.ini")
 
     config.read(default_config)
     config.read(user_config)
     return dict(config["DEFAULT"])
+
 
 def plain_to_kana(text: str):
     result = text.replace("&nbsp;", " ")
@@ -208,7 +206,13 @@ def parse_args(args, config) -> tuple[str | None, str | None, int | None]:
 
 
 class AudioPlayer:
-    def __init__(self, word: str, reading: str | None, note_id: int | None, config: dict[str, Any]):
+    def __init__(
+        self,
+        word: str,
+        reading: str | None,
+        note_id: int | None,
+        config: dict[str, Any],
+    ):
         self.word = word
         self.reading = reading
         self.note_id = note_id
@@ -257,13 +261,13 @@ class AudioPlayer:
         return sources
 
     def play_audio(self, url: str):
-        temp_audio_path = Path(__file__).parent.joinpath('temp_audio')
+        temp_audio_path = Path(__file__).parent.joinpath("temp_audio")
 
         r = requests.get(url)
         with open(temp_audio_path, "wb") as f:
             f.write(r.content)
 
-        mpv_path = self.config['mpv_path']
+        mpv_path = self.config["mpv_path"]
 
         subprocess.run(os_cmd(f"{mpv_path} {temp_audio_path}"), encoding="utf8")
 
