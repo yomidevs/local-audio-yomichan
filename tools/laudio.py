@@ -1,6 +1,6 @@
 """
 An internal CLI script to play and add audio from the local server.
-Maybe this can be an add-on (or part of one) later?
+Maybe this can be an add-on (or part of this one) later?
 
 Requirements:
 - requests library (`pip install requests`)
@@ -9,7 +9,6 @@ Requirements:
     - Anki-Connect (with Anki open)
 
 WARNING:
-- Hard coded to use "JP Mining Note" (TODO: make configurable)
 - Requires *nix systems (as `/tmp/` and `mpv` is hard coded) (TODO: make configurable)
 
 Usage:
@@ -44,11 +43,13 @@ import json
 import shlex
 import argparse
 import subprocess
+import configparser
 import urllib.request
 
 from pathlib import Path
 from time import localtime, strftime
 from urllib.parse import urlparse
+from typing import Any
 
 import requests
 
@@ -113,6 +114,15 @@ def get_args():
     return parser.parse_args()
 
 
+def get_global_config():
+    config = configparser.ConfigParser()
+    default_config = Path(__file__).parent.joinpath('default_config.ini')
+    user_config = Path(__file__).parent.joinpath('config.ini')
+
+    config.read(default_config)
+    config.read(user_config)
+    return dict(config["DEFAULT"])
+
 def plain_to_kana(text: str):
     result = text.replace("&nbsp;", " ")
     return rx_PLAIN_FURIGANA.sub(r"\2", result)
@@ -140,18 +150,23 @@ def required_length(nmin: int, nmax: int):
     return RequiredLength
 
 
-def parse_args(args) -> tuple[str | None, str | None, int | None]:
+def parse_args(args, config) -> tuple[str | None, str | None, int | None]:
     """
     gets word, reading, and note_id from args
     """
     command = args.command
     note_id = None
 
+    word_field = config["word_field"]
+    reading_field = config["reading_field"]
+
     if command == "anki" or command == "current":
         if command == "anki":
-            field = "Key" if args.key else "Word"
+            search_field = config["key_field"] if args.key else config["word_field"]
+            note_type = config["note_type"]
+
             note_ids = invoke(
-                "findNotes", query=f'"note:JP Mining Note" "{field}:{args.word}"'
+                "findNotes", query=f'"note:{note_type}" "{search_field}:{args.word}"'
             )
             notes_info = invoke("notesInfo", notes=note_ids)
             if len(note_ids) > 1:
@@ -171,8 +186,8 @@ def parse_args(args) -> tuple[str | None, str | None, int | None]:
         db_word, db_reading = args.db_search
         if db_word is None or db_reading is None:
             # use word from Anki
-            word = note_info["fields"]["Word"]["value"]
-            word_reading = note_info["fields"]["WordReading"]["value"]
+            word = note_info["fields"][word_field]["value"]
+            word_reading = note_info["fields"][reading_field]["value"]
             reading = plain_to_kana(word_reading)
         else:
             # we search the database with the field
@@ -193,11 +208,12 @@ def parse_args(args) -> tuple[str | None, str | None, int | None]:
 
 
 class AudioPlayer:
-    def __init__(self, word: str, reading: str | None, note_id: int | None):
+    def __init__(self, word: str, reading: str | None, note_id: int | None, config: dict[str, Any]):
         self.word = word
         self.reading = reading
         self.note_id = note_id
         self.sources = self.get_sources()
+        self.config = config
 
     def send_audio(self, url: str):
         suffix = url[url.rfind(".") :]
@@ -241,11 +257,15 @@ class AudioPlayer:
         return sources
 
     def play_audio(self, url: str):
+        temp_audio_path = Path(__file__).parent.joinpath('temp_audio')
+
         r = requests.get(url)
-        with open("/tmp/local_audio", "wb") as f:
+        with open(temp_audio_path, "wb") as f:
             f.write(r.content)
 
-        subprocess.run(os_cmd("mpv /tmp/local_audio"), encoding="utf8")
+        mpv_path = self.config['mpv_path']
+
+        subprocess.run(os_cmd(f"{mpv_path} {temp_audio_path}"), encoding="utf8")
 
     def run_main_loop(self):
         if len(self.sources) == 0:
@@ -292,12 +312,13 @@ class AudioPlayer:
 
 
 def main():
+    config = get_global_config()
     args = get_args()
-    word, reading, note_id = parse_args(args)
+    word, reading, note_id = parse_args(args, config)
     # TODO: accept either word is None or reading is None
     if word is None:
         return
-    player = AudioPlayer(word, reading, note_id)
+    player = AudioPlayer(word, reading, note_id, config)
     player.run_main_loop()
 
 
