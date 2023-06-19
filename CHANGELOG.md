@@ -1,3 +1,8 @@
+## v1.7.0
+- Made reading parameter is now optional (within the URL)
+- Made it possible to visit http://localhost:5050 for debugging purposes
+- Inform user of the progress when generating the database
+
 ## v1.6.1
 - Fixed a bug where some files weren't being opened with utf-8 encoding
 
