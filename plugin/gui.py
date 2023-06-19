@@ -18,6 +18,7 @@ from .db_utils import (
 )
 
 from .util import get_db_path
+from .config import ALL_SOURCES
 
 
 def attempt_init_db_gui():
@@ -37,6 +38,8 @@ def regenerate_database_operation(msg: Optional[str]=None):
     if not msg:
         msg = "Generating local audio database."
 
+    base_msg = f"{msg}\nThis may take a while."
+
     start_time = time.time()
 
     op = QueryOp(
@@ -44,21 +47,33 @@ def regenerate_database_operation(msg: Optional[str]=None):
         parent=mw,
         # the operation is passed the collection for convenience; you can
         # ignore it if you wish
-        op=lambda _: regenerate_database_action(),
+        op=lambda _: regenerate_database_action(base_msg),
         # this function will be called if op completes successfully,
         # and it is given the return value of the op
         success=lambda _: regenerate_database_success(start_time),
     )
 
+    # ASSUMPTION: ALL_SOURCES is insertion ordered
+    # ASSUMPTION 2: ALL_SOURCES has at least one source (why would you have zero sources defined?)
+    # ASSUMPTION 3: We must actually get the first source here, because the initial callback
+    #   runs too early? for the popup to properly update.
+    first_source = next(iter(ALL_SOURCES.values()))
+    start_msg = base_msg + f"\n\nAdding entries from {first_source.data.id}..."
+
     # if with_progress() is not called, no progress window will be shown.
     # note: QueryOp.with_progress() was broken until Anki 2.1.50
-    op.with_progress(
-        f"{msg}\nThis may take a while..."
-    ).run_in_background()
+    op.with_progress(start_msg).run_in_background()
 
 
-def regenerate_database_action() -> int:
-    init_db()
+def regenerate_database_action(progress_msg: str) -> int:
+    def callback(msg: str):
+        mw.taskman.run_on_main(
+            lambda: mw.progress.update(
+                label=progress_msg + "\n\n" + msg,
+            )
+        )
+
+    init_db(callback)
     return 1
 
 

@@ -9,9 +9,8 @@ import json
 import shutil
 import sqlite3
 from pathlib import Path
-from typing import Any, TypedDict
+from typing import Any, Callable, TypedDict, Optional
 from dataclasses import dataclass, field
-from collections import defaultdict
 
 from .util import (
     get_android_db_path,
@@ -331,7 +330,10 @@ def fill_jmdict_forms(conn: sqlite3.Connection):
     conn.commit()
 
 
-def init_db():
+def init_db(callback: Optional[Callable[[str], None]] = None):
+    """
+    callback is an optional function to inform the UI of the current action
+    """
     print("Initializing database. This make take a while...")
 
     update_db_version()
@@ -415,8 +417,12 @@ def init_db():
 
         for source in ALL_SOURCES.values():
             print(f"(init_db) Adding entries from {source.data.id}...")
+            if callback is not None:
+                callback(f"Adding entries from {source.data.id}...")
             source.add_entries(connection)
 
+    if callback is not None:
+        callback("Backfilling entries using JMdict data...")
     fill_jmdict_forms(connection)
 
     print("Finished initializing database!")

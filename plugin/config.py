@@ -70,6 +70,9 @@ def read_config() -> JsonConfig:
 
 
 def get_all_sources() -> dict[str, AudioSource]:
+    """
+    note: insertion order is important for this to work
+    """
     sources = {}
     config = read_config()
     for source_json in config["sources"]:
