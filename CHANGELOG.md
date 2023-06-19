@@ -1,5 +1,5 @@
 ## v1.7.0
-- Made reading parameter is now optional (within the URL)
+- Reading parameter is now optional (within the URL)
 - Made it possible to visit http://localhost:5050 for debugging purposes
 - Inform user of the progress when generating the database
 
