@@ -198,6 +198,10 @@ standard Yomichan sources and this local audio server.
 ## Troubleshooting
 These are additional instructions and tips if something doesn't work as expected.
 
+*   Ensure the local audio server is actually running.
+    You can do this by visiting [http://localhost:5050](http://localhost:5050).
+    If it says "Local Audio Server (version)", then the server is up and running!
+
 *   Make sure the database was properly generated.
 
     <img align="right" src="./img/num_per_source.png">
