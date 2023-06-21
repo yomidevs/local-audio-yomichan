@@ -25,6 +25,8 @@ from .db_utils import execute_query
 
 class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
+    # TODO: maybe use mimetypes.guess_type?
+    # https://docs.python.org/3/library/mimetypes.html
     SUFFIX_TO_MIME_TYPE = {
         ".mp3": "audio/mpeg",
         ".aac": "audio/aac",
