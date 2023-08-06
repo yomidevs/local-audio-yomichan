@@ -4,6 +4,7 @@ import http.server
 import json
 import sqlite3
 import threading
+import os
 
 from http import HTTPStatus
 from urllib.parse import unquote
@@ -60,6 +61,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             return
         self.send_response(200)
         self.send_header("Content-type", mime_type)
+        self.send_header('Content-length', str(os.stat(audio_file).st_size))
         self.end_headers()
 
         with open(audio_file, "rb") as fh:
