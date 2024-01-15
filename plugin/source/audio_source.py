@@ -8,7 +8,7 @@ from typing import Final
 from urllib.parse import urlunparse
 
 from ..util import (
-    get_program_root_path,
+    get_data_path,
     URLComponents,
 )
 from ..consts import (
@@ -70,4 +70,4 @@ class AudioSource(ABC):
         return urlunparse(parts)
 
     def get_media_dir_path(self) -> Path:
-        return get_program_root_path().joinpath(self.data.media_dir)
+        return get_data_path().joinpath(self.data.media_dir)
