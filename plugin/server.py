@@ -14,9 +14,9 @@ from pathlib import Path
 
 from .util import (
     QueryComponents,
-    get_db_path,
-    get_android_db_path,
-    get_version_file_path,
+    get_db_file,
+    get_android_db_file,
+    get_version_file,
 )
 from .consts import *
 from .config import ALL_SOURCES
@@ -81,7 +81,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         self.send_header("Content-type", mime_type)
         self.end_headers()
 
-        android_db_path = get_android_db_path()
+        android_db_path = get_android_db_file()
         with sqlite3.connect(android_db_path) as android_connection:
             android_cursor = android_connection.cursor()
             sql = """
@@ -131,7 +131,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         return qcomps
 
     def send_version(self):
-        latest_version_file = get_version_file_path()
+        latest_version_file = get_version_file()
         with open(latest_version_file) as f:
             ver = f.read().strip()
         payload = f"Local Audio Server v{ver}".encode("utf-8")
@@ -170,7 +170,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         qcomps = self.parse_query_components()
 
         audio_sources_json_list = []
-        with sqlite3.connect(get_db_path()) as connection:
+        with sqlite3.connect(get_db_file()) as connection:
             rows = execute_query(connection, qcomps)
             for row in rows:
                 source = row[SOURCE]

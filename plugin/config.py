@@ -19,7 +19,7 @@ from .source.forvo import ForvoAudioSource
 from .source.ajt_jp import AJTJapaneseSource
 
 from .consts import CONFIG_FILE_NAME, DEFAULT_CONFIG_FILE_NAME
-from .util import get_config_path, get_data_path, get_program_root_path
+from .util import get_config_dir, get_data_dir, get_program_root_dir
 from .source.audio_source import AudioSource, AudioSourceData
 
 
@@ -43,11 +43,11 @@ class JsonConfig(TypedDict):
 
 
 def get_default_config_file():
-    return get_program_root_path().joinpath(DEFAULT_CONFIG_FILE_NAME)
+    return get_program_root_dir().joinpath(DEFAULT_CONFIG_FILE_NAME)
 
 
 def get_config_file():
-    return get_config_path().joinpath(CONFIG_FILE_NAME)
+    return get_config_dir().joinpath(CONFIG_FILE_NAME)
 
 
 def read_config() -> JsonConfig:
@@ -82,7 +82,7 @@ def get_all_sources() -> dict[str, AudioSource]:
         display = source_json["display"]
 
         # checks for source_meta.json
-        source_meta_path = get_data_path() / path / "source_meta.json"
+        source_meta_path = get_data_dir() / path / "source_meta.json"
         if source_meta_path.is_file():
             with open(source_meta_path, encoding="utf-8") as f:
                 source_meta = json.load(f)

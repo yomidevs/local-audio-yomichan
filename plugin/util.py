@@ -11,7 +11,7 @@ from .consts import APP_NAME, DB_FILE_NAME, ANDROID_DB_FILE_NAME, LATEST_VERSION
 
 
 
-def get_program_root_path():
+def get_program_root_dir():
     """
     gets 'plugin' folder in repo, or the add-on ID on AnkiWeb
     """
@@ -20,14 +20,14 @@ def get_program_root_path():
     )
 
 
-def get_anki_data_path():
-    return get_program_root_path() / "user_files"
+def get_anki_data_dir():
+    return get_program_root_dir() / "user_files"
 
 
-get_anki_config_path = get_anki_data_path
+get_anki_config_dir = get_anki_data_dir
 
 
-def _get_win_data_path():
+def _get_win_data_dir():
     csidl_const = 28  # CSIDL_LOCAL_APPDATA
 
     buf = ctypes.create_unicode_buffer(1024)
@@ -42,13 +42,13 @@ def _get_win_data_path():
     return Path(buf.value) / APP_NAME
 
 
-get_win_data_path = lru_cache(maxsize=None)(_get_win_data_path)
+get_win_data_dir = lru_cache(maxsize=None)(_get_win_data_dir)
 
 
-get_win_config_path = get_win_data_path
+get_win_config_dir = get_win_data_dir
 
 
-def get_linux_data_path():
+def get_linux_data_dir():
     xdg = os.environ.get("XDG_DATA_HOME", "")
     if not xdg.strip():
         return Path.home() / ".local" / "share" / APP_NAME
@@ -56,7 +56,7 @@ def get_linux_data_path():
         return Path(xdg) / APP_NAME
 
 
-def get_linux_config_path():
+def get_linux_config_dir():
     xdg = os.environ.get("XDG_CONFIG_HOME", "")
     if not xdg.strip():
         return Path.home() / ".config" / APP_NAME
@@ -64,55 +64,55 @@ def get_linux_config_path():
         return Path(xdg) / APP_NAME
 
 
-def get_mac_data_path():
+def get_mac_data_dir():
     return Path.home() / "Library" / "Application Support" / APP_NAME
 
 
-get_mac_config_path = get_mac_data_path
+get_mac_config_dir = get_mac_data_dir
 
 
-def get_data_path():
+def get_data_dir():
     """
     returns the native, platform-specific directory for the application data directory
     """
     if importlib.util.find_spec("aqt"):
-        return get_anki_data_path()
+        return get_anki_data_dir()
     elif platform.system() == "Windows":
-        return get_win_data_path()
+        return get_win_data_dir()
     elif platform.system() == "Linux":
-        return get_linux_data_path()
+        return get_linux_data_dir()
     elif platform.system() == "Darwin":
-        return get_mac_data_path()
+        return get_mac_data_dir()
     else:
-        return get_anki_data_path()
+        return get_anki_data_dir()
 
 
-def get_config_path():
+def get_config_dir():
     """
     returns the native, platform-specific directory for the application config directory
     """
     if importlib.util.find_spec("aqt"):
-        return get_anki_config_path()
+        return get_anki_config_dir()
     elif platform.system() == "Windows":
-        return get_win_config_path()
+        return get_win_config_dir()
     elif platform.system() == "Linux":
-        return get_linux_config_path()
+        return get_linux_config_dir()
     elif platform.system() == "Darwin":
-        return get_mac_config_path()
+        return get_mac_config_dir()
     else:
-        return get_anki_config_path()
+        return get_anki_config_dir()
 
 
-def get_db_path():
-    return get_data_path().joinpath(DB_FILE_NAME)
+def get_db_file():
+    return get_data_dir().joinpath(DB_FILE_NAME)
 
 
-def get_android_db_path():
-    return get_data_path().joinpath(ANDROID_DB_FILE_NAME)
+def get_android_db_file():
+    return get_data_dir().joinpath(ANDROID_DB_FILE_NAME)
 
 
-def get_version_file_path():
-    return get_program_root_path().joinpath(LATEST_VERSION_FILE_NAME)
+def get_version_file():
+    return get_program_root_dir().joinpath(LATEST_VERSION_FILE_NAME)
 
 
 class URLComponents(NamedTuple):

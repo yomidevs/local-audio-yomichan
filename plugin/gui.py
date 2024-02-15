@@ -17,7 +17,7 @@ from .db_utils import (
     get_unique_count,
 )
 
-from .util import get_db_path
+from .util import get_db_file
 from .config import ALL_SOURCES
 
 
@@ -120,7 +120,7 @@ def generate_android_database_success(start_time: float):
 
 
 def show_stats():
-    with sqlite3.connect(get_db_path()) as conn:
+    with sqlite3.connect(get_db_file()) as conn:
         count = get_count(conn)
         files_per_source = get_num_files_per_source(conn)
         unique_count = get_unique_count(conn)
