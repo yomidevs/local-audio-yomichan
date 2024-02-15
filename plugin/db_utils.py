@@ -13,10 +13,11 @@ from typing import Any, Callable, TypedDict, Optional
 from dataclasses import dataclass, field
 
 from .util import (
-    get_android_db_path,
-    get_db_path,
-    get_program_root_path,
-    get_version_file_path,
+    get_android_db_file,
+    get_db_file,
+    get_data_dir,
+    get_program_root_dir,
+    get_version_file,
     QueryComponents,
 )
 from .jp_util import is_hiragana
@@ -54,8 +55,8 @@ def android_gen():
     generates the android.db file
     """
 
-    original_db_path = get_db_path()
-    android_db_path = get_android_db_path()
+    original_db_path = get_db_file()
+    android_db_path = get_android_db_file()
 
     # literally copy entries.db -> android.db
     shutil.copy(original_db_path, android_db_path)
@@ -108,7 +109,7 @@ def android_write(og_cur, cur):
         source = ALL_SOURCES[source_id]
 
         full_file_path = os.path.join(
-            get_program_root_path(), source.get_media_dir_path(), file_name
+            get_data_dir(), source.get_media_dir_path(), file_name
         )
         if not Path(full_file_path).is_file():
             print(f"(android_write) Cannot find file: {full_file_path}")
@@ -119,7 +120,7 @@ def android_write(og_cur, cur):
 
 
 def table_exists_and_has_data() -> bool:
-    with sqlite3.connect(get_db_path()) as conn:
+    with sqlite3.connect(get_db_file()) as conn:
         cursor = conn.cursor()
         cursor.execute(
             "SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
@@ -150,9 +151,9 @@ def table_must_be_updated():
     # uses a super basic database updating scheme: regenerates the entire thing
     # (it's failsafe!)
 
-    db_version_file = os.path.join(get_program_root_path(), DB_VERSION_FILE_NAME)
+    db_version_file = os.path.join(get_data_dir(), DB_VERSION_FILE_NAME)
     latest_version_file = os.path.join(
-        get_program_root_path(), LATEST_VERSION_FILE_NAME
+        get_program_root_dir(), LATEST_VERSION_FILE_NAME
     )
 
     if not os.path.isfile(db_version_file):
@@ -187,8 +188,8 @@ def update_db_version():
     """
     writes the current version to the db version file
     """
-    db_version_file = os.path.join(get_program_root_path(), DB_VERSION_FILE_NAME)
-    latest_version_file = get_version_file_path()
+    db_version_file = os.path.join(get_data_dir(), DB_VERSION_FILE_NAME)
+    latest_version_file = get_version_file()
 
     with open(latest_version_file) as f:
         ver = f.read().strip()
@@ -307,7 +308,7 @@ def fill_jmdict_forms(conn: sqlite3.Connection):
     """
 
     print(f"(init_db) Filling out JMdict forms...")
-    jmdict_forms_file = get_program_root_path().joinpath(JMDICT_FORMS_JSON_FILE_NAME)
+    jmdict_forms_file = get_data_dir().joinpath(JMDICT_FORMS_JSON_FILE_NAME)
     if not jmdict_forms_file.is_file():
         return
 
@@ -338,7 +339,7 @@ def init_db(callback: Optional[Callable[[str], None]] = None):
 
     update_db_version()
 
-    original_db_path = get_db_path()
+    original_db_path = get_db_file()
 
     # completely wipes out the file
     try:
@@ -359,7 +360,7 @@ def init_db(callback: Optional[Callable[[str], None]] = None):
         # - reading: kana only version of expression. If null, then no reading was
         #   available from the source.
         # - source: one of "jpod", "jpod_alternate", "forvo", "nhk16", "shinmeikai8"
-        # - file: file path to the audio, rooted at user_files/MEDIA_FOLDER
+        # - file: file path to the audio, with the root determined by get_data_path()
         #   Allows for easier sorting for more ideal results without post processing
         #   or unions + subqueries.
         # - speaker: contains the forvo username. Null for anything that isn't forvo.
