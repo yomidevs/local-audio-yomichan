@@ -87,6 +87,18 @@ def get_data_dir():
         return get_anki_data_dir()
 
 
+def attempt_init_data_dir():
+    """
+    Create the data directory if it doesn't already exist.
+    """
+    data_dir = get_data_dir()
+    if not os.path.exists(data_dir):
+        try:
+            os.makedirs(data_dir)
+        except OSError as e:
+            raise Exception(f"Failed to create data directory {data_dir}. Error: {e}") from e
+
+
 def get_config_dir():
     """
     returns the native, platform-specific directory for the application config directory
