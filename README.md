@@ -74,7 +74,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         >
         >     </details>
         >
-        > -   **For people who learn other language**, use the magnet link below and select to download _only_ zip file of the language under the folder Forvo_pronunciation > export > opus > `[iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)`:
+        > -   **For people who learn other language**, use the magnet link below and select to download _only_ zip file of the language under the folder Forvo_pronunciation > export > opus > [iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes):
         >     <details><summary>Magnet link</summary>
         >
         >     ```
@@ -98,7 +98,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         >
         >     </details>
         >
-        > -   **For people who learn other language**, use the magnet link below and select to download _only_ zip file of the language under the folder Forvo_pronunciation > export > mp3 > `[iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)`:
+        > -   **For people who learn other language**, use the magnet link below and select to download _only_ zip file of the language under the folder Forvo_pronunciation > export > mp3 > [iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes):
         >     <details><summary>Magnet link</summary>
         >
         >     ```
@@ -170,7 +170,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         </details>
 
     * For people who learn other language: change the name of folder from the second step to `forvo_files` and copy the entire folder _into_ `user_files` folder.
-    
+
         <details> <summary>Example file structure for people who learn other language <i>(click here)</i></summary>
 
             1045800357
