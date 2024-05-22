@@ -176,24 +176,14 @@ There is currently no way of using this on AnkiMobile (iOS).
             1045800357
             ├── __init__.py
             ├── __pycache__
-            │   ├── __init__.cpython-39.opt-2.pyc
             │   ├── ...
-            ├── config.py
             ├── ...
             ├── source
             │   ├── __init__.py
             │   ├── __pycache__
             │   │   ├── __init__.cpython-39.opt-2.pyc
-            │   │   ├── ajt_jp.cpython-39.opt-2.pyc
-            │   │   ├── audio_source.cpython-39.opt-2.pyc
-            │   │   ├── forvo.cpython-39.opt-2.pyc
-            │   │   ├── jpod.cpython-39.opt-2.pyc
-            │   │   └── nhk16.cpython-39.opt-2.pyc
-            │   ├── ajt_jp.py
-            │   ├── audio_source.py
-            │   ├── forvo.py
-            │   ├── jpod.py
-            │   └── nhk16.py
+            │   │   ├── ...
+            │   ├── ...
             ├── user_files
             │   ├── entries.db
             │   ├── entries_version.txt
