@@ -133,7 +133,6 @@ There is currently no way of using this on AnkiMobile (iOS).
         ![image](./img/view_files.png)
 
     * For people who learn Japanese, copy the entire `user_files` folder (from the second step) into this folder.
-    * For people who learn other language: change the name of folder from the second step to `forvo_files` and copy the entire folder _into_ `user_files` folder.
 
         <details> <summary>Expected file structure for people who learn Japanese <i>(click here)</i></summary>
 
@@ -170,6 +169,8 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         </details>
 
+    * For people who learn other language: change the name of folder from the second step to `forvo_files` and copy the entire folder _into_ `user_files` folder.
+    
         <details> <summary>Example file structure for people who learn other language <i>(click here)</i></summary>
 
             1045800357
