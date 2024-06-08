@@ -64,7 +64,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         > **However, Opus is NOT compatible with AnkiMobile (iOS), Android 4, and AnkiWeb.**
         > If you use any of these, please use the 2nd option (MP3 audio) below.
         >
-        > -   **For people who learn Japanese, download the files from [this torrent](https://nyaa.si/view/1681655)**.
+        > -   **For Japanese audio, download the files from [this torrent](https://nyaa.si/view/1681655)**.
         >     Alternatively, use the magnet link below:
         >     <details><summary>Magnet link</summary>
         >
@@ -74,7 +74,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         >
         >     </details>
         >
-        > -   **For people who learn other language**, use the magnet link below and select to download _only_ zip file of the language under the folder Forvo_pronunciation > export > opus > [iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes):
+        > -   **For audio of other languages**, use the magnet link below containing Forvo audio and select the zip file of the language you want under the folder `Forvo_pronunciation > export > opus > [iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)`:
         >     <details><summary>Magnet link</summary>
         >
         >     ```
@@ -88,7 +88,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         <summary>MP3 audio (4.9 GiB)</summary>
 
         > Older and less efficient codec, but needed for compatibility with pretty much all devices.
-        > -   **For people who learn Japanese, download the files from [this torrent](https://nyaa.si/view/1681654)**.
+        > -   **For Japanese audio, download the files from [this torrent](https://nyaa.si/view/1681654)**.
         >     Alternatively, use the magnet link below:
         >     <details><summary>Magnet link</summary>
         >
@@ -111,7 +111,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
-2. Extract the `.tar.xz` (Japanese), or `.zip` file for other language.
+2. Extract the `.tar.xz` (Japanese), or `.zip` file for other languages.
     * **Windows** users can use [7zip](https://7-zip.org/download.html). Note that for the `.tar.xz` file, 7zip users must extract the resulting `tar` file as well.
     * **Linux and MacOS** users can use either the default GUI archive manager or the `tar -xf`/`unzip` command.
 
@@ -132,9 +132,9 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         ![image](./img/view_files.png)
 
-    * For people who learn Japanese, copy the entire `user_files` folder (from the second step) into this folder.
+    * For Japanese, copy the entire `user_files` folder (from the second step) into this folder.
 
-        <details> <summary>Expected file structure for people who learn Japanese <i>(click here)</i></summary>
+        <details> <summary>Expected file structure for Japanese audio <i>(click here)</i></summary>
 
             1045800357
             ├── db_utils.py
@@ -169,9 +169,9 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         </details>
 
-    * For people who learn other language: change the name of folder from the second step to `forvo_files` and copy the entire folder _into_ `user_files` folder.
+    * For other languages, change the name of the folder from the second step to `forvo_files` and copy the entire folder _into_ the `user_files` folder.
 
-        <details> <summary>Example file structure for people who learn other language <i>(click here)</i></summary>
+        <details> <summary>Example file structure for other languages' audio <i>(click here)</i></summary>
 
             1045800357
             ├── __init__.py
