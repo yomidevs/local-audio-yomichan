@@ -64,12 +64,21 @@ There is currently no way of using this on AnkiMobile (iOS).
         > **However, Opus is NOT compatible with AnkiMobile (iOS), Android 4, and AnkiWeb.**
         > If you use any of these, please use the 2nd option (MP3 audio) below.
         >
-        > -   **Download the files from [this torrent](https://nyaa.si/view/1681655)**.
+        > -   **For Japanese audio, download the files from [this torrent](https://nyaa.si/view/1681655)**.
         >     Alternatively, use the magnet link below:
         >     <details><summary>Magnet link</summary>
         >
         >     ```
         >     magnet:?xt=urn:btih:ef90ec428e6abcd560ffc85a2a1c083e0399d003&dn=local-yomichan-audio-collection-2023-06-11-opus.tar.xz&tr=http%3a%2f%2fanidex.moe%3a6969%2fannounce&tr=http%3a%2f%2fnyaa.tracker.wf%3a7777%2fannounce&tr=udp%3a%2f%2fexodus.desync.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.opentrackr.org%3a1337%2fannounce&tr=udp%3a%2f%2fopen.stealth.si%3a80%2fannounce&tr=udp%3a%2f%2ftracker.tiny-vps.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.moeking.me%3a6969%2fannounce&tr=udp%3a%2f%2fopentracker.i2p.rocks%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.openbittorrent.com%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.torrent.eu.org%3a451%2fannounce&tr=udp%3a%2f%2fexplodie.org%3a6969%2fannounce&tr=udp%3a%2f%2ftracker.zerobytes.xyz%3a1337%2fannounce
+        >     ```
+        >
+        >     </details>
+        >
+        > -   **For audio of other languages**, use the magnet link below containing Forvo audio and select the zip file of the language you want under the folder `Forvo_pronunciation > export > opus > [iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)`:
+        >     <details><summary>Magnet link</summary>
+        >
+        >     ```
+        >     magnet:?xt=urn:btih:255A1B495719DD3CE0CF8AA708FE6837AD9F57E1&tr=http%3A%2F%2Fbt2.t-ru.org%2Fann%3Fmagnet&dn=%D0%9D%D0%B0%D0%B1%D0%BE%D1%80%20%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%BD%D0%BE%D1%88%D0%B5%D0%BD%D0%B8%D0%B9%20%D0%BE%D1%82%20Forvo.com%20%D0%B4%D0%BB%D1%8F%20GoldenDict%20%D0%BD%D0%B0%20%D0%B2%D1%81%D0%B5%D1%85%20%D1%8F%D0%B7%D1%8B%D0%BA%D0%B0%D1%85
         >     ```
         >
         >     </details>
@@ -79,7 +88,7 @@ There is currently no way of using this on AnkiMobile (iOS).
         <summary>MP3 audio (4.9 GiB)</summary>
 
         > Older and less efficient codec, but needed for compatibility with pretty much all devices.
-        > -   **Download the files from [this torrent](https://nyaa.si/view/1681654)**.
+        > -   **For Japanese audio, download the files from [this torrent](https://nyaa.si/view/1681654)**.
         >     Alternatively, use the magnet link below:
         >     <details><summary>Magnet link</summary>
         >
@@ -88,14 +97,23 @@ There is currently no way of using this on AnkiMobile (iOS).
         >     ```
         >
         >     </details>
+        >
+        > -   **For audio of other languages**, use the magnet link below containing Forvo audio and select the zip file of the language you want under the folder `Forvo_pronunciation > export > opus > [iso 639 code of language that you want to learn.zip](https://en.wikipedia.org/wiki/List_of_ISO_639_language_codes)`:
+        >     <details><summary>Magnet link</summary>
+        >
+        >     ```
+        >     magnet:?xt=urn:btih:255A1B495719DD3CE0CF8AA708FE6837AD9F57E1&tr=http%3A%2F%2Fbt2.t-ru.org%2Fann%3Fmagnet&dn=%D0%9D%D0%B0%D0%B1%D0%BE%D1%80%20%D0%BF%D1%80%D0%BE%D0%B8%D0%B7%D0%BD%D0%BE%D1%88%D0%B5%D0%BD%D0%B8%D0%B9%20%D0%BE%D1%82%20Forvo.com%20%D0%B4%D0%BB%D1%8F%20GoldenDict%20%D0%BD%D0%B0%20%D0%B2%D1%81%D0%B5%D1%85%20%D1%8F%D0%B7%D1%8B%D0%BA%D0%B0%D1%85
+        >     ```
+        >
+        >     </details>
         </details>
 
     If you have never downloaded from a torrent before, I highly recommend using the
     [qBittorrent](https://www.qbittorrent.org/) client.
 
-2. Extract the `.tar.xz` file.
-    * **Windows** users can use [7zip](https://7-zip.org/download.html). Note that 7zip users must extract the resulting `tar` file as well.
-    * **Linux and MacOS** users can use either the default GUI archive manager or the `tar -xf` command.
+2. Extract the `.tar.xz` (Japanese), or `.zip` file for other languages.
+    * **Windows** users can use [7zip](https://7-zip.org/download.html). Note that for the `.tar.xz` file, 7zip users must extract the resulting `tar` file as well.
+    * **Linux and MacOS** users can use either the default GUI archive manager or the `tar -xf`/`unzip` command.
 
 3. [Download the add-on](https://ankiweb.net/shared/info/1045800357):
     * Within Anki, navigate to `Tools` →  `Add-ons` →  `Get Add-ons...`
@@ -114,9 +132,9 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         ![image](./img/view_files.png)
 
-    * Copy the entire `user_files` folder (from the second step) into this folder.
+    * For Japanese, copy the entire `user_files` folder (from the second step) into this folder.
 
-        <details> <summary>Expected file structure <i>(click here)</i></summary>
+        <details> <summary>Expected file structure for Japanese audio <i>(click here)</i></summary>
 
             1045800357
             ├── db_utils.py
@@ -148,6 +166,33 @@ There is currently no way of using this on AnkiMobile (iOS).
                     │   ├── 00002.opus
                     │   └── ...
                     └── index.json
+
+        </details>
+
+    * For other languages, change the name of the folder from the second step to `forvo_files` and copy the entire folder _into_ the `user_files` folder.
+
+        <details> <summary>Example file structure for other languages' audio <i>(click here)</i></summary>
+
+            1045800357
+            ├── __init__.py
+            ├── __pycache__
+            │   ├── ...
+            ├── ...
+            ├── source
+            │   ├── __init__.py
+            │   ├── __pycache__
+            │   │   ├── __init__.cpython-39.opt-2.pyc
+            │   │   ├── ...
+            │   ├── ...
+            ├── user_files
+            │   ├── entries.db
+            │   ├── entries_version.txt
+            │   └── forvo_files
+            │       ├── 030Join
+            │       ├── ...
+            │       ├── Maevew
+            │       ├── ...
+            └── ...
 
         </details>
 
