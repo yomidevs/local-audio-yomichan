@@ -124,7 +124,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     This add-on only works for Anki versions 2.1.50 and above.
     If you are using Anki versions 2.1.49 or below, I highly recommend updating.
     If you can't do this for whatever reason, the legacy instructions and add-on can be found
-    [here](https://github.com/themoeway/local-audio-yomichan/tree/old).
+    [here](https://github.com/yomidevs/local-audio-yomichan/tree/old).
 
 4. Move the downloaded audio files to the correct place.
     * Within the same Add-ons window, select the add-on (`Local Audio Server for Yomichan`).
@@ -269,11 +269,8 @@ These are additional instructions and tips if something doesn't work as expected
     * Delete the add-on.
     * Start again from step 3.
 
-*   If nothing else works, you have questions, etc., feel free to contact
-    me on discord `Aquafina water bottle#3026`,
-    or [submit an issue](https://github.com/themoeway/local-audio-yomichan/issues).
-    I exist on the [TheMoeWay](https://learnjapanese.moe/join/) (see [this thread](https://discord.com/channels/617136488840429598/1074057444365443205)) and Refold (Japanese) servers.
-
+*   If nothing else works, you have questions, etc., feel free to ask in [discord](https://discord.gg/eCKjNuXW)
+    or [submit an issue](https://github.com/yomidevs/local-audio-yomichan/issues).
 
 ## Configuring sources
 
@@ -362,7 +359,7 @@ On top of changing the priority of sources and removing sources, you can do the 
 ## Running without Anki
 If you wish to run the server without Anki, do the following:
 ```bash
-git clone https://github.com/themoeway/local-audio-yomichan.git
+git clone https://github.com/yomidevs/local-audio-yomichan.git
 cd local-audio-yomichan
 
 # You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
@@ -382,7 +379,7 @@ python3 run_server.py
 
 - Linux and MacOS users can run:
     ```bash
-    git clone https://github.com/themoeway/local-audio-yomichan.git
+    git clone https://github.com/yomidevs/local-audio-yomichan.git
     cd local-audio-yomichan
     ./link.sh
     ```
@@ -407,7 +404,7 @@ Huge thanks to everyone who made it happen:
 
 
 ## License
-[MIT](https://github.com/themoeway/local-audio-yomichan/blob/master/LICENSE)
+[MIT](https://github.com/yomidevs/local-audio-yomichan/blob/master/LICENSE)
 
 
 ## Other
@@ -418,7 +415,7 @@ Huge thanks to everyone who made it happen:
 
     > The files for now only includes audio files with an exact 1:1 mapping of a dictionary/Marv's JPDB frequency list term to the name of the file the user uploaded. Just because you don't get audio for an user it does not mean the user has no audio on Forvo. Just because you get audio it does not mean it actually matches the current word/reading. It is also not uncommon that people pronounce multiple readings in the same file.
 
-    The full quote can be found at the bottom of [the legacy instructions](https://github.com/themoeway/local-audio-yomichan/tree/old), under "Original Message for v09".
+    The full quote can be found at the bottom of [the legacy instructions](https://github.com/yomidevs/local-audio-yomichan/tree/old), under "Original Message for v09".
 
 </details>
 
@@ -481,7 +478,7 @@ Huge thanks to everyone who made it happen:
         change the URL in the future. However, please note that the **default source order has changed**
         to `nhk16,shinmeikai8,forvo,jpod`, to optimize for Japanese correctness over literal audio quality.
         If you want to change the order the sources (i.e. to restore the previous default order), see
-        [here](https://github.com/themoeway/local-audio-yomichan#configuring-sources).
+        [here](https://github.com/yomidevs/local-audio-yomichan#configuring-sources).
     7. If you are using AnkiConnectAndroid, make sure to update the app, [regenerate the Android database and send it to your device](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
         Don't forget to update the URL in Yomichan.
     8. Enjoy your new audio!
