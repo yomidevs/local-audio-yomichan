@@ -1,10 +1,10 @@
 
-# Local Audio Server for Yomichan
+# Local Audio Server for Yomitan
 
 > <sup>**Announcement**: A new audio collection was released on 2023/06/11! See how to upgrade to the new collection [here](#other) ("Updating to the new audio collection") </sup>
 
 This [Anki add-on](https://ankiweb.net/shared/info/1045800357)
-runs a local server that Yomichan fetches audio files from,
+runs a local server that Yomitan fetches audio files from,
 using a database containing over 250,000 unique expressions.
 With this setup, you are able to create Anki cards nearly instantaneously,
 get word audio without a working internet connection,
@@ -24,13 +24,13 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
     fetching the audio can take anywhere from one second to a full minute
     (on particularly bad days).
 
-    Most of the delay from Yomichan when creating cards is from fetching the audio.
+    Most of the delay from Yomitan when creating cards is from fetching the audio.
     In other words, audio fetching is the main bottleneck when creating Anki cards.
     This add-on removes the aforementioned bottleneck, meaning **you can make cards with virtually 0 delay**.
 
 1. If you do not have internet access, you can still add audio to your cards.
 
-1. Compared to standard Yomichan, this **improves audio coverage** because it adds various sources not covered by Yomichan: Forvo (select users), NHK 2016, and Shinmeikai 8.
+1. Compared to standard Yomitan, this **improves audio coverage** because it adds various sources not covered by Yomitan: Forvo (select users), NHK 2016, and Shinmeikai 8.
 
 1. Much [pre-processing](https://github.com/Aquafina-water-bottle/local-audio-yomichan-build-scripts) has been done to this audio to make it as high quality as possible:
     - All audio is normalized, so the volume remains relatively similar for each file.
@@ -43,7 +43,7 @@ P.S. Feel free to check out <a href="https://aquafina-water-bottle.github.io/jp-
 
 1. This setup requires about **3-5 GB of free space**.
 
-1. This setup requires Anki to be open (or the server to be [run manually](#running-without-anki)) in order for Yomichan to fetch audio from it. Note that Yomichan can still fall back to its default sources if the local audio server is unavailable or does not have the requested word.
+1. This setup requires Anki to be open (or the server to be [run manually](#running-without-anki)) in order for Yomitan to fetch audio from it. Note that Yomitan can still fall back to its default sources if the local audio server is unavailable or does not have the requested word.
 
 </details>
 
@@ -196,9 +196,9 @@ There is currently no way of using this on AnkiMobile (iOS).
 
         </details>
 
-5. Add the URL in Yomichan.
+5. Add the URL in Yomitan.
 
-    * In Yomichan Settings ![image](./img/yomichan_cog.svg), go to:
+    * In Yomitan Settings ![image](./img/yomichan_cog.svg), go to:
       > `Audio` →  `Configure audio playback sources`.
 
     * Set the first source to be `Custom URL (JSON)`.
@@ -214,7 +214,7 @@ There is currently no way of using this on AnkiMobile (iOS).
 6. Restart Anki. You should see a message saying "Generating local audio database",
     and should take some time to finish.
 
-7. Ensure that everything works. To do this, play some audio from Yomichan.
+7. Ensure that everything works. To do this, play some audio from Yomitan.
     You should notice two things:
 
     - The audio should be played almost immediately after clicking the play button.
@@ -237,7 +237,7 @@ that can backfill cards from any custom URL, including this local audio server.
 To increase audio coverage, I recommend including an extra
 [Forvo audio source](https://learnjapanese.moe/yomichan/#bonus-adding-forvo-extra-audio-source).
 Although the audio is fetched online, this vastly improves coverage compared to the
-standard Yomichan sources and this local audio server.
+standard Yomitan sources and this local audio server.
 
 
 ## Troubleshooting
@@ -480,7 +480,7 @@ Huge thanks to everyone who made it happen:
         If you want to change the order the sources (i.e. to restore the previous default order), see
         [here](https://github.com/yomidevs/local-audio-yomichan#configuring-sources).
     7. If you are using AnkiConnectAndroid, make sure to update the app, [regenerate the Android database and send it to your device](https://github.com/KamWithK/AnkiconnectAndroid#additional-instructions-local-audio).
-        Don't forget to update the URL in Yomichan.
+        Don't forget to update the URL in Yomitan.
     8. Enjoy your new audio!
 
 </details>
