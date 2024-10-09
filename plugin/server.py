@@ -191,8 +191,8 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
                 entry = {"name": name, "url": url}
                 audio_sources_json_list.append(entry)
 
-        # Build JSON that Yomichan requires
-        # Ref: https://github.com/FooSoft/yomichan/blob/master/ext/data/schemas/custom-audio-list-schema.json
+        # Build JSON that Yomitan requires
+        # Ref: https://github.com/yomidevs/yomitan/blob/master/ext/data/schemas/custom-audio-list-schema.json
         resp = {"type": "audioSourceList", "audioSources": audio_sources_json_list}
         print(audio_sources_json_list)
 

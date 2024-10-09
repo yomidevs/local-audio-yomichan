@@ -72,7 +72,7 @@ class NHK16AudioSource(AudioSource):
                     continue
 
                 # This is specifically to differentiate between silenced mora and regular mora,
-                # since it's pretty difficult to represent it any other way in Yomichan
+                # since it's pretty difficult to represent it any other way in Yomitan
                 mora_list[index] = katakana_to_hiragana(mora_list[index])
 
             pitch_accent = int(word_segment["pitchAccent"])

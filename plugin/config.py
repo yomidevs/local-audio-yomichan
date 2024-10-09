@@ -6,7 +6,7 @@ Source schema:
     - If you ever create a new source, I recommend following the AJT Japanese schema, as it's well defined compared to the others
 - id: string id used as the id in the "source" column, as well as the parameter in the url
 - path: string, path to the source files
-- display: string used to display in Yomichan. Uses %s for the "DISPLAY" column.
+- display: string used to display in Yomitan. Uses %s for the "DISPLAY" column.
 """
 
 import json
