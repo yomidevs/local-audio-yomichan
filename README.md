@@ -370,7 +370,7 @@ ln -s ~/Library/Application\ Support/Anki2/addons21/1045800357/user_files ~/Libr
 
 # After filling in `plugin/user_files` with the audio files, you can now run the server.
 # Ensure you have python 3.9 or above.
-python3 run_server.py
+WO_ANKI=1 python3 run_server.py
 ```
 
 ## Install from Source
