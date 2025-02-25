@@ -204,7 +204,7 @@ There is currently no way of using this on AnkiMobile (iOS).
     * Set the first source to be `Custom URL (JSON)`.
     * Under the first source, set the `URL` field to:
         ```
-        http://localhost:5050/?term={term}&reading={reading}
+        http://127.0.0.1:5050/?term={term}&reading={reading}
         ```
     * If you have other sources, feel free to re-add them under the first source.
 
@@ -244,7 +244,7 @@ standard Yomitan sources and this local audio server.
 These are additional instructions and tips if something doesn't work as expected.
 
 *   Ensure the local audio server is actually running.
-    You can do this by visiting [http://localhost:5050](http://localhost:5050).
+    You can do this by visiting [http://127.0.0.1:5050](http://127.0.0.1:5050).
     If it says "Local Audio Server (version)", then the server is up and running!
 
 *   Make sure the database was properly generated.
@@ -283,7 +283,7 @@ These are additional instructions and tips if something doesn't work as expected
         <summary>JPod, NHK16, Shinmeikai8, Forvo (the original default order)</summary>
 
         ```
-        http://localhost:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8,forvo
+        http://127.0.0.1:5050/?term={term}&reading={reading}&sources=jpod,nhk16,shinmeikai8,forvo
         ```
 
         </details>
@@ -292,7 +292,7 @@ These are additional instructions and tips if something doesn't work as expected
         <summary>NHK16, Shinmeikai8, Forvo (JPod will never be fetched!)</summary>
 
         ```
-        http://localhost:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo
+        http://127.0.0.1:5050/?term={term}&reading={reading}&sources=nhk16,shinmeikai8,forvo
         ```
 
         </details>
@@ -301,7 +301,7 @@ These are additional instructions and tips if something doesn't work as expected
 
     For example, the following will get Forvo audio in the priority of strawberrybrown, then akitomo. All other users **will not be included in the search**.
     ```
-    http://localhost:5050/?term={term}&reading={reading}&user=strawberrybrown,akitomo
+    http://127.0.0.1:5050/?term={term}&reading={reading}&user=strawberrybrown,akitomo
     ```
 
     <details>
@@ -472,7 +472,7 @@ Huge thanks to everyone who made it happen:
     5. Restart Anki, and then regenerate the Local Audio Database (`Tools` →  `Local Audio Server` →  `Regenerate database`)
     6. Change your custom URL (JSON) value to the following:
         ```
-        http://localhost:5050/?term={term}&reading={reading}
+        http://127.0.0.1:5050/?term={term}&reading={reading}
         ```
         This URL removes the `sources` parameter, so sources can be added without having to
         change the URL in the future. However, please note that the **default source order has changed**
