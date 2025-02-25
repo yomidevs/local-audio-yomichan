@@ -365,12 +365,12 @@ cd local-audio-yomichan
 # You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
 # You can run one of the following OS-specific commands:
 mklink /d %LOCALAPPDATA%/local-audio-yomichan %APPDATA%/Anki2/addons21/1045800357/user_files # Windows (requires elavated priviledges)
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ~/local/share/local-audio-yomichan # Linux
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ~/.local/share/local-audio-yomichan # Linux
 ln -s ~/Library/Application\ Support/Anki2/addons21/1045800357/user_files ~/Library/Application\ Support/local-audio-yomichan # MacOS
 
 # After filling in `plugin/user_files` with the audio files, you can now run the server.
 # Ensure you have python 3.9 or above.
-python3 run_server.py
+WO_ANKI=1 python3 run_server.py
 ```
 
 ## Install from Source
