@@ -65,24 +65,11 @@ SQL: Final[
 
 class OZK5AudioSource(AudioSource):
     def get_display_text(self, entry: OZK5Data) -> Optional[str]:
-        """
-        displays as katakana with number and downstep, i.e. "ヨ＼ム [1]"
-        """
+        """displays as katakana"""
         reading = entry.get("kana", None)
         if reading is None:
             return None
-        mora_list = split_into_mora(hiragana_to_katakana(reading))
-        try:
-            if entry["pitch_number"] == "?":
-                return None
-            pitch_accent = int(entry["pitch_number"])
-        except Exception:
-            # handle non-integer pitch numbers
-            print(f"({self.data.id}) pitch_number is not an integer: {entry}")
-            return None
-        if pitch_accent > 0:
-            mora_list.insert(pitch_accent, "＼")
-        return "".join(mora_list) + f" [{pitch_accent}]"
+        return "".join(split_into_mora(hiragana_to_katakana(reading)))
 
     def add_entries(self, connection: sqlite3.Connection):
         cur = connection.cursor()
