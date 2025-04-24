@@ -12,8 +12,8 @@ WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app /usr/src/app
 
-VOLUME ["/usr/src/app/plugin/user_files"]
-
 EXPOSE 5050
 
-CMD ["python", "run_server.py"]
+VOLUME ["/root/.local/share/local-audio-yomichan"]
+
+CMD ["python", "./run_server.py"]
