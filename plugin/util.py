@@ -6,6 +6,36 @@ from functools import lru_cache
 from pathlib import Path
 from typing import NamedTuple, Optional
 from dataclasses import dataclass
+from enum import Enum, auto
+
+class Environment(Enum):
+    ANKI = auto()
+    WINDOWS = auto()
+    LINUX = auto()
+    DARWIN = auto()
+
+    @classmethod
+    def check(cls):
+
+        VAR_NAME = "WO_ANKI"
+
+        # check if the env var WO_ANKI is set
+        if os.environ.get(VAR_NAME, "").strip().lower() in ("1", "true"):
+            sys_platform = platform.system()
+            if sys_platform == "Windows":
+                return cls.WINDOWS
+            elif sys_platform == "Linux":
+                return cls.LINUX
+            elif sys_platform == "Darwin":
+                return cls.DARWIN
+            else:
+                raise Exception(f"Unknown platform: {sys_platform}")
+        elif importlib.util.find_spec("aqt"):
+            return cls.ANKI
+        else:
+            raise Exception(f"Could not determine environment, set the environment variable {VAR_NAME} if you are running without Anki.")
+
+
 
 from .consts import APP_NAME, DB_FILE_NAME, ANDROID_DB_FILE_NAME, LATEST_VERSION_FILE_NAME
 
@@ -75,13 +105,15 @@ def get_data_dir():
     """
     returns the native, platform-specific directory for the application data directory
     """
-    if importlib.util.find_spec("aqt"):
+    env = Environment.check()
+
+    if env == Environment.ANKI:
         return get_anki_data_dir()
-    elif platform.system() == "Windows":
+    elif env == Environment.WINDOWS:
         return get_win_data_dir()
-    elif platform.system() == "Linux":
+    elif env == Environment.LINUX:
         return get_linux_data_dir()
-    elif platform.system() == "Darwin":
+    elif env == Environment.DARWIN:
         return get_mac_data_dir()
     else:
         return get_anki_data_dir()
@@ -103,13 +135,15 @@ def get_config_dir():
     """
     returns the native, platform-specific directory for the application config directory
     """
-    if importlib.util.find_spec("aqt"):
+    env = Environment.check()
+
+    if env == Environment.ANKI:
         return get_anki_config_dir()
-    elif platform.system() == "Windows":
+    elif env == Environment.WINDOWS:
         return get_win_config_dir()
-    elif platform.system() == "Linux":
+    elif env == Environment.LINUX:
         return get_linux_config_dir()
-    elif platform.system() == "Darwin":
+    elif env == Environment.DARWIN:
         return get_mac_config_dir()
     else:
         return get_anki_config_dir()
