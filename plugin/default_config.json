@@ -29,6 +29,12 @@
       "id": "jpod_alternate",
       "path": "jpod_alternate_files",
       "display": "JPod101 Alt"
+    },
+    {
+      "type": "ozk5",
+      "id": "ozk5",
+      "path": "ozk5_files",
+      "display": "OZK5 %s"
     }
   ]
 }
