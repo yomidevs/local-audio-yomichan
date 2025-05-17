@@ -108,7 +108,8 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         elif "expression" in parsed_qcomps:
             term = parsed_qcomps["expression"][0]
         else:
-            raise Exception(f"Cannot find term or expression in query: {self.path}")
+            print(f"Cannot find term or expression in query: {self.path}")
+            return None
 
         # reading field should actually be optional, to query just for the term / expression
         if "reading" in parsed_qcomps:
@@ -168,6 +169,9 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         qcomps = self.parse_query_components()
+        if not qcomps:
+            self.send_response(400)
+            return
 
         audio_sources_json_list = []
         with sqlite3.connect(get_db_file()) as connection:
