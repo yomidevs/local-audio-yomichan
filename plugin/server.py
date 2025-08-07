@@ -49,19 +49,26 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         """Make log_message do nothing."""
         pass
 
+    def send_cors_response(self, code):
+        """Send response with CORS headers."""
+        self.send_response(code)
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.end_headers()
+
     def get_audio(self, media_dir, file_path):
         audio_file = media_dir.joinpath(file_path)
         if not audio_file.is_file():
-            self.send_response(400)
+            self.send_cors_response(400)
             return
 
         mime_type = LocalAudioHandler.SUFFIX_TO_MIME_TYPE.get(audio_file.suffix, None)
         if mime_type is None:
-            self.send_response(400)
+            self.send_cors_response(400)
             return
         self.send_response(200)
         self.send_header("Content-type", mime_type)
         self.send_header("Content-length", str(os.stat(audio_file).st_size))
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
 
         with open(audio_file, "rb") as fh:
@@ -75,10 +82,11 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         mime_type = LocalAudioHandler.SUFFIX_TO_MIME_TYPE.get(audio_file.suffix, None)
         if mime_type is None:
-            self.send_response(400)
+            self.send_cors_response(400)
             return
         self.send_response(200)
         self.send_header("Content-type", mime_type)
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
 
         android_db_path = get_android_db_file()
@@ -91,7 +99,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
                 sql, {"file": file_path, "source": source}
             ).fetchone()
             if row is None:
-                self.send_response(400)
+                self.send_cors_response(400)
                 return
 
             data = row[0]
@@ -140,6 +148,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(200)
         self.send_header("Content-type", "text/plain; charset=UTF-8")
         self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         self.wfile.write(payload)
 
@@ -157,7 +166,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         if full_path.strip() == "/favicon.ico":
             # skip entirely
-            self.send_response(400)
+            self.send_cors_response(400)
             return
 
         path_parts = full_path.split("/", 2)
@@ -170,7 +179,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
 
         qcomps = self.parse_query_components()
         if not qcomps:
-            self.send_response(400)
+            self.send_cors_response(400)
             return
 
         audio_sources_json_list = []
@@ -205,6 +214,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-type", "application/json")
         self.send_header("Content-length", str(len(payload)))
+        self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         try:
             self.wfile.write(payload)
