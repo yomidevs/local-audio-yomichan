@@ -358,19 +358,35 @@ On top of changing the priority of sources and removing sources, you can do the 
 
 ## Running without Anki
 If you wish to run the server without Anki, do the following:
+
 ```bash
 git clone https://github.com/yomidevs/local-audio-yomichan.git
 cd local-audio-yomichan
+```
 
-# You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions.
-# You can run one of the following OS-specific commands:
-mklink /d %LOCALAPPDATA%/local-audio-yomichan %APPDATA%/Anki2/addons21/1045800357/user_files # Windows (requires elavated priviledges)
-ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ~/.local/share/local-audio-yomichan # Linux
-ln -s ~/Library/Application\ Support/Anki2/addons21/1045800357/user_files ~/Library/Application\ Support/local-audio-yomichan # MacOS
+You must fill `plugin/user_files` with the audio files, like with step 3 of the main instructions. Then run the OS specific commands below:
 
-# After filling in `plugin/user_files` with the audio files, you can now run the server.
-# Ensure you have python 3.9 or above.
+**Linux:**
+```bash
+ln -s ~/.local/share/Anki2/addons21/1045800357/user_files ~/.local/share/local-audio-yomichan
+```
+**MacOS:**
+```bash
+ln -s ~/Library/Application\ Support/Anki2/addons21/1045800357/user_files ~/Library/Application\ Support/local-audio-yomichan
+```
+**Windows:**
+```batch
+mklink /d %LOCALAPPDATA%/local-audio-yomichan %APPDATA%/Anki2/addons21/1045800357/user_files
+```
+After filling in `plugin/user_files` with the audio files, you can now run the server.
+
+**Linux and MacOS:**
+```bash
 WO_ANKI=1 python3 run_server.py
+```
+**Windows:**
+```batch
+cmd /C "set WO_ANKI=1&& py run_server.py"
 ```
 
 ## Install from Source
