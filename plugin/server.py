@@ -108,7 +108,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             android_cursor.close()
 
     def parse_query_components(self) -> QueryComponents:
-        """Extract 'term', 'reading', 'sources', and 'user' query parameters"""
+        """Extract 'term', 'reading', 'sources', 'language', and 'user' query parameters"""
         parsed_qcomps = parse_qs(urlparse(self.path).query)
 
         if "term" in parsed_qcomps:
@@ -129,6 +129,20 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             sources = parsed_qcomps["sources"][0].split(",")
         else:
             sources = list(ALL_SOURCES.keys())
+
+        # narrow sources by language if the param is present
+        if "language" in parsed_qcomps:
+            lang = parsed_qcomps["language"][0]
+            # declared first, empty-language sources appended as fallback;
+            # sources declaring other languages are dropped
+            declared, unspecified = [], []
+            for sid in sources:
+                langs = ALL_SOURCES[sid].data.languages
+                if lang in langs:
+                    declared.append(sid)
+                elif not langs:
+                    unspecified.append(sid)
+            sources = declared + unspecified
 
         if "user" in parsed_qcomps:
             user = [u.strip() for u in parsed_qcomps["user"][0].split(",")]

@@ -4,37 +4,43 @@
       "type": "nhk",
       "id": "nhk16",
       "path": "nhk16_files",
-      "display": "NHK16 %s"
+      "display": "NHK16 %s",
+      "languages": ["ja"]
     },
     {
       "type": "ajt_jp",
       "id": "shinmeikai8",
       "path": "shinmeikai8_files",
-      "display": "SMK8 %s"
+      "display": "SMK8 %s",
+      "languages": ["ja"]
     },
     {
       "type": "forvo",
       "id": "forvo",
       "path": "forvo_files",
-      "display": "Forvo (%s)"
+      "display": "Forvo (%s)",
+      "languages": ["ja", "en", "zh", "ko"]
     },
     {
       "type": "jpod",
       "id": "jpod",
       "path": "jpod_files",
-      "display": "Jpod101"
+      "display": "Jpod101",
+      "languages": ["ja"]
     },
     {
       "type": "jpod",
       "id": "jpod_alternate",
       "path": "jpod_alternate_files",
-      "display": "JPod101 Alt"
+      "display": "JPod101 Alt",
+      "languages": ["ja"]
     },
     {
       "type": "ozk5",
       "id": "ozk5",
       "path": "ozk5_files",
-      "display": "OZK5 %s"
+      "display": "OZK5 %s",
+      "languages": ["ja"]
     }
   ]
 }

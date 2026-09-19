@@ -297,6 +297,15 @@ These are additional instructions and tips if something doesn't work as expected
 
         </details>
 
+* You can filter sources by language using `&language=`.
+
+    For example, the following will only fetch audio from sources configured for Japanese:
+    ```
+    http://127.0.0.1:5050/?term={term}&reading={reading}&language=ja
+    ```
+
+    Sources without a configured language are included as fallback.
+
 * For Forvo audio specifically, you can modify the priority of users by using `&user=`.
 
     For example, the following will get Forvo audio in the priority of strawberrybrown, then akitomo. All other users **will not be included in the search**.
@@ -321,6 +330,7 @@ If you want even more power, sources can be manually configured using a config f
 On top of changing the priority of sources and removing sources, you can do the following:
 - Specify a path for each source folder. You can use this to store audio files in a different drive.
 - Add entirely new audio sources
+- Configure languages for each source
 
 ### Config Setup
 

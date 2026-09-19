@@ -22,6 +22,7 @@ class AudioSourceData:
     id: Final[str]  # also the table name
     media_dir: Final[str]
     display: Final[str]
+    languages: Final[list[str]]  # empty list means "language not set"
 
 
 class AudioSource(ABC):

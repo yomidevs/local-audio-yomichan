@@ -7,6 +7,7 @@ Source schema:
 - id: string id used as the id in the "source" column, as well as the parameter in the url
 - path: string, path to the source files
 - display: string used to display in Yomitan. Uses %s for the "DISPLAY" column.
+- languages: list of strings, languages supported by the source. Defaults to [] if missing.
 """
 
 import json
@@ -38,6 +39,7 @@ class JsonConfigSource(TypedDict):
     id: str
     path: str
     display: str
+    languages: list[str]  # optional, defaults to [] if missing
 
 
 class JsonConfig(TypedDict):
@@ -82,6 +84,7 @@ def get_all_sources() -> dict[str, AudioSource]:
         type = source_json["type"]
         path = source_json["path"]
         display = source_json["display"]
+        languages = source_json.get("languages", [])
 
         # checks for source_meta.json
         source_meta_path = get_data_dir() / path / "source_meta.json"
@@ -93,7 +96,7 @@ def get_all_sources() -> dict[str, AudioSource]:
                     type = meta_type
 
         AudioSourceClass = SOURCE_TYPES[type]
-        data = AudioSourceData(id, path, display)
+        data = AudioSourceData(id, path, display, languages)
         source = AudioSourceClass(data)
         sources[id] = source
     return sources
