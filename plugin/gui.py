@@ -1,5 +1,6 @@
 import time
 import sqlite3
+from contextlib import closing
 from typing import Optional
 
 from aqt import mw, gui_hooks
@@ -120,7 +121,7 @@ def generate_android_database_success(start_time: float):
 
 
 def show_stats():
-    with sqlite3.connect(get_db_file()) as conn:
+    with closing(sqlite3.connect(get_db_file())) as conn, conn:
         count = get_count(conn)
         files_per_source = get_num_files_per_source(conn)
         unique_count = get_unique_count(conn)
