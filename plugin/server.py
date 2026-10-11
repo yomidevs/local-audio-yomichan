@@ -3,6 +3,7 @@ from __future__ import annotations
 import http.server
 import json
 import sqlite3
+from contextlib import closing
 import threading
 import os
 
@@ -90,7 +91,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
         self.end_headers()
 
         android_db_path = get_android_db_file()
-        with sqlite3.connect(android_db_path) as android_connection:
+        with closing(sqlite3.connect(android_db_path)) as android_connection, android_connection:
             android_cursor = android_connection.cursor()
             sql = """
             SELECT data FROM android WHERE file = :file AND source = :source
@@ -183,7 +184,7 @@ class LocalAudioHandler(http.server.SimpleHTTPRequestHandler):
             return
 
         audio_sources_json_list = []
-        with sqlite3.connect(get_db_file()) as connection:
+        with closing(sqlite3.connect(get_db_file())) as connection, connection:
             rows = execute_query(connection, qcomps)
             for row in rows:
                 source = row[SOURCE]

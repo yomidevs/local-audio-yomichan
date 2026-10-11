@@ -8,6 +8,7 @@ import os
 import json
 import shutil
 import sqlite3
+from contextlib import closing
 from pathlib import Path
 from typing import Any, Callable, TypedDict, Optional
 from dataclasses import dataclass, field
@@ -62,7 +63,7 @@ def android_gen():
     # literally copy entries.db -> android.db
     shutil.copy(original_db_path, android_db_path)
 
-    with sqlite3.connect(android_db_path) as android_connection:
+    with closing(sqlite3.connect(android_db_path)) as android_connection, android_connection:
         # bulk-load PRAGMAs (safe: PC builds, Android only reads)
         android_connection.execute("PRAGMA synchronous = OFF")
         android_connection.execute("PRAGMA journal_mode = OFF")
@@ -136,7 +137,7 @@ def android_write(conn):
 
 
 def table_exists_and_has_data() -> bool:
-    with sqlite3.connect(get_db_file()) as conn:
+    with closing(sqlite3.connect(get_db_file())) as conn, conn:
         cursor = conn.cursor()
         cursor.execute(
             "SELECT count(*) FROM sqlite_master WHERE type = 'table' AND name = :name",
@@ -364,7 +365,7 @@ def init_db(callback: Optional[Callable[[str], None]] = None):
     except Exception:
         pass
 
-    with sqlite3.connect(original_db_path) as connection:
+    with closing(sqlite3.connect(original_db_path)) as connection, connection:
         cursor = connection.cursor()
 
         # initializes entries table
